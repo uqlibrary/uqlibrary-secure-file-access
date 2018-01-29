@@ -110,11 +110,6 @@
         value: ''
       },
 
-      method : {
-        type: String,
-        value: ''
-      },
-
       pageHeader: {
         type: String,
         value: ''
@@ -128,6 +123,16 @@
       hideCopyrightMessage: {
         type: Boolean,
         value: true
+      },
+
+      subCollectionName: {
+        type: String,
+        value: ''
+      },
+
+      methodType: {
+        type: String,
+        value: ''
       }
 
 
@@ -156,8 +161,9 @@
 
     ready: function() {
       this.collectionType = this.getVariableFromUrlParameter('collection');
+      this.subCollectionName = this.getVariableFromUrlParameter('subCollection');
       this.filePath = this.getVariableFromUrlParameter('file');
-      this.method = this.getVariableFromUrlParameter('method'); // list for thomson or bom; missing otherwise - get or serve options handled by s3
+      this.methodType = this.getVariableFromUrlParameter('method'); // list for thomson or bom; missing otherwise - get or serve options handled by s3
 
       // var acceptCopyrightButton = document.querySelector('#acceptCopyrightButton');
       // if (typeof(acceptCopyrightButton) !== 'undefined' && acceptCopyrightButton) {
@@ -202,7 +208,7 @@
 
         var fileList = [];
         // thomson and bom supply a list page
-        if (this.method === 'list') {
+        if (this.methodType === 'list') {
           // list: tbd
           // get an aws keyed url from api/files
           // if ( !preg_match('/^(apps|lectures|sustainable_tourism)/', fileid) ) {
@@ -297,8 +303,8 @@ this.isOpenaccess = true;
       // valid values for method can be 'get' or 'serve' for general collection types, or 'list' for thomson & bom
       // it is also overloaded as {collection name} for thomson
 // I dont think we need this - S3 is looking after get/serve. or is just going to be list?
-//       if (method === false) {
-//         method = 'serve';
+//       if (this.methodType === false) {
+//         this.methodType = 'serve';
 //       }
     },
 
@@ -310,8 +316,8 @@ this.isOpenaccess = true;
       }
 
       if (hasSubcollection) {
-        subcollectionName = method;
-        // method = 'serve';
+        this.subCollectionName = this.methodType;
+        // this.methodType = 'serve';
         // } else {
         //   if (collection.validMethods.indexOf(method) === -1) {
         //     // invalid method found
