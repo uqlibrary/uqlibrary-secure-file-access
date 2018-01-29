@@ -1,0 +1,109 @@
+<link rel="import" href="elements.html">
+
+<!--
+`<uqlibrary-secure-file-access>` enables search of UQ Fryer Library on various types:
+
+Example:
+
+
+@demo
+
+@demo demo/index.html Demo of uqlibrary-secure-file-access
+-->
+<dom-module id="uqlibrary-secure-file-access">
+  <template id="documentDownloadPage">
+    <style is="custom-style" include="common-styles">
+
+      :host {
+        font-family: var(--font-family);
+        font-size: var(--body-font-size);
+      }
+
+      div#download {
+        text-align: center;
+      }
+      paper-button {
+        padding: 1em;
+      }
+
+    </style>
+
+    <uqlibrary-api-collection-encoded-url id="encodedUrlApi" plainUrl="[[ linkToEncode ]]"
+                                          on-uqlibrary-api-collection-encoded-url="handleLoadedFile"></uqlibrary-api-collection-encoded-url>
+
+    <uqlibrary-ga id="ga" app-name="[[_gaAppName]]"></uqlibrary-ga>
+
+    <div id="layout">
+      <paper-card heading="[[ pageHeader ]]">
+        <div class="card-content">
+
+          <div class="header">
+            <h1>[[ collection.subHeader ]]</h1>
+          </div>
+
+<!--
+          <div id="thomsonList" hidden$="[[!isThomsonList]]">
+            <div hidden$="[[!isList]]">
+              <h1>List All Files in Collection - <collectionName /></h1>
+              // no, I think we can just do the loop here without creating another component
+              // no that doesnt make sense - we have to call something to get the file list
+              // so do we need a component to do that, or just another uqlibrary-api call?
+              // just the call, then loop I would say
+              <uqlibrary-filelist type="thomson" supply fileList for loop></uqlibrary-filelist>
+            </div>
+          </div>
+-->
+<!--
+          <div id="bomList" hidden$="[[!isBomList]]">
+            <div hidden$="[[!isList]]">
+              <h1>Bureau of Meteorology - Climate Data</h1>
+              <p>Access to files in these datasets is restricted to UQ users.</p>
+              <uqlibrary-filelist type="bom" supply fileList for loop></uqlibrary-filelist>
+            </div>
+          </div>
+-->
+
+          <div class="invalidRequest" hidden$="[[ filesAvailable ]]">
+            <h2>Sorry, an error occurred</h2>
+            <p>Secure files are not available at the moment - please try again later (Are you logged in?)</p>
+          </div>
+
+          <div class="invalidRequest" hidden$="[[ isValidRequest ]]">
+            <h2>Invalid file location</h2>
+            <h3>Sorry, this is not a valid file location.</h3>
+            <p>Please check the link you have used.</p>
+          </div>
+
+          <div class="copyright" hidden$="[[ hideCopyrightMessage ]]">
+            <h2>COMMONWEALTH OF AUSTRALIA</h2>
+            <h3>Copyright Regulations 1969</h3>
+
+            <h2>WARNING</h2>
+            <p>This material has been reproduced and communicated to you by or on behalf of the University of Queensland pursuant to Part VB of the Copyright Act 1968 (the Act).</p>
+            <p>The material in this communication may be subject to copyright under the Act. Any further reproduction or communication of this material by you may be the subject of copyright protection under the Act.</p>
+
+            <div id="download">
+              <paper-button class="button-colored-accent">
+                <a href="[[ deliveryFilename ]]">Acknowledge Copyright and Download</a>
+              </paper-button>
+            </div>
+
+            <p>If you would like to save the file to your PC, <strong>right click</strong> on
+              <a id="link" href="[[ deliveryFilename ]]">this link</a>
+              and then click 'Save' or 'Save to disk'.</p>
+            <p>Save the file with a name ending in <b>.[[ fileExtension ]]</b> so your system will know how to open it.</p>
+
+          </div>
+
+          <div class="redirect" hidden$="[[ !isRedirect ]]">
+            <p>This is not the right page to access this file.</p>
+            <p><a href="[[ deliveryFilename ]]">Click here</a> if the page does not redirect.</p>
+          </div>
+
+        </div>
+      </paper-card>
+    </div>
+  </template>
+
+  <script src="uqlibrary-secure-file-access.js"></script>
+</dom-module>

@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+
+    <title>uqlibrary-secure-file-access</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <link rel="import" href="../elements/uqlibrary-secure-file-access.html">
+    <style>
+      body {
+        padding: 40px;
+      }
+    </style>
+</head>
+<body class="fullbleed">
+
+<div>Search on Primo</div>
+&lt;uqlibrary-secure-file-access search-type="primo"&gt;&lt;/uqlibrary-fryer-search&gt;
+<uqlibrary-fryer-search search-type="primo"></uqlibrary-fryer-search>
+
+<br>
+<br>
+<div>Search on Google</div>
+&lt;uqlibrary-fryer-search search-type="google"&gt;&lt;/uqlibrary-fryer-search&gt;
+<uqlibrary-fryer-search search-type="google"></uqlibrary-fryer-search>
+
+<br>
+<br>
+<div>Search on eSpace</div>
+&lt;uqlibrary-fryer-search search-type="espace"&gt;&lt;/uqlibrary-fryer-search&gt;
+<uqlibrary-fryer-search search-type="espace"></uqlibrary-fryer-search>
+
+<br>
+<br>
+<div>Anything else is invalid and will default to Google</div>
+&lt;uqlibrary-fryer-search search-type="invalid"&gt;&lt;/uqlibrary-fryer-search&gt;
+<uqlibrary-fryer-search search-type="invalid"></uqlibrary-fryer-search>
+
+<br>
+<br>
+<div>No search supplied - default to Google</div>
+&lt;uqlibrary-fryer-search&gt;&lt;/uqlibrary-fryer-search&gt;
+<uqlibrary-fryer-search></uqlibrary-fryer-search>
+
+
+
+<script>
+    (function () {
+        document.cookie="UQLMockData=enabled";
+        document.cookie="UQLMockData-PType=1";
+
+    }());
+</script>
+</body>
+</html>

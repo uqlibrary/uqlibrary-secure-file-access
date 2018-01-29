@@ -1,0 +1,9 @@
+tmp
+.sass-cache
+.tmp
+.idea
+*.map
+*.rb
+../
+node_modules/
+npm-debug.log

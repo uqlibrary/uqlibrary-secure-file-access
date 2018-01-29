@@ -1,0 +1,56 @@
+<link rel="import" href="elements.html">
+
+<!--
+`<uqlibrary-secure-file-access>` is a simple element that displays the availability of computers in the various libraries
+
+Example:
+
+    <uqlibrary-computers compact-view="false" auto-load="true"></uqlibrary-computers>
+
+@demo
+
+@demo demo/index.html Demo of the Full view
+@demo demo/index-compact.html Demo of the Compact view
+-->
+
+<style type="text/css">
+  /** Hack is in place to fix the width of the dropdown (full view mode) **/
+
+  paper-dropdown-menu.uqlibrary-computers iron-dropdown {
+    position: absolute;
+    left: 0 !important;
+    right: 0 !important;
+    top: 0 !important;
+  }
+</style>
+<dom-module id="uqlibrary-computers">
+  <style is="custom-style" include="common-styles">
+    :host {
+      @apply(--uql-app-host);
+    }
+
+    #pages {
+      position: absolute;
+      top: 0;
+      right:0;
+      left:0;
+      bottom: 0;
+    }
+
+    /** Full View */
+    .back-arrow {
+      margin-right: 20px;
+    }
+  </style>
+
+  <template>
+    <!-- API & GA dependencies -->
+    <uqlibrary-api-account id="account"></uqlibrary-api-account>
+    <uqlibrary-ga id="ga" app-name="[[_gaAppName]]"></uqlibrary-ga>
+
+MAIN
+
+  </template>
+
+  <script src="uqlibrary-computers.js"></script>
+</dom-module>

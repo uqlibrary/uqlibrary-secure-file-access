@@ -1,0 +1,34 @@
+{
+  "name": "uqlibrary-secure-file-access",
+  "version": "1.0",
+  "keywords": [
+    "seed",
+    "polymer",
+    "web-components"
+  ],
+  "private": true,
+  "main": "uqlibrary-secure-file-access.html",
+  "dependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-elements": "PolymerElements/iron-elements#^1.0.0",
+    "paper-elements": "PolymerElements/paper-elements#^1.0.0",
+    "polymer": "Polymer/polymer#^1.4.0",
+    "uqlibrary-ga": "uqlibrary/uqlibrary-ga#v1.0.3",
+    "uqlibrary-styles": "uqlibrary/uqlibrary-styles#v1.0.5",
+    "webcomponentsjs": "^0.7.12"
+  },
+  "devDependencies": {
+    "web-component-tester": "^4.2.2",
+    "test-fixture": "PolymerElements/test-fixture#^1.0.0"
+  },
+  "homepage": "https://github.com/uqlibrary/uqlibrary-secure-file-access",
+  "_release": "1.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0",
+    "commit": "3a7fb43ccaba32b468fd67cb99d82fa9ac81b74a"
+  },
+  "_source": "https://github.com/uqlibrary/uqlibrary-secure-file-access.git",
+  "_target": "v1.0.7",
+  "_originalSource": "uqlibrary/uqlibrary-secure-file-access"
+}
