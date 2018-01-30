@@ -100,16 +100,6 @@
         ]
       },
 
-      collectionType : {
-        type: String,
-        value: ''
-      },
-
-      filePath : {
-        type: String,
-        value: ''
-      },
-
       pageHeader: {
         type: String,
         value: ''
@@ -125,7 +115,32 @@
         value: true
       },
 
+      collectionType : {
+        type: String,
+        value: ''
+      },
+
+      collectionTypeDefault : {
+        type: String,
+        value: ''
+      },
+
+      filePath : {
+        type: String,
+        value: ''
+      },
+
+      filePathDefault : {
+        type: String,
+        value: ''
+      },
+
       subCollectionName: {
+        type: String,
+        value: ''
+      },
+
+      subCollectionNameDefault: {
         type: String,
         value: ''
       },
@@ -133,12 +148,33 @@
       methodType: {
         type: String,
         value: ''
+      },
+
+      methodTypeDefault: {
+        type: String,
+        value: ''
       }
 
 
     },
 
-    
+    // used for testing to simulate request variables
+    setCollectionTypeDefault: function(value) {
+      this.collectionTypeDefault = value;
+    },
+
+    setFilePathDefault: function(value) {
+      this.filePathDefault = value;
+    },
+
+    setSubCollectionNameDefault: function(value) {
+      this.subCollectionNameDefault = value;
+    },
+
+    setMethodTypeDefault: function(value) {
+      this.methodTypeDefault = value;
+    },
+
     /*
      * Builds the url and opens it.
      */
@@ -160,10 +196,10 @@
     // },
 
     ready: function() {
-      this.collectionType = this.getVariableFromUrlParameter('collection');
-      this.subCollectionName = this.getVariableFromUrlParameter('subCollection');
-      this.filePath = this.getVariableFromUrlParameter('file');
-      this.methodType = this.getVariableFromUrlParameter('method'); // list for thomson or bom; missing otherwise - get or serve options handled by s3
+      this.collectionType = this.getVariableFromUrlParameter('collection', this.collectionTypeDefault);
+      this.subCollectionName = this.getVariableFromUrlParameter('subCollection', this.subCollectionNameDefault);
+      this.filePath = this.getVariableFromUrlParameter('file', this.filePathDefault);
+      this.methodType = this.getVariableFromUrlParameter('method', this.methodTypeDefault); // list for thomson or bom; missing otherwise - get or serve options handled by s3
 
       // var acceptCopyrightButton = document.querySelector('#acceptCopyrightButton');
       // if (typeof(acceptCopyrightButton) !== 'undefined' && acceptCopyrightButton) {
@@ -332,7 +368,7 @@ this.isOpenaccess = true;
       this.fire('show-list');
     },
     */
-    getVariableFromUrlParameter: function(variable) {
+    getVariableFromUrlParameter: function(variable, defaultValue) {
       var query = window.location.search.substring(1);
       var vars = query.split("&");
       for (var i = 0; i < vars.length; i++) {
@@ -341,7 +377,11 @@ this.isOpenaccess = true;
           return pair[1];
         }
       }
-      return false;
+      if (defaultValue === undefined || defaultValue === '') {
+        return false;
+      } else {
+        return defaultValue;
+      }
     },
 
     loadCollectionDetail: function() {

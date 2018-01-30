@@ -1,18 +1,13 @@
 {
   "name": "uqlibrary-secure-file-access",
-  "version": "1.0.0",
-  "keywords": [
-    "seed",
-    "polymer",
-    "web-components"
-  ],
-  "private": true,
+  "private": false,
   "main": "uqlibrary-secure-file-access.html",
   "dependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
     "iron-elements": "PolymerElements/iron-elements#^1.0.0",
     "paper-elements": "PolymerElements/paper-elements#^1.0.0",
-    "polymer": "Polymer/polymer#^1.4.0",
+    "polymer": "Polymer/polymer#1.9.3",
+    "uqlibrary-api": "uqlibrary/uqlibrary-api#file-152226514",
     "uqlibrary-ga": "uqlibrary/uqlibrary-ga#v1.0.3",
     "uqlibrary-styles": "uqlibrary/uqlibrary-styles#v1.0.5",
     "webcomponentsjs": "^0.7.12"
