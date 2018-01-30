@@ -100,21 +100,6 @@
         ]
       },
 
-      collectionType : {
-        type: String,
-        value: ''
-      },
-
-      filePath : {
-        type: String,
-        value: ''
-      },
-
-      method : {
-        type: String,
-        value: ''
-      },
-
       pageHeader: {
         type: String,
         value: ''
@@ -128,12 +113,68 @@
       hideCopyrightMessage: {
         type: Boolean,
         value: true
+      },
+
+      collectionType : {
+        type: String,
+        value: ''
+      },
+
+      collectionTypeDefault : {
+        type: String,
+        value: ''
+      },
+
+      filePath : {
+        type: String,
+        value: ''
+      },
+
+      filePathDefault : {
+        type: String,
+        value: ''
+      },
+
+      subCollectionName: {
+        type: String,
+        value: ''
+      },
+
+      subCollectionNameDefault: {
+        type: String,
+        value: ''
+      },
+
+      methodType: {
+        type: String,
+        value: ''
+      },
+
+      methodTypeDefault: {
+        type: String,
+        value: ''
       }
 
 
     },
 
-    
+    // used for testing to simulate request variables
+    setCollectionTypeDefault: function(value) {
+      this.collectionTypeDefault = value;
+    },
+
+    setFilePathDefault: function(value) {
+      this.filePathDefault = value;
+    },
+
+    setSubCollectionNameDefault: function(value) {
+      this.subCollectionNameDefault = value;
+    },
+
+    setMethodTypeDefault: function(value) {
+      this.methodTypeDefault = value;
+    },
+
     /*
      * Builds the url and opens it.
      */
@@ -155,9 +196,10 @@
     // },
 
     ready: function() {
-      this.collectionType = this.getVariableFromUrlParameter('collection');
-      this.filePath = this.getVariableFromUrlParameter('file');
-      this.method = this.getVariableFromUrlParameter('method'); // list for thomson or bom; missing otherwise - get or serve options handled by s3
+      this.collectionType = this.getVariableFromUrlParameter('collection', this.collectionTypeDefault);
+      this.subCollectionName = this.getVariableFromUrlParameter('subCollection', this.subCollectionNameDefault);
+      this.filePath = this.getVariableFromUrlParameter('file', this.filePathDefault);
+      this.methodType = this.getVariableFromUrlParameter('method', this.methodTypeDefault); // list for thomson or bom; missing otherwise - get or serve options handled by s3
 
       // var acceptCopyrightButton = document.querySelector('#acceptCopyrightButton');
       // if (typeof(acceptCopyrightButton) !== 'undefined' && acceptCopyrightButton) {
@@ -202,7 +244,7 @@
 
         var fileList = [];
         // thomson and bom supply a list page
-        if (this.method === 'list') {
+        if (this.methodType === 'list') {
           // list: tbd
           // get an aws keyed url from api/files
           // if ( !preg_match('/^(apps|lectures|sustainable_tourism)/', fileid) ) {
@@ -297,8 +339,8 @@ this.isOpenaccess = true;
       // valid values for method can be 'get' or 'serve' for general collection types, or 'list' for thomson & bom
       // it is also overloaded as {collection name} for thomson
 // I dont think we need this - S3 is looking after get/serve. or is just going to be list?
-//       if (method === false) {
-//         method = 'serve';
+//       if (this.methodType === false) {
+//         this.methodType = 'serve';
 //       }
     },
 
@@ -310,8 +352,8 @@ this.isOpenaccess = true;
       }
 
       if (hasSubcollection) {
-        subcollectionName = method;
-        // method = 'serve';
+        this.subCollectionName = this.methodType;
+        // this.methodType = 'serve';
         // } else {
         //   if (collection.validMethods.indexOf(method) === -1) {
         //     // invalid method found
@@ -326,7 +368,7 @@ this.isOpenaccess = true;
       this.fire('show-list');
     },
     */
-    getVariableFromUrlParameter: function(variable) {
+    getVariableFromUrlParameter: function(variable, defaultValue) {
       var query = window.location.search.substring(1);
       var vars = query.split("&");
       for (var i = 0; i < vars.length; i++) {
@@ -335,7 +377,11 @@ this.isOpenaccess = true;
           return pair[1];
         }
       }
-      return false;
+      if (defaultValue === undefined || defaultValue === '') {
+        return false;
+      } else {
+        return defaultValue;
+      }
     },
 
     loadCollectionDetail: function() {

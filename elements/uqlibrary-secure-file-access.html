@@ -11,7 +11,7 @@ Example:
 @demo demo/index.html Demo of uqlibrary-secure-file-access
 -->
 <dom-module id="uqlibrary-secure-file-access">
-  <template id="documentDownloadPage">
+  <template id="documentDownloadPage" unresolved>
     <style is="custom-style" include="common-styles">
 
       :host {
@@ -63,18 +63,18 @@ Example:
           </div>
 -->
 
-          <div class="invalidRequest" hidden$="[[ filesAvailable ]]">
+          <div id="filesUnavailable" class="invalidRequest" hidden$="[[ filesAvailable ]]">
             <h2>Sorry, an error occurred</h2>
             <p>Secure files are not available at the moment - please try again later (Are you logged in?)</p>
           </div>
 
-          <div class="invalidRequest" hidden$="[[ isValidRequest ]]">
+          <div id="invalidRequest" class="invalidRequest" hidden$="[[ isValidRequest ]]">
             <h2>Invalid file location</h2>
             <h3>Sorry, this is not a valid file location.</h3>
             <p>Please check the link you have used.</p>
           </div>
 
-          <div class="copyright" hidden$="[[ hideCopyrightMessage ]]">
+          <div id="copyright" class="copyright" hidden$="[[ hideCopyrightMessage ]]">
             <h2>COMMONWEALTH OF AUSTRALIA</h2>
             <h3>Copyright Regulations 1969</h3>
 
@@ -88,14 +88,11 @@ Example:
               </paper-button>
             </div>
 
-            <p>If you would like to save the file to your PC, <strong>right click</strong> on
-              <a id="link" href="[[ deliveryFilename ]]">this link</a>
-              and then click 'Save' or 'Save to disk'.</p>
             <p>Save the file with a name ending in <b>.[[ fileExtension ]]</b> so your system will know how to open it.</p>
 
           </div>
 
-          <div class="redirect" hidden$="[[ !isRedirect ]]">
+          <div id="redirect" class="redirect" hidden$="[[ !isRedirect ]]">
             <p>This is not the right page to access this file.</p>
             <p><a href="[[ deliveryFilename ]]">Click here</a> if the page does not redirect.</p>
           </div>

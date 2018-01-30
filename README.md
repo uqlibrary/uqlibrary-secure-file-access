@@ -9,8 +9,6 @@ There is currently no documentation at [GitHub Pages](http://uqlibrary.github.io
 
 This component is called from secure.html in uqlibrary-pages to show a copyright acknowledgement page before viewing eg a pdf file stored in s3 at uql_secure_files on AWS
 
-This repo is private because it explains how to get direct access without acknowledging copyright. No point making it easy for them...
-
 ### Getting Started
 Install Node.JS and run the following oneliner in the project directory:
 ```sh

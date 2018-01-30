@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=no">
+  <title>uqlibrary-secure-file-access test</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../test-fixture/test-fixture-mocha.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+
+
+  <link rel="import" href="../elements/uqlibrary-secure-file-access.html">
+</head>
+<body>
+
+<test-fixture id="element">
+  <template>
+    <uqlibrary-secure-file-access></uqlibrary-secure-file-access>
+  </template>
+</test-fixture>
+
+<script>
+  suite('<uqlibrary-secure-file-access> tests', function () {
+    var element;
+
+    setup(function () {
+      element = fixture('element');
+    });
+
+    test('it should redirect open access files to the correct url', function (done) {
+      flush(function () {
+//        http://dev-app.library.uq.edu.au:9999/secure.html?collection=doc&file=/someFile.pdf
+        element.setCollectionTypeDefault('doc');
+        element.setFilePathDefault('/someFile.pdf');
+
+        var paragraph = element.$.redirect.querySelector('p');
+        // '<a class="style-scope uqlibrary-secure-file-access" href="https://files.library.uq.edu.au/collection/doc/someFile.pdf">Click here</a>'
+        expect(paragraph.textContent).to.contain('This is not the right page to access this file');
+
+        var link = element.$.redirect.querySelector('p a');
+        expect(link.textContent).to.contain('Click here');
+//        expect(paragraph.textContent).to.contain('if the page does not redirect');
+        done();
+      });
+    });
+
+    test('it should show the copyright page for copyrighted files', function (done) {
+      flush(function () {
+        element.setCollectionTypeDefault('exams');
+        element.setFilePathDefault('/someFile.pdf');
+
+        var page = element.$.copyright;
+        var header = page.querySelector('h2');
+        expect(header.textContent).to.contain('COMMONWEALTH OF AUSTRALIA');
+
+        var els = page.querySelector('#download');
+        expect(els.textContent).to.contain('Acknowledge Copyright and Download');
+        done();
+
+      });
+    });
+
+    test('it should handle invalid file requests', function (done) {
+      flush(function () {
+        element.setCollectionTypeDefault('invalidCollection');
+        element.setFilePathDefault('/someFile.pdf');
+
+        var page = element.$.invalidRequest;
+        var header = page.querySelector('h2');
+        console.log(header);
+        expect(header.textContent).to.contain('Invalid file location');
+
+        var header2 = page.querySelector('h3');
+        expect(header2.textContent).to.contain('Sorry, this is not a valid file location.');
+        done();
+
+      });
+    });
+  });
+
+
+</script>
+
+</body>
+</html>
