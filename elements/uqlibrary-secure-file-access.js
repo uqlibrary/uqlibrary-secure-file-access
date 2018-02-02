@@ -21,61 +21,6 @@
         value: false
       },
 
-      pageHeader: {
-        type: String,
-        value: ''
-      },
-
-      filesAvailable: {
-        type: Boolean,
-        value: true
-      },
-
-      hideCopyrightMessage: {
-        type: Boolean,
-        value: true
-      },
-
-      collectionType : {
-        type: String,
-        value: ''
-      },
-
-      collectionTypeDefault : {
-        type: String,
-        value: ''
-      },
-
-      filePath : {
-        type: String,
-        value: ''
-      },
-
-      filePathDefault : {
-        type: String,
-        value: ''
-      },
-
-      subCollectionName: {
-        type: String,
-        value: ''
-      },
-
-      subCollectionNameDefault: {
-        type: String,
-        value: ''
-      },
-
-      methodType: {
-        type: String,
-        value: ''
-      },
-
-      methodTypeDefault: {
-        type: String,
-        value: ''
-      },
-
       pathProperties: {
         type: Array,
         value: [
@@ -137,7 +82,64 @@
             hasList: true // this will be used in future to determine if list is a valid method to show a list of files page. it should default to false
           }
         ]
+      },
+
+      pageHeader: {
+        type: String,
+        value: ''
+      },
+
+      filesAvailable: {
+        type: Boolean,
+        value: true
+      },
+
+      hideCopyrightMessage: {
+        type: Boolean,
+        value: true
+      },
+
+      collectionType : {
+        type: String,
+        value: ''
+      },
+
+      collectionTypeDefault : {
+        type: String,
+        value: ''
+      },
+
+      filePath : {
+        type: String,
+        value: ''
+      },
+
+      filePathDefault : {
+        type: String,
+        value: ''
+      },
+
+      subCollectionName: {
+        type: String,
+        value: ''
+      },
+
+      subCollectionNameDefault: {
+        type: String,
+        value: ''
+      },
+
+      methodType: {
+        type: String,
+        value: ''
+      },
+
+      methodTypeDefault: {
+        type: String,
+        value: ''
       }
+
+
     },
 
     // used for testing to simulate request variables
@@ -204,7 +206,7 @@
 
       if (this.isValidRequest) {
 
-        var linkToEncode = this.collectionType + this.filePath + '?copyright';
+        var linkToEncode = this.collectionType + "/" + this.filePath + '?copyright';
 
         this.fileExtension =  this.filePath.substr(this.filePath.lastIndexOf('.') + 1);
 
@@ -266,14 +268,15 @@
         this.isRedirect = true;
         this.setAccessCopyrightMessage(); // TODO: or do this with watcher?
 
-        const finalHref = 'https://files.library.uq.edu.au/collection/' + this.collectionType + this.filePath;
+        const finalHref = 'https://files.library.uq.edu.au/collection/' + this.collectionType + '/' + this.filePath;
         this.deliveryFilename = finalHref;
         console.log('handleLoadedFile: SHOULD REDIRECT TO ' + finalHref);
-// commented out for dev
-//        window.location.href = finalHref;
 
 // included for dev only
-        this.isOpenaccess = true;
+//         this.isOpenaccess = true;
+
+// commented out for dev
+       window.location.href = finalHref;
 
       } else {
         this.isOpenaccess = false; // this will need to be more complicated for bom & thomson
