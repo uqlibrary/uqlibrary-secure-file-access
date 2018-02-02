@@ -21,85 +21,6 @@
         value: false
       },
 
-      pathProperties: {
-        type: Array,
-        value: [
-          {
-            // most of these probably arent needed
-            name: 'pdf',
-            oldPHP: '/coursebank/get.php',
-            oldFileLocation: '/coursematerials/coursebank/', // unused? , included for transparency
-            urlPath: '/collection/pdf/get/', // unused? , included for transparency
-            collection: 'pdf',
-            isDownloadForced: true/false
-          },
-          {
-            name: 'exams',
-            oldPHP: 'pdfserve.php',
-            oldFileLocation: '/coursematerials/exams/',
-            urlPath: '/collection/exams/get/',
-            collection: 'exams',
-            isDownloadForced: true/false
-          },
-          { // default
-            name: 'coursematerials',
-            oldPHP: 'eget.php', // ???
-            oldFileLocation: '/coursematerials/',
-            urlPath: '/collection/coursematerials/',
-            collection: 'coursematerials',
-            isDownloadForced: true/false
-          },
-          {
-            name: 'cdbooks',
-            oldPHP: 'acdb.php',
-            oldFileLocation: '/cdbooks/',
-            urlPath: '/collection/acdb/',
-            collection: 'cdbooks',
-            fileId: 'rid',
-            isDownloadForced: true/false
-          },
-          {
-            name: 'doc',
-            oldPHP: 'pdfget.php',
-            oldFileLocation: '/uqdocserv/',
-            urlPath: '/collection/doc/',
-            collection: 'doc',
-            fileId: 'image',
-            isDownloadForced: true/false
-          },
-          {
-            name: 'software',
-            oldPHP: 'swget.php',
-            oldFileLocation: '/uqsoftserv/',
-            urlPath: '/collection/software/',
-            collection: 'software',
-            isDownloadForced: true/false
-          },
-          {
-            name: 'bom',
-            oldPHP: 'bom.php',
-            oldFileLocation: '/bom/',
-            urlPath: '/collection/bom/',
-            validMethods: [ 'list' ],
-            collection: 'bom',
-            pageHeader: 'Bureau of Meteorology - Climate Data',
-            // pageSubheader: 'Bureau of Meteorology - Climate Data',
-            content: 'Access to files in these datasets is restricted to UQ users.',
-            isDownloadForced: true/false,
-          },
-          {
-            name: 'thomson',
-            oldPHP: 'thomson',
-            oldFileLocation: '/thomson/',
-            urlPath: '/collection/thomson/',
-            collection: 'thomson',
-            validMethods: ['list'],
-            isDownloadForced: true / false,
-            pageHeader: 'Thomson Reuters Collections'
-          }
-        ]
-      },
-
       pageHeader: {
         type: String,
         value: ''
@@ -153,9 +74,70 @@
       methodTypeDefault: {
         type: String,
         value: ''
+      },
+
+      pathProperties: {
+        type: Array,
+        value: [
+          {
+            name: 'coursebank', // pdf
+            // dev notes - remove later
+            oldPHP: '/coursebank/get.php',
+            oldFileLocation: '/coursematerials/coursebank/', // unused? , included for transparency
+            urlPath: '/collection/pdf/get/' // unused? , included for transparency
+          },
+          {
+            name: 'exams',
+            oldPHP: 'pdfserve.php',
+            oldFileLocation: '/coursematerials/exams/',
+            urlPath: '/collection/exams/get/'
+          },
+          // { // these folders havent been implemented yet
+          //   name: 'coursematerials',
+          //   oldPHP: 'eget.php', // ???
+          //   oldFileLocation: '/coursematerials/',
+          //   urlPath: '/collection/coursematerials/'
+          // },
+          // {
+          //   name: 'cdbooks',
+          //   oldPHP: 'acdb.php',
+          //   oldFileLocation: '/cdbooks/',
+          //   urlPath: '/collection/acdb/',
+          //   fileId: 'rid'
+          // },
+          // {
+          //   name: 'doc',
+          //   oldPHP: 'pdfget.php',
+          //   oldFileLocation: '/uqdocserv/',
+          //   urlPath: '/collection/doc/',
+          //   fileId: 'image'
+          // },
+          // {
+          //   name: 'software',
+          //   oldPHP: 'swget.php',
+          //   oldFileLocation: '/uqsoftserv/',
+          //   urlPath: '/collection/software/',
+          // },
+          // {
+          //   name: 'bom',
+          //   oldPHP: 'bom.php',
+          //   oldFileLocation: '/bom/',
+          //   urlPath: '/collection/bom/',
+          //   pageHeader: 'Bureau of Meteorology - Climate Data',
+          //   // pageSubheader: 'Bureau of Meteorology - Climate Data',
+          //   content: 'Access to files in these datasets is restricted to UQ users.'
+          //   hasList: true
+          // },
+          {
+            name: 'thomson',
+            oldPHP: 'thomson',
+            oldFileLocation: '/thomson/',
+            urlPath: '/collection/thomson/',
+            pageHeader: 'Thomson Reuters Collections',
+            hasList: true // this will be used in future to determine if list is a valid method to show a list of files page. it should default to false
+          }
+        ]
       }
-
-
     },
 
     // used for testing to simulate request variables
@@ -219,7 +201,6 @@
       }
 
       this.checkValidRequest(); // needs to be set as it controls block display on page
-      this.setAccessCopyrightMessage(); // TODO: or do with watcher on isvalid?
 
       if (this.isValidRequest) {
 
@@ -287,12 +268,12 @@
 
         const finalHref = 'https://files.library.uq.edu.au/collection/' + this.collectionType + this.filePath;
         this.deliveryFilename = finalHref;
-console.log('handleLoadedFile: SHOULD REDIRECT TO ' + finalHref);
+        console.log('handleLoadedFile: SHOULD REDIRECT TO ' + finalHref);
 // commented out for dev
 //        window.location.href = finalHref;
 
 // included for dev only
-this.isOpenaccess = true;
+        this.isOpenaccess = true;
 
       } else {
         this.isOpenaccess = false; // this will need to be more complicated for bom & thomson
@@ -324,13 +305,11 @@ this.isOpenaccess = true;
     },
 
     checkValidRequest: function() {
-
       var requestedUrl = '';
 
       var testCollection = this.pathProperties.filter(function (e) {
         return that.collectionType === e.name;
       });
-
       if (testCollection.length === 0) {
         this.isValidRequest = false;
       }

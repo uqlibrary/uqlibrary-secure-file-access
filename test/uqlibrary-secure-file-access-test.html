@@ -31,17 +31,22 @@
 
     test('it should redirect open access files to the correct url', function (done) {
       flush(function () {
-//        http://dev-app.library.uq.edu.au:9999/secure.html?collection=doc&file=/someFile.pdf
-        element.setCollectionTypeDefault('doc');
+        element.setCollectionTypeDefault('thomson');
         element.setFilePathDefault('/someFile.pdf');
 
-        var paragraph = element.$.redirect.querySelector('p');
-        // '<a class="style-scope uqlibrary-secure-file-access" href="https://files.library.uq.edu.au/collection/doc/someFile.pdf">Click here</a>'
-        expect(paragraph.textContent).to.contain('This is not the right page to access this file');
+        var body = element.$.layout;
 
-        var link = element.$.redirect.querySelector('p a');
+        var redirectparagraph = body.querySelector('#redirect p');
+        expect(redirectparagraph.textContent).to.contain('This is not the right page to access this file');
+
+        var link = body.querySelector('#redirect p a');
         expect(link.textContent).to.contain('Click here');
-//        expect(paragraph.textContent).to.contain('if the page does not redirect');
+
+        var copyright = body.querySelector('#copyright');
+        expect(copyright).to.have.property('hidden');
+
+        var invalidRequest = body.querySelector('#invalidRequest');
+        expect(invalidRequest).to.have.property('hidden');
         done();
       });
     });
@@ -51,12 +56,21 @@
         element.setCollectionTypeDefault('exams');
         element.setFilePathDefault('/someFile.pdf');
 
-        var page = element.$.copyright;
-        var header = page.querySelector('h2');
+        var body = element.$.layout;
+console.log(body);
+        var header = body.querySelector('#copyright h2');
         expect(header.textContent).to.contain('COMMONWEALTH OF AUSTRALIA');
 
-        var els = page.querySelector('#download');
+        var copyright = body.querySelector('#copyright');
+
+        var els = body.querySelector('#copyright #download');
         expect(els.textContent).to.contain('Acknowledge Copyright and Download');
+
+        var invalidRequest = body.querySelector('#invalidRequest');
+        expect(invalidRequest).to.have.property('hidden');
+
+        var redirectparagraph = body.querySelector('#redirect p');
+        expect(redirectparagraph).to.have.property('hidden');
         done();
 
       });
@@ -64,16 +78,24 @@
 
     test('it should handle invalid file requests', function (done) {
       flush(function () {
-        element.setCollectionTypeDefault('invalidCollection');
+        element.setCollectionTypeDefault('exams');
         element.setFilePathDefault('/someFile.pdf');
 
-        var page = element.$.invalidRequest;
-        var header = page.querySelector('h2');
-        console.log(header);
+        var body = element.$.layout;
+
+        var invalidRequest = body.querySelector('#invalidRequest');
+
+        var header = invalidRequest.querySelector('#invalidRequest h2');
         expect(header.textContent).to.contain('Invalid file location');
 
-        var header2 = page.querySelector('h3');
+        var header2 = invalidRequest.querySelector('h3');
         expect(header2.textContent).to.contain('Sorry, this is not a valid file location.');
+
+        var copyright = body.querySelector('#copyright');
+        expect(copyright).to.have.property('hidden');
+
+        var redirectparagraph = body.querySelector('#redirect p');
+        expect(redirectparagraph).to.have.property('hidden');
         done();
 
       });
