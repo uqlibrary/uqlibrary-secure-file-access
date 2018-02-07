@@ -206,7 +206,8 @@
 
       if (this.isValidRequest) {
 
-        var linkToEncode = this.collectionType + "/" + this.filePath + '?copyright';
+        var copyrightAcknowledged = true;
+        var linkToEncode = this.getLinkPath(copyrightAcknowledged);
 
         this.fileExtension =  this.filePath.substr(this.filePath.lastIndexOf('.') + 1);
 
@@ -251,6 +252,15 @@
 
     },
 
+    getLinkPath: function (copyrightAcknowledged) {
+
+      var path = this.collectionType + '/' + this.filePath;
+      if (copyrightAcknowledged) {
+        path = path + '?copyright';
+      }
+      return path;
+    },
+
     handleLoadedFile: function(e) {
       // error: {response: true, responseText: "An unknown error occurred"}
       // ok: {url: "https://files.library.uq.edu.au/secure/exams/0001/3e201.pdf"}
@@ -268,15 +278,15 @@
         this.isRedirect = true;
         this.setAccessCopyrightMessage(); // TODO: or do this with watcher?
 
-        const finalHref = 'https://files.library.uq.edu.au/collection/' + this.collectionType + '/' + this.filePath;
+        var withoutCopyrightSeenFlag = false;
+        const finalHref = 'https://files.library.uq.edu.au/collection/' + this.getLinkPath(withoutCopyrightSeenFlag);
         this.deliveryFilename = finalHref;
         console.log('handleLoadedFile: SHOULD REDIRECT TO ' + finalHref);
+// commented out for dev
+        window.location.href = finalHref;
 
 // included for dev only
-//         this.isOpenaccess = true;
-
-// commented out for dev
-       window.location.href = finalHref;
+//        this.isOpenaccess = true;
 
       } else {
         this.isOpenaccess = false; // this will need to be more complicated for bom & thomson
