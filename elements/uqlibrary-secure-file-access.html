@@ -94,7 +94,9 @@ Example:
               </paper-button>
             </div>
 
-            <p>Save the file with a name ending in <b>.[[ fileExtension ]]</b> so your system will know how to open it.</p>
+            <div hidden$="[[ !fileExtension ]]">
+              <p>Save the file with a name ending in <b>.[[ fileExtension ]]</b> so your system will know how to open it.</p>
+            </div>
 
           </div>
 

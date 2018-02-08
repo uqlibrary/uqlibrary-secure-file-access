@@ -206,10 +206,9 @@
 
       if (this.isValidRequest) {
 
-        var copyrightAcknowledged = true;
-        var linkToEncode = this.getLinkPath(copyrightAcknowledged);
+        var linkToEncode = this.collectionType + "/" + this.filePath + '?copyright';
 
-        this.fileExtension =  this.filePath.substr(this.filePath.lastIndexOf('.') + 1);
+        this.fileExtension =  this.getFileExtension();
 
 
         // var self = this;
@@ -252,73 +251,77 @@
 
     },
 
-    getLinkPath: function (copyrightAcknowledged) {
-
-      var path = this.collectionType + '/' + this.filePath;
-      if (copyrightAcknowledged) {
-        path = path + '?copyright';
-      }
-      return path;
-    },
-
+    /**
+     * called when the api uqlibrary-api-collection-encoded-url returns
+     * @param e
+     */
     handleLoadedFile: function(e) {
       // error: {response: true, responseText: "An unknown error occurred"}
       // ok: {url: "https://files.library.uq.edu.au/secure/exams/0001/3e201.pdf"}
-      var s = 'cloudfront.net';
-      s = 'http://192.168.62.129';  // for dev
       if (e.detail.url === undefined || e.detail.response === true) {
         // an error occurred
         this.filesAvailable = false;
       }
-      this.setAccessCopyrightMessage(); // TODO: or do this with watcher?
+      this._setAccessCopyrightMessage(); // TODO: or do this with watcher?
 
       if (e.detail.isOpenaccess) {
-        // it is? we shouldnt be here...
+        // it is? we shouldnt be here... show the other message and redirect
 
         this.isRedirect = true;
-        this.setAccessCopyrightMessage(); // TODO: or do this with watcher?
+        this._setAccessCopyrightMessage(); // TODO: or do this with watcher?
 
-        var withoutCopyrightSeenFlag = false;
-        const finalHref = 'https://files.library.uq.edu.au/collection/' + this.getLinkPath(withoutCopyrightSeenFlag);
+        const finalHref = 'https://files.library.uq.edu.au/collection/' + this.collectionType + '/' + this.filePath;
         this.deliveryFilename = finalHref;
         console.log('handleLoadedFile: SHOULD REDIRECT TO ' + finalHref);
-// commented out for dev
-        window.location.href = finalHref;
 
 // included for dev only
 //        this.isOpenaccess = true;
 
+// commented out for dev
+        window.location.href = finalHref;
+
       } else {
-        this.isOpenaccess = false; // this will need to be more complicated for bom & thomson
+        this.isOpenaccess = false; // this will need to be more complicated for bom & thomson lists
 
         this.deliveryFilename = e.detail.url;
 
       }
     },
 
-    setAccessCopyrightMessage: function() {
+    /**
+     * determine whether we should show the 'this file is under copyright' message
+     */
+    _setAccessCopyrightMessage: function() {
       if (this.isOpenaccess) {
         this.hideCopyrightMessage = true; // not required - the file is openaccess
         return;
       }
       if (!this.isValidRequest) {
-        this.hideCopyrightMessage = true; // we will show a different panel
+        this.hideCopyrightMessage = true; // we will show the 'invalid' panel
         return;
       }
       if (!this.filesAvailable) {
-        this.hideCopyrightMessage = true; // we will show a different panel
+        this.hideCopyrightMessage = true; // we will show the 'offline' panel
         return;
       }
       if (this.isRedirect) {
-        this.hideCopyrightMessage = true; // we will show a different panel
+        this.hideCopyrightMessage = true; // we will show the 'redirect' panel
         return;
       }
 
-      this.hideCopyrightMessage = false;
+      this.hideCopyrightMessage = false; // show the 'copyright' panel
     },
 
+    /**
+     * determine if the url parameters ask for a valid file
+     */
     checkValidRequest: function() {
       var requestedUrl = '';
+
+      if (this.filePath === undefined || this.filePath === false) {
+        this.isValidRequest = false;
+        return;
+      }
 
       var testCollection = this.pathProperties.filter(function (e) {
         return that.collectionType === e.name;
@@ -336,6 +339,10 @@
 //       }
     },
 
+    /**
+     * get the name of the subcollection for those colections which allow one
+     * @private
+     */
     _getSubcollection: function() {
       var subcollectionName = '';
       var hasSubcollection = false;
@@ -360,6 +367,13 @@
       this.fire('show-list');
     },
     */
+
+    /**
+     * extract the values out of the data passed in the url
+     * @param variable
+     * @param defaultValue
+     * @returns string|boolean
+     */
     getVariableFromUrlParameter: function(variable, defaultValue) {
       var query = window.location.search.substring(1);
       var vars = query.split("&");
@@ -376,6 +390,10 @@
       }
     },
 
+    /**
+     * get the details for the specific folder out of the array
+     * @returns array|boolean
+     */
     loadCollectionDetail: function() {
       var collection = false;
 
@@ -389,6 +407,24 @@
       } else {
         return false;
       }
+    },
+
+    /**
+     * if the filename has a '.' in it then we return the file extension to tell the user to make sure the file extension is set
+     * @returns int|boolean
+     */
+    getFileExtension: function() {
+      if (this.filePath === undefined) {
+        return false;
+      }
+
+      var dotPosition = this.filePath.lastIndexOf('.');
+      if (dotPosition !== undefined && dotPosition >= 0) {
+        return this.filePath.substr(dotPosition + 1);
+      } else {
+        return false;
+      }
     }
+
   });
 })();
