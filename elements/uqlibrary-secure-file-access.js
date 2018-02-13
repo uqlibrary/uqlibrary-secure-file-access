@@ -270,15 +270,14 @@
         this.isRedirect = true;
         this._setAccessCopyrightMessage(); // TODO: or do this with watcher?
 
-        const finalHref = 'https://files.library.uq.edu.au/collection/' + this.collectionType + '/' + this.filePath;
-        this.deliveryFilename = finalHref;
-        console.log('handleLoadedFile: SHOULD REDIRECT TO ' + finalHref);
+        this.deliveryFilename = e.detail.url;
+console.log('handleLoadedFile: SHOULD REDIRECT TO ' + this.deliveryFilename);
 
 // included for dev only
-//        this.isOpenaccess = true;
+        this.isOpenaccess = true;
 
 // commented out for dev
-        window.location.href = finalHref;
+//        window.location.href = finalHref;
 
       } else {
         this.isOpenaccess = false; // this will need to be more complicated for bom & thomson lists
@@ -424,7 +423,21 @@
       } else {
         return false;
       }
-    }
+    },
 
+    /**
+     * Callback for loaded account - they must be logged in
+     * @param e
+     */
+    accountLoaded: function (e) {
+      if (e.detail.hasSession) {
+        //     if (document.getElementById('preloader'))
+        //       document.getElementById('preloader').style.display = 'none';
+      }
+      else {
+        // Not logged in
+        this.$.account.login(window.location.href);
+      }
+    },
   });
 })();
