@@ -37,7 +37,7 @@
         var body = element.$.layout;
 
         var redirectparagraph = body.querySelector('#redirect p');
-        expect(redirectparagraph.textContent).to.contain('This is not the right page to access this file');
+        expect(redirectparagraph.textContent).to.contain('We have the file ready for you');
 
         var link = body.querySelector('#redirect p a');
         expect(link.textContent).to.contain('Click here');

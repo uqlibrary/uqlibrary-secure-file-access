@@ -438,6 +438,6 @@ console.log('handleLoadedFile: SHOULD REDIRECT TO ' + this.deliveryFilename);
         // Not logged in
         this.$.account.login(window.location.href);
       }
-    },
+    }
   });
 })();
