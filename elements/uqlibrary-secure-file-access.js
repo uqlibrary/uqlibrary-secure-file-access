@@ -194,6 +194,17 @@
       //   });
       // }
 
+      self = this;
+      this.$.account.addEventListener('uqlibrary-api-account-loaded', function (e) {
+        if (e.detail.hasSession) {
+console.log('logged in');
+        } else {
+console.log('not logged in');
+          // Not logged in
+            self.$.account.login(window.location.href);
+        }
+      });
+
       var displayContent = document.querySelector('#layout');
 
       this.collection = this.loadCollectionDetail();
