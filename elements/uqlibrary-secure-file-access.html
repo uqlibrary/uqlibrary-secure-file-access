@@ -29,9 +29,14 @@ Example:
       }
 
       div#layout {
-        margin-top: 16px;
-        margin-top: 1rem;
+        margin-top: 0 16px 16px;
+        margin-top: 0 1rem 1rem;
       }
+
+      #copyright h1, #copyright h2, #copyright h3, #copyright h4, #copyright p {
+          text-align: center;
+      }
+
     </style>
 
     <uqlibrary-api-collection-encoded-url id="encodedUrlApi" plainUrl="[[ linkToEncode ]]"
@@ -78,10 +83,12 @@ Example:
           </div>
 
           <div id="copyright" class="copyright" hidden$="[[ hideCopyrightMessage ]]">
+            <h1>Copyright Notice</h1>
+            <p>This file is provided to support teaching and learning for the staff and students of the University of Queensland</p>
             <h2>COMMONWEALTH OF AUSTRALIA</h2>
             <h3>Copyright Regulations 1969</h3>
 
-            <h2>WARNING</h2>
+            <h4>WARNING</h4>
             <p>This material has been reproduced and communicated to you by or on behalf of the University of Queensland pursuant to Part VB of the Copyright Act 1968 (the Act).</p>
             <p>The material in this communication may be subject to copyright under the Act. Any further reproduction or communication of this material by you may be the subject of copyright protection under the Act.</p>
 
