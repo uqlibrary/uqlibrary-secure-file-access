@@ -180,7 +180,9 @@
     // },
 
     ready: function() {
-      //this.$.account.get(); // they must be logged in, so auto load
+      this.collectionType = this.getVariableFromUrlParameter('collection', this.collectionTypeDefault);
+      this.filePath = this.getVariableFromUrlParameter('file', this.filePathDefault);
+      this.methodType = this.getVariableFromUrlParameter('method', this.methodTypeDefault); // list for thomson or bom; missing otherwise - get or serve options handled by s3
 
       window.addEventListener('WebComponentsReady', function() {
 
@@ -193,47 +195,35 @@
             this.requestCollectionFile();
           } else {
             console.log('Not logged in');
+            this.filesAvailable = false;
             account.login(window.location.href);
           }
         });
-
+// comment for dev
         account.get();
 
       });
+// comment for prod
+//      this.requestCollectionFile();
     },
 
     requestCollectionFile: function() {
-      this.collectionType = this.getVariableFromUrlParameter('collection', this.collectionTypeDefault);
-      this.subCollectionName = this.getVariableFromUrlParameter('subCollection', this.subCollectionNameDefault);
-      this.filePath = this.getVariableFromUrlParameter('file', this.filePathDefault);
-      this.methodType = this.getVariableFromUrlParameter('method', this.methodTypeDefault); // list for thomson or bom; missing otherwise - get or serve options handled by s3
-
-      // var acceptCopyrightButton = document.querySelector('#acceptCopyrightButton');
-      // if (typeof(acceptCopyrightButton) !== 'undefined' && acceptCopyrightButton) {
-      //   //// Listen for template bound event to know when bindings
-      //   //// have resolved and content has been stamped to the page
-      //   acceptCopyrightButton.addEventListener('dom-change', function () {
-      //       redirect to cloudfront url
-      //   });
-      // }
-
-      var displayContent = document.querySelector('#layout');
+      // var displayContent = document.querySelector('#layout');
 
       this.collection = this.loadCollectionDetail();
       if (false === this.collection) {
-        this.pageHeader = 'Invalid file location';
-        return;
+        this.isValidRequest = false;
       }
 
       this.checkValidRequest(); // needs to be set as it controls block display on page
 
-      if (this.isValidRequest) {
+      var linkToEncode = '';
 
-        var linkToEncode = this.collectionType + "/" + this.filePath + '?copyright';
+      if (this.isValidRequest) {
 
         this.fileExtension =  this.getFileExtension();
 
-        var fileList = [];
+//        var fileList = [];
         // thomson and bom supply a list page
         if (this.methodType === 'list') {
           // list: tbd
@@ -242,20 +232,23 @@
           //   set this.isValidRequest = false
           // }
           // vary deliver on method = get/serve
-          fileList = 'something'; // replace with aws thingy
+//          fileList = 'something'; // replace with aws thingy
           // then display on page as list
         } else {
-          this.$.encodedUrlApi.get({plainUrl: linkToEncode});
-
+          linkToEncode = this.collectionType + "/" + this.filePath + '?copyright';
 
           // if ( !preg_match('/^(apps|lectures|sustainable_tourism)/', fileid) ) {
           //   set this.isValidRequest = false
           // }
           // vary deliver on method = get/serve
+
+
         }
-      } else {
       }
 
+      if ('' !== linkToEncode) {
+        this.$.encodedUrlApi.get({plainUrl: linkToEncode});
+      }
     },
 
     /**
@@ -268,7 +261,11 @@
       if (e.detail.url === undefined || e.detail.response === true) {
         // an error occurred
         this.filesAvailable = false;
+        return;
       }
+
+      this.filesAvailable = true;
+
       this._setAccessCopyrightMessage(); // TODO: or do this with watcher?
 
       if (e.detail.isOpenaccess) {
@@ -307,11 +304,11 @@
         return;
       }
       if (!this.filesAvailable) {
-        this.hideCopyrightMessage = true; // we will show the 'offline' panel
+        this.hideCopyrightMessage = true; // we will show the 'offline/needs login' panel
         return;
       }
       if (this.isRedirect) {
-        this.hideCopyrightMessage = true; // we will show the 'redirect' panel
+        this.hideCopyrightMessage = true; // we will show the 'redirect to file' panel
         return;
       }
 
@@ -343,28 +340,6 @@
 //       if (this.methodType === false) {
 //         this.methodType = 'serve';
 //       }
-    },
-
-    /**
-     * get the name of the subcollection for those colections which allow one
-     * @private
-     */
-    _getSubcollection: function() {
-      var subcollectionName = '';
-      var hasSubcollection = false;
-      if (this.collectionType === 'thomson') { // also bom?
-        hasSubcollection = true;
-      }
-
-      if (hasSubcollection) {
-        this.subCollectionName = this.methodType;
-        // this.methodType = 'serve';
-        // } else {
-        //   if (collection.validMethods.indexOf(method) === -1) {
-        //     // invalid method found
-        //     isValidRequest = false
-        //   }
-      }
     },
 
     /*
