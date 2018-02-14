@@ -180,6 +180,26 @@
     // },
 
     ready: function() {
+      //this.$.account.get(); // they must be logged in, so auto load
+
+      window.addEventListener('WebComponentsReady', function() {
+
+        var account = document.querySelector('uqlibrary-api-account');
+
+        var self = this;
+        account.addEventListener('uqlibrary-api-account-loaded', function(e) {
+          if (e.detail.hasSession) {
+            console.log('Logged in as ' + e.detail.id);
+          } else {
+            console.log('Not logged in');
+            self.$.account.login(window.location.href);
+          }
+        });
+
+        account.get();
+
+      });
+
       this.collectionType = this.getVariableFromUrlParameter('collection', this.collectionTypeDefault);
       this.subCollectionName = this.getVariableFromUrlParameter('subCollection', this.subCollectionNameDefault);
       this.filePath = this.getVariableFromUrlParameter('file', this.filePathDefault);
@@ -194,16 +214,16 @@
       //   });
       // }
 
-      self = this;
-      this.$.account.addEventListener('uqlibrary-api-account-loaded', function (e) {
-        if (e.detail.hasSession) {
-console.log('logged in');
-        } else {
-console.log('not logged in');
-          // Not logged in
-            self.$.account.login(window.location.href);
-        }
-      });
+//       var self = this;
+//       this.$.account.addEventListener('uqlibrary-api-account-loaded', function (e) {
+//         if (e.detail.hasSession) {
+// console.log('logged in');
+//         } else {
+// console.log('not logged in');
+//           // Not logged in
+//             self.$.account.login(window.location.href);
+//         }
+//       });
 
       var displayContent = document.querySelector('#layout');
 
@@ -440,16 +460,16 @@ console.log('handleLoadedFile: SHOULD REDIRECT TO ' + this.deliveryFilename);
      * Callback for loaded account - they must be logged in
      * @param e
      */
-    accountLoaded: function (e) {
-      if (e.detail.hasSession) {
-        //     if (document.getElementById('preloader'))
-console.log('accountLoaded - has session');
-      }
-      else {
-console.log('accountLoaded - not logged in');
-        // Not logged in
-        this.$.account.login(window.location.href);
-      }
-    }
+//     accountLoaded: function (e) {
+//       if (e.detail.hasSession) {
+//         //     if (document.getElementById('preloader'))
+// console.log('accountLoaded - has session');
+//       }
+//       else {
+// console.log('accountLoaded - not logged in');
+//         // Not logged in
+//         this.$.account.login(window.location.href);
+//       }
+//     }
   });
 })();
