@@ -190,6 +190,7 @@
         account.addEventListener('uqlibrary-api-account-loaded', function(e) {
           if (e.detail.hasSession) {
             console.log('Logged in as ' + e.detail.id);
+            this.requestCollectionFile();
           } else {
             console.log('Not logged in');
             account.login(window.location.href);
@@ -199,21 +200,9 @@
         account.get();
 
       });
-/*
-     // Add event listener for accounts
-      this.$.account.addEventListener('uqlibrary-api-account-loaded', function (e) {
-        if (e.detail.hasSession) {
-          if (e.detail.classes) {
-            self.user = e.detail;
-          } else {
-            // Not logged in
-            self.$.account.login(window.location.href);
-          }
-        }
-      });
+    },
 
-*/
-
+    requestCollectionFile: function() {
       this.collectionType = this.getVariableFromUrlParameter('collection', this.collectionTypeDefault);
       this.subCollectionName = this.getVariableFromUrlParameter('subCollection', this.subCollectionNameDefault);
       this.filePath = this.getVariableFromUrlParameter('file', this.filePathDefault);
@@ -227,17 +216,6 @@
       //       redirect to cloudfront url
       //   });
       // }
-
-//       var self = this;
-//       this.$.account.addEventListener('uqlibrary-api-account-loaded', function (e) {
-//         if (e.detail.hasSession) {
-// console.log('logged in');
-//         } else {
-// console.log('not logged in');
-//           // Not logged in
-//             self.$.account.login(window.location.href);
-//         }
-//       });
 
       var displayContent = document.querySelector('#layout');
 
@@ -254,21 +232,6 @@
         var linkToEncode = this.collectionType + "/" + this.filePath + '?copyright';
 
         this.fileExtension =  this.getFileExtension();
-
-
-        // var self = this;
-//     this.$.encodedUrlApi.addEventListener('uqlibrary-api-collection-encoded-url', function (e) {
-//       console.log(e);
-//       if (e.detail.url) {
-//         self.clickableLink = e.detail.url;
-// console.log('self.clickableLink: ' + self.clickableLink);
-//       }
-//     });
-//         this.$.list.addEventListener('uqlibrary-api', function (e) {
-//           self.list = e.detail;
-//           self.fire('uqlibrary-api-collection-encoded-url', self.list);
-//         });
-
 
         var fileList = [];
         // thomson and bom supply a list page
@@ -293,7 +256,6 @@
       } else {
       }
 
-
     },
 
     /**
@@ -316,7 +278,7 @@
         this._setAccessCopyrightMessage(); // TODO: or do this with watcher?
 
         this.deliveryFilename = e.detail.url;
-console.log('handleLoadedFile: SHOULD REDIRECT TO ' + this.deliveryFilename);
+        console.log('handleLoadedFile: SHOULD REDIRECT TO ' + this.deliveryFilename);
 
 // included for dev only
         this.isOpenaccess = true;
@@ -468,7 +430,7 @@ console.log('handleLoadedFile: SHOULD REDIRECT TO ' + this.deliveryFilename);
       } else {
         return false;
       }
-    },
+    }
 
     /**
      * Callback for loaded account - they must be logged in
