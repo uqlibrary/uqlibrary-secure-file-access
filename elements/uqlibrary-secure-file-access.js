@@ -86,7 +86,7 @@
 
       pageHeader: {
         type: String,
-        value: 'UQ Library pdf collection'
+        value: 'UQ Library secure file collection'
       },
 
       filesAvailable: {
@@ -192,13 +192,27 @@
             console.log('Logged in as ' + e.detail.id);
           } else {
             console.log('Not logged in');
-            self.$.account.login(window.location.href);
+            account.login(window.location.href);
           }
         });
 
         account.get();
 
       });
+/*
+     // Add event listener for accounts
+      this.$.account.addEventListener('uqlibrary-api-account-loaded', function (e) {
+        if (e.detail.hasSession) {
+          if (e.detail.classes) {
+            self.user = e.detail;
+          } else {
+            // Not logged in
+            self.$.account.login(window.location.href);
+          }
+        }
+      });
+
+*/
 
       this.collectionType = this.getVariableFromUrlParameter('collection', this.collectionTypeDefault);
       this.subCollectionName = this.getVariableFromUrlParameter('subCollection', this.subCollectionNameDefault);

@@ -29,12 +29,20 @@ Example:
       }
 
       div#layout {
-        margin-top: 0 16px 16px;
-        margin-top: 0 1rem 1rem;
+        margin-top: 16px;
+        margin-top: 1rem;
       }
 
-      #copyright h1, #copyright h2, #copyright h3, #copyright h4, #copyright p {
-          text-align: center;
+      div.card-content {
+        padding: 0 16px 16px;
+        padding: 0 1rem 1rem;
+      }
+
+      #copyright h1, #copyright h2, #copyright h3, #copyright h4, #copyright p.copyrightsubhead {
+        text-align: center;
+      }
+      #copyright h1 {
+        margin-top: 0;
       }
 
     </style>
@@ -49,27 +57,27 @@ Example:
       <paper-card heading="[[ pageHeader ]]">
         <div class="card-content">
 
-<!--
-          <div id="thomsonList" hidden$="[[!isThomsonList]]">
-            <div hidden$="[[!isList]]">
-              <h1>List All Files in Collection - <collectionName /></h1>
-              // no, I think we can just do the loop here without creating another component
-              // no that doesnt make sense - we have to call something to get the file list
-              // so do we need a component to do that, or just another uqlibrary-api call?
-              // just the call, then loop I would say
-              <uqlibrary-filelist type="thomson" supply fileList for loop></uqlibrary-filelist>
-            </div>
-          </div>
--->
-<!--
-          <div id="bomList" hidden$="[[!isBomList]]">
-            <div hidden$="[[!isList]]">
-              <h1>Bureau of Meteorology - Climate Data</h1>
-              <p>Access to files in these datasets is restricted to UQ users.</p>
-              <uqlibrary-filelist type="bom" supply fileList for loop></uqlibrary-filelist>
-            </div>
-          </div>
--->
+          <!--
+                    <div id="thomsonList" hidden$="[[!isThomsonList]]">
+                      <div hidden$="[[!isList]]">
+                        <h1>List All Files in Collection - <collectionName /></h1>
+                        // no, I think we can just do the loop here without creating another component
+                        // no that doesnt make sense - we have to call something to get the file list
+                        // so do we need a component to do that, or just another uqlibrary-api call?
+                        // just the call, then loop I would say
+                        <uqlibrary-filelist type="thomson" supply fileList for loop></uqlibrary-filelist>
+                      </div>
+                    </div>
+          -->
+          <!--
+                    <div id="bomList" hidden$="[[!isBomList]]">
+                      <div hidden$="[[!isList]]">
+                        <h1>Bureau of Meteorology - Climate Data</h1>
+                        <p>Access to files in these datasets is restricted to UQ users.</p>
+                        <uqlibrary-filelist type="bom" supply fileList for loop></uqlibrary-filelist>
+                      </div>
+                    </div>
+          -->
 
           <div id="filesUnavailable" class="filesUnavailable" hidden$="[[ filesAvailable ]]">
             <h2>Sorry, an error occurred</h2>
@@ -84,7 +92,7 @@ Example:
 
           <div id="copyright" class="copyright" hidden$="[[ hideCopyrightMessage ]]">
             <h1>Copyright Notice</h1>
-            <p>This file is provided to support teaching and learning for the staff and students of the University of Queensland</p>
+            <p class="copyrightsubhead">This file is provided to support teaching and learning for the staff and students of the University of Queensland</p>
             <h2>COMMONWEALTH OF AUSTRALIA</h2>
             <h3>Copyright Regulations 1969</h3>
 
