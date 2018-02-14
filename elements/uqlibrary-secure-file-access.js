@@ -86,7 +86,7 @@
 
       pageHeader: {
         type: String,
-        value: ''
+        value: 'UQ Library pdf collection'
       },
 
       filesAvailable: {
@@ -443,9 +443,10 @@ console.log('handleLoadedFile: SHOULD REDIRECT TO ' + this.deliveryFilename);
     accountLoaded: function (e) {
       if (e.detail.hasSession) {
         //     if (document.getElementById('preloader'))
-        //       document.getElementById('preloader').style.display = 'none';
+console.log('accountLoaded - has session');
       }
       else {
+console.log('accountLoaded - not logged in');
         // Not logged in
         this.$.account.login(window.location.href);
       }
