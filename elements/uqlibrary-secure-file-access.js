@@ -191,25 +191,23 @@
         var self = this;
         account.addEventListener('uqlibrary-api-account-loaded', function(e) {
           if (e.detail.hasSession) {
-            console.log('Logged in as ' + e.detail.id);
-            this.requestCollectionFile();
+console.log('Logged in as ' + e.detail.id);
+            self.requestCollectionFile();
           } else {
-            console.log('Not logged in');
-            this.filesAvailable = false;
+console.log('Not logged in');
+            self.filesAvailable = false;
             account.login(window.location.href);
           }
         });
-// comment for dev
+// comment for dev | uncomment for prod
         account.get();
 
       });
-// comment for prod
+// uncomment for dev | comment for prod
 //      this.requestCollectionFile();
     },
 
     requestCollectionFile: function() {
-      // var displayContent = document.querySelector('#layout');
-
       this.collection = this.loadCollectionDetail();
       if (false === this.collection) {
         this.isValidRequest = false;
