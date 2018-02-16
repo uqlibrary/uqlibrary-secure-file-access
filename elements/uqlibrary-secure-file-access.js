@@ -119,6 +119,16 @@
         value: ''
       },
 
+      pathname: {
+        type: String,
+        value: ''
+      },
+
+      search: {
+        type: String,
+        value: ''
+      },
+
       subCollectionName: {
         type: String,
         value: ''
@@ -146,43 +156,36 @@
     setCollectionTypeDefault: function(value) {
       this.collectionTypeDefault = value;
     },
-
     setFilePathDefault: function(value) {
       this.filePathDefault = value;
     },
-
     setSubCollectionNameDefault: function(value) {
       this.subCollectionNameDefault = value;
     },
-
     setMethodTypeDefault: function(value) {
       this.methodTypeDefault = value;
     },
-
-    /*
-     * Builds the url and opens it.
-     */
-    // _searchActivated: function(e) {
-    //
-    //   var searchText = this.$.searchKeywordInput.value;
-    //
-    //   var searchUrl = this._selectedSource.urlRoot + searchText;
-    //   if (this._selectedSource.urlAppend) {
-    //     searchUrl += this._selectedSource.urlAppend;
-    //   }
-    //   searchUrl = encodeURI(searchUrl);
-    //
-    //   this.async(function () {
-    //     window.open(searchUrl, '_blank');
-    //   }, 100);
-    //
-    //   this.$.ga.addEvent(this.searchType, searchText);
-    // },
+    setSearch: function(defaultValue) {
+      if (this.search === '') {
+        this.search = defaultValue;
+      }
+    },
+    setPathname: function(defaultValue) {
+      if (this.pathname === '') {
+        this.pathname = defaultValue;
+      }
+    },
 
     ready: function() {
-      this.collectionType = this.getVariableFromUrlParameter('collection', this.collectionTypeDefault);
-      this.filePath = this.getVariableFromUrlParameter('file', this.filePathDefault);
-      this.methodType = this.getVariableFromUrlParameter('method', this.methodTypeDefault); // list for thomson or bom; missing otherwise - get or serve options handled by s3
+      // while we use an AWS Lambda to break the pretty url into html & parameters to be passed to call uqlibrary_pages
+      // this doesnt actually make it to the browser
+      // so once in javascript we have to manually break up the url to get the bits.
+      // however, in dev we have to have the parametrs in the url. So, we have to do it both ways :(
+      this.collectionType = this.getCollectionNameFromUrl(this.collectionTypeDefault);
+      this.filePath = this.getFilePathFromUrl(this.filePathDefault);
+
+      // this will be used once we are getting lists
+      this.methodType = this.getVariableFromUrl('method', this.methodTypeDefault); // list for thomson or bom; missing otherwise - get or serve options handled by s3
 
       var self = this;
       window.addEventListener('WebComponentsReady', function() {
@@ -196,15 +199,74 @@ console.log('Logged in as ' + e.detail.id);
           } else {
 console.log('Not logged in');
             self.filesAvailable = false;
+// comment out for dev | uncomment for prod (or loops endlessly)
             account.login(window.location.href);
           }
         });
-// comment for dev | uncomment for prod
         account.get();
 
       });
-// uncomment for dev | comment for prod
+// uncomment for dev | comment out for prod
+//      this.filesAvailable = true;
 //      this.requestCollectionFile();
+    },
+
+    /**
+     * eg window.location.pathname = "/thomson/classic_legal_texts/Baker_Introduction_to_Torts_2e.pdf" => thomson
+     * @param defaultValue
+     * @returns {*}
+     */
+    getCollectionNameFromUrl: function(defaultValue) {
+      this.setSearch(window.location.search);
+      this.setPathname(window.location.pathname);
+
+      if (this.search !== '') {
+        return this.getVariableFromUrl('collection', defaultValue);
+      }
+
+      if (this.pathname.startsWith('/')) {
+        parts = this.pathname.split('/');
+        if (parts.length >= 3) {
+          parts.shift(); // discard the first bit = its from the initial slash
+          return parts.shift();
+        }
+      }
+
+      return this.useDefault(defaultValue);
+    },
+
+    /**
+     *
+     * eg window.location.pathname = "/thomson/classic_legal_texts/Baker_Introduction_to_Torts_2e.pdf" => classic_legal_texts/Baker_Introduction_to_Torts_2e.pdf
+     * @param defaultValue
+     * @returns string|boolean
+     */
+    getFilePathFromUrl: function(defaultValue) {
+      this.setSearch(window.location.search);
+      this.setPathname(window.location.pathname);
+
+      if (this.search !== '') {
+        return this.getVariableFromUrl('file', defaultValue);
+      }
+
+      if (this.pathname.startsWith('/')) {
+        parts = this.pathname.split('/');
+        if (parts.length >= 3) {
+          parts.shift(); // discard the first bit = its from the initial slash
+          parts.shift(); // discard the collection name
+          return parts.join("/");
+        }
+      }
+
+      return this.useDefault(defaultValue);
+    },
+
+    useDefault: function(defaultValue) {
+      if (defaultValue === undefined || defaultValue === '') {
+        return false;
+      } else {
+        return defaultValue;
+      }
     },
 
     requestCollectionFile: function() {
@@ -353,8 +415,9 @@ console.log('Not logged in');
      * @param defaultValue
      * @returns string|boolean
      */
-    getVariableFromUrlParameter: function(variable, defaultValue) {
-      var query = window.location.search.substring(1);
+    getVariableFromUrl: function(variable, defaultValue) {
+      var startChar = '?'.length;
+      var query = window.location.search.substring(startChar);
       var vars = query.split("&");
       for (var i = 0; i < vars.length; i++) {
         var pair = vars[i].split("=");
