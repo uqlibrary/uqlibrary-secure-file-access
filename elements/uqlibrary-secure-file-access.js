@@ -184,11 +184,11 @@
       this.filePath = this.getVariableFromUrlParameter('file', this.filePathDefault);
       this.methodType = this.getVariableFromUrlParameter('method', this.methodTypeDefault); // list for thomson or bom; missing otherwise - get or serve options handled by s3
 
+      var self = this;
       window.addEventListener('WebComponentsReady', function() {
 
         var account = document.querySelector('uqlibrary-api-account');
 
-        var self = this;
         account.addEventListener('uqlibrary-api-account-loaded', function(e) {
           if (e.detail.hasSession) {
 console.log('Logged in as ' + e.detail.id);
