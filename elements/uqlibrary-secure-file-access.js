@@ -6,10 +6,10 @@
       /**
        * Application name for google analytics records.
        */
-      gaAppName: {
-        type: String,
-        value: 'SecureFileAccess'
-      },
+      // gaAppName: {
+      //   type: String,
+      //   value: 'SecureFileAccess'
+      // },
 
       isValidRequest: {
         type: Boolean,
@@ -99,25 +99,25 @@
         value: true
       },
 
-      collectionType : {
+      collectionType: {
         type: String,
         value: ''
       },
 
-      collectionTypeDefault : {
-        type: String,
-        value: ''
-      },
+      // collectionTypeDefault: {
+      //   type: String,
+      //   value: ''
+      // },
 
-      filePath : {
-        type: String,
-        value: ''
-      },
-
-      filePathDefault : {
-        type: String,
-        value: ''
-      },
+      // filePath: {
+      //   type: String,
+      //   value: ''
+      // },
+      //
+      // filePathDefault: {
+      //   type: String,
+      //   value: ''
+      // },
 
       pathname: {
         type: String,
@@ -129,79 +129,45 @@
         value: ''
       },
 
-      subCollectionName: {
-        type: String,
-        value: ''
-      },
-
-      subCollectionNameDefault: {
-        type: String,
-        value: ''
-      },
-
       methodType: {
         type: String,
         value: ''
-      },
-
-      methodTypeDefault: {
-        type: String,
-        value: ''
       }
-
-
     },
 
-    // used for testing to simulate request variables
-    setCollectionTypeDefault: function(value) {
-      this.collectionTypeDefault = value;
-    },
-    setFilePathDefault: function(value) {
-      this.filePathDefault = value;
-    },
-    setSubCollectionNameDefault: function(value) {
-      this.subCollectionNameDefault = value;
-    },
-    setMethodTypeDefault: function(value) {
-      this.methodTypeDefault = value;
-    },
-    setSearch: function(defaultValue) {
+    setSearch: function (value) {
       if (this.search === '') {
-        this.search = defaultValue;
-      }
-    },
-    setPathname: function(defaultValue) {
-      if (this.pathname === '') {
-        this.pathname = defaultValue;
+        this.search = value;
       }
     },
 
-    ready: function() {
-      // while we use an AWS Lambda to break the pretty url into html & parameters to be passed to call uqlibrary_pages
-      // this doesnt actually make it to the browser
-      // so once in javascript we have to manually break up the url to get the bits.
-      // however, in dev we have to have the parametrs in the url. So, we have to do it both ways :(
-      this.collectionType = this.getCollectionNameFromUrl(this.collectionTypeDefault);
-console.log('collectionType = ' + this.collectionType);
-      this.filePath = this.getFilePathFromUrl(this.filePathDefault);
-console.log('filePath = ' + this.filePath);
+    ready: function () {
+      if (this.pathname === '') {
+        // called if it has not been initialised (in test)
+        this.pathname = this.setupPath(window.location.pathname);
+      }
+
+      if (!this.checkValidRequest()) {
+        this.filesAvailable = false;
+        return;
+      }
 
       // this will be used once we are getting lists
-      this.methodType = this.getVariableFromUrl('method', this.methodTypeDefault); // list for thomson or bom; missing otherwise - get or serve options handled by s3
+//      this.methodType = this.getVariableFromUrl('method', this.methodTypeDefault); // list for thomson or bom; missing otherwise - get or serve options handled by s3
 
       var self = this;
-      window.addEventListener('WebComponentsReady', function() {
+      window.addEventListener('WebComponentsReady', function () {
 
         var account = document.querySelector('uqlibrary-api-account');
 
-        account.addEventListener('uqlibrary-api-account-loaded', function(e) {
+        account.addEventListener('uqlibrary-api-account-loaded', function (e) {
           if (e.detail.hasSession) {
 console.log('Logged in as ' + e.detail.id);
             self.requestCollectionFile();
           } else {
 console.log('Not logged in');
-            self.filesAvailable = false; // experiment with removing this, to see if its better without the flash of content
-// comment out in pages bower_components for dev (or loops endlessly) | uncomment for prod
+            self.filesAvailable = false;
+// comment out for dev | uncomment for prod (or loops endlessly)
             account.login(window.location.href);
           }
         });
@@ -214,70 +180,41 @@ console.log('Not logged in');
     },
 
     /**
-     * eg window.location.pathname = "/thomson/classic_legal_texts/Baker_Introduction_to_Torts_2e.pdf"
-     * => thomson
-     * @param defaultValue
-     * @returns string|boolean
+     * in test and prod, we will pass something like '/folder/somwething.pdf'
+     * in dev, we will get 'collection.html?
+     * @param newPathname
      */
-    getCollectionNameFromUrl: function(defaultValue) {
-      this.setSearch(window.location.search);
-      this.setPathname(window.location.pathname);
-
-      if (this.search !== '') {
-        return this.getVariableFromUrl('collection', defaultValue);
-      }
-
-      if (this.pathname.startsWith('/')) {
-        parts = this.pathname.split('/');
-        if (parts.length >= 3) {
-          parts.shift(); // discard the first bit = its from the initial slash
-          return parts.shift();
+    setupPath: function(newPathname) {
+      // we pass the window.location.pathname along directly to the api
+      // if we get a paramter based url in dev, we must construct it first
+      if (newPathname === undefined || newPathname === '') {
+        // this should never happen
+        console.log('ERROR: setupPath called without path');
+      } else if (newPathname === '/collection.html') {
+        // we are in dev
+        if (this.search !== '') {
+          // has been set by call to this.setSearch
+        } else if (window.location.search === undefined) {
+          // this should never happen
+        } else {
+          this.search = window.location.search;
         }
-      }
-
-      return this.useDefault(defaultValue);
-    },
-
-    /**
-     *
-     * eg window.location.pathname = "/thomson/classic_legal_texts/Baker_Introduction_to_Torts_2e.pdf"
-     * => classic_legal_texts/Baker_Introduction_to_Torts_2e.pdf
-     * @param defaultValue
-     * @returns string|boolean
-     */
-    getFilePathFromUrl: function(defaultValue) {
-      this.setSearch(window.location.search);
-      this.setPathname(window.location.pathname);
-
-      if (this.search !== '') {
-        return this.getVariableFromUrl('file', defaultValue);
-      }
-
-      if (this.pathname.startsWith('/')) {
-        parts = this.pathname.split('/');
-        if (parts.length >= 3) {
-          parts.shift(); // discard the first bit = its from the initial slash
-          parts.shift(); // discard the collection name
-          return parts.join("/");
-        }
-      }
-
-      return this.useDefault(defaultValue);
-    },
-
-    /**
-     * loads in a supplied default value, if provided (otherwise false)
-     * (this allows test values and fail on bad prod)
-     * @param defaultValue
-     * @returns string|boolean
-     */
-    useDefault: function(defaultValue) {
-      if (defaultValue === undefined || defaultValue === '') {
-        return false;
+        // we are in dev and must join the params into a path
+        var startChar = '?'.length;
+        var query = this.search.substring(startChar);
+        var parts = query.split("&");
+        this.pathname = '/' + parts.map(function(kk,vv) {
+          return kk.split('=').pop();
+        }).join('/');
+        // this.pathname = '/' + parts. replace(',', '/');
       } else {
-        return defaultValue;
+        // we are in prod
+        this.pathname = newPathname
       }
+      return this.pathname;
     },
+
+
 
     requestCollectionFile: function() {
       this.collection = this.loadCollectionDetail();
@@ -285,11 +222,11 @@ console.log('Not logged in');
         this.isValidRequest = false;
       }
 
-      this.checkValidRequest(); // needs to be set as it controls block display on page
+      // this.checkValidRequest(); // needs to be set as it controls block display on page
 
       var linkToEncode = '';
 
-      if (this.isValidRequest) {
+      if (this.checkValidRequest()) {
 
         this.fileExtension =  this.getFileExtension();
 
@@ -305,7 +242,8 @@ console.log('Not logged in');
 //          fileList = 'something'; // replace with aws thingy
           // then display on page as list
         } else {
-          linkToEncode = this.collectionType + "/" + this.filePath + '?copyright';
+          //strip opening slash
+          linkToEncode = this.stripFirstChar(this.pathname) + '?copyright';
 
           // if ( !preg_match('/^(apps|lectures|sustainable_tourism)/', fileid) ) {
           //   set this.isValidRequest = false
@@ -321,12 +259,15 @@ console.log('Not logged in');
       }
     },
 
+    stripFirstChar: function(input) {
+      return input.substring(1);
+    },
+
     /**
      * called when the api uqlibrary-api-collection-encoded-url returns
      * @param e
      */
     handleLoadedFile: function(e) {
-console.log(e);
       // error: {response: true, responseText: "An unknown error occurred"}
       // ok: {url: "https://files.library.uq.edu.au/secure/exams/0001/3e201.pdf"}
       if (e.detail.url === undefined || e.detail.response === true) {
@@ -346,7 +287,7 @@ console.log(e);
         this._setAccessCopyrightMessage(); // TODO: or do this with watcher?
 
         this.deliveryFilename = e.detail.url;
-        console.log('handleLoadedFile: SHOULD REDIRECT TO ' + this.deliveryFilename);
+console.log('handleLoadedFile: SHOULD REDIRECT TO ' + this.deliveryFilename);
 
 // included for dev only
         this.isOpenaccess = true;
@@ -388,29 +329,37 @@ console.log(e);
 
     /**
      * determine if the url parameters ask for a valid file
+     * @param collectionName - supplied for unit test
+     * @returns boolean
      */
-    checkValidRequest: function() {
+    checkValidRequest: function(collectionName) {
+      if (collectionName === undefined || collectionName === '') {
+        collectionName = this.getCollectionFolder();
+      }
       var requestedUrl = '';
-
-      if (this.filePath === undefined || this.filePath === false) {
-        this.isValidRequest = false;
-        return;
+      this.isValidRequest = false;
+      if (this.pathname === undefined || this.pathname === false) {
+        return this.isValidRequest;
       }
 
+      var that = this;
       var testCollection = this.pathProperties.filter(function (e) {
-        return that.collectionType === e.name;
+        return collectionName === e.name;
       });
-      if (testCollection.length === 0) {
-        this.isValidRequest = false;
+      this.isValidRequest =  (testCollection.length !== 0);
+
+      return this.isValidRequest;
+    },
+
+    getCollectionFolder: function() {
+      if (this.pathname.startsWith('/')) {
+        parts = this.pathname.split('/');
+        if (parts.length >= 3) {
+          parts.shift(); // discard the first bit = its from the initial slash
+          return parts.shift();
+        }
       }
-
-
-      // valid values for method can be 'get' or 'serve' for general collection types, or 'list' for thomson & bom
-      // it is also overloaded as {collection name} for thomson
-// I dont think we need this - S3 is looking after get/serve. or is just going to be list?
-//       if (this.methodType === false) {
-//         this.methodType = 'serve';
-//       }
+      return false;
     },
 
     /*
@@ -420,28 +369,6 @@ console.log(e);
     },
     */
 
-    /**
-     * extract the values out of the data passed in the url
-     * @param variable
-     * @param defaultValue
-     * @returns string|boolean
-     */
-    getVariableFromUrl: function(variable, defaultValue) {
-      var startChar = '?'.length;
-      var query = window.location.search.substring(startChar);
-      var vars = query.split("&");
-      for (var i = 0; i < vars.length; i++) {
-        var pair = vars[i].split("=");
-        if (pair[0] === variable) {
-          return pair[1];
-        }
-      }
-      if (defaultValue === undefined || defaultValue === '') {
-        return false;
-      } else {
-        return defaultValue;
-      }
-    },
 
     /**
      * get the details for the specific folder out of the array
@@ -467,32 +394,16 @@ console.log(e);
      * @returns int|boolean
      */
     getFileExtension: function() {
-      if (this.filePath === undefined) {
+      if (this.pathname === undefined) {
         return false;
       }
 
-      var dotPosition = this.filePath.lastIndexOf('.');
+      var dotPosition = this.pathname.lastIndexOf('.');
       if (dotPosition !== undefined && dotPosition >= 0) {
-        return this.filePath.substr(dotPosition + 1);
+        return this.pathname.substr(dotPosition + 1);
       } else {
         return false;
       }
     }
-
-    /**
-     * Callback for loaded account - they must be logged in
-     * @param e
-     */
-//     accountLoaded: function (e) {
-//       if (e.detail.hasSession) {
-//         //     if (document.getElementById('preloader'))
-// console.log('accountLoaded - has session');
-//       }
-//       else {
-// console.log('accountLoaded - not logged in');
-//         // Not logged in
-//         this.$.account.login(window.location.href);
-//       }
-//     }
   });
 })();

@@ -26,13 +26,65 @@
     var element;
 
     setup(function () {
+      document.cookie="UQLMockData=enabled";
       element = fixture('element');
     });
 
+    test('it should not get an invalid folder', function() {
+      var expected = false;
+      var actual = element.checkValidRequest('missingabczyx');
+      expect(expected).to.equal(actual);
+    });
+
+    test('it should get a valid folder', function() {
+      element.pathProperties.push({
+        name: 'test'
+      });
+
+      var expected = true;
+      var actual = element.checkValidRequest('test');
+      expect(expected).to.equal(actual);
+    });
+
+    test('will be able to manually load a parameter path in dev', function (done) {
+      element.setSearch('?collection=exams&file=0001/3e201.pdf');
+      element.setupPath('/collection.html');
+
+      var expected = '/exams/0001/3e201.pdf';
+      var actual = element.pathname;
+      expect(expected).to.equal(actual);
+
+      done();
+    });
+
+    test('it should get the file extension', function (done) {
+      element.setupPath('/someFile/someFile.pdf');
+
+      var expected = 'pdf';
+      var actual = element.getFileExtension();
+      expect(expected).to.equal(actual);
+
+      done();
+    });
+
+    test('it should skip a missing file extension', function (done) {
+      element.setupPath('/someFile/someFile');
+
+      var expected = false;
+      var actual = element.getFileExtension();
+      expect(expected).to.equal(actual);
+
+      done();
+    });
+
+
+
+
     test('it should redirect open access files to the correct url', function (done) {
       flush(function () {
-        element.setCollectionTypeDefault('thomson');
-        element.setFilePathDefault('/someFile.pdf');
+        element.setupPath('/someFile/someFile.pdf');
+
+        element.fire("uqlibrary-api-account-loaded");
 
         var body = element.$.layout;
 
@@ -53,11 +105,9 @@
 
     test('it should show the copyright page for copyrighted files', function (done) {
       flush(function () {
-        element.setCollectionTypeDefault('exams');
-        element.setFilePathDefault('/someFile.pdf');
+        element.setupPath('/exams/someFile.pdf');
 
         var body = element.$.layout;
-console.log(body);
         var header = body.querySelector('#copyright h2');
         expect(header.textContent).to.contain('COMMONWEALTH OF AUSTRALIA');
 
@@ -78,8 +128,7 @@ console.log(body);
 
     test('it should handle invalid file requests', function (done) {
       flush(function () {
-        element.setCollectionTypeDefault('invalid');
-        element.setFilePathDefault('/blah.pdf');
+        element.setupPath('/invalid/blah.pdf');
 
         var body = element.$.layout;
 
@@ -102,8 +151,7 @@ console.log(body);
     });
 
     test('it should redirect open access files to the correct url with non-params url', function (done) {
-      element.setSearch('');
-      element.setPathname("/thomson/someFile.pdf");
+      element.setupPath("/thomson/someFile.pdf");
 
       flush(function () {
         var body = element.$.layout;
@@ -124,8 +172,7 @@ console.log(body);
     });
 
     test('it should show the copyright page for copyrighted files with non-params url', function (done) {
-      element.setSearch('');
-      element.setPathname("/exams/someFile.pdf");
+      element.setupPath("/exams/someFile.pdf");
 
       flush(function () {
         var body = element.$.layout;
@@ -143,11 +190,11 @@ console.log(body);
 
         var redirectparagraph = body.querySelector('#redirect p');
         expect(redirectparagraph).to.have.property('hidden');
+
         done();
 
       });
     });
-
   });
 
 
