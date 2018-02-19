@@ -182,7 +182,9 @@
       // so once in javascript we have to manually break up the url to get the bits.
       // however, in dev we have to have the parametrs in the url. So, we have to do it both ways :(
       this.collectionType = this.getCollectionNameFromUrl(this.collectionTypeDefault);
+console.log('collectionType = ' + this.collectionType);
       this.filePath = this.getFilePathFromUrl(this.filePathDefault);
+console.log('filePath = ' + this.filePath);
 
       // this will be used once we are getting lists
       this.methodType = this.getVariableFromUrl('method', this.methodTypeDefault); // list for thomson or bom; missing otherwise - get or serve options handled by s3
@@ -198,8 +200,8 @@ console.log('Logged in as ' + e.detail.id);
             self.requestCollectionFile();
           } else {
 console.log('Not logged in');
-            self.filesAvailable = false;
-// comment out for dev | uncomment for prod (or loops endlessly)
+            self.filesAvailable = false; // experiment with removing this, to see if its better without the flash of content
+// comment out in pages bower_components for dev (or loops endlessly) | uncomment for prod
             account.login(window.location.href);
           }
         });
@@ -212,9 +214,10 @@ console.log('Not logged in');
     },
 
     /**
-     * eg window.location.pathname = "/thomson/classic_legal_texts/Baker_Introduction_to_Torts_2e.pdf" => thomson
+     * eg window.location.pathname = "/thomson/classic_legal_texts/Baker_Introduction_to_Torts_2e.pdf"
+     * => thomson
      * @param defaultValue
-     * @returns {*}
+     * @returns string|boolean
      */
     getCollectionNameFromUrl: function(defaultValue) {
       this.setSearch(window.location.search);
@@ -237,7 +240,8 @@ console.log('Not logged in');
 
     /**
      *
-     * eg window.location.pathname = "/thomson/classic_legal_texts/Baker_Introduction_to_Torts_2e.pdf" => classic_legal_texts/Baker_Introduction_to_Torts_2e.pdf
+     * eg window.location.pathname = "/thomson/classic_legal_texts/Baker_Introduction_to_Torts_2e.pdf"
+     * => classic_legal_texts/Baker_Introduction_to_Torts_2e.pdf
      * @param defaultValue
      * @returns string|boolean
      */
@@ -261,6 +265,12 @@ console.log('Not logged in');
       return this.useDefault(defaultValue);
     },
 
+    /**
+     * loads in a supplied default value, if provided (otherwise false)
+     * (this allows test values and fail on bad prod)
+     * @param defaultValue
+     * @returns string|boolean
+     */
     useDefault: function(defaultValue) {
       if (defaultValue === undefined || defaultValue === '') {
         return false;
@@ -316,6 +326,7 @@ console.log('Not logged in');
      * @param e
      */
     handleLoadedFile: function(e) {
+console.log(e);
       // error: {response: true, responseText: "An unknown error occurred"}
       // ok: {url: "https://files.library.uq.edu.au/secure/exams/0001/3e201.pdf"}
       if (e.detail.url === undefined || e.detail.response === true) {
