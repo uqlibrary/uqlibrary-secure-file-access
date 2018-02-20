@@ -79,18 +79,18 @@ Example:
                     </div>
           -->
 
-          <div id="filesUnavailable" class="filesUnavailable" hidden$="[[ filesAvailable ]]">
+          <div id="filesUnavailable" class="filesUnavailable" hidden$="[[ !isPanelFilesUnavailable ]]">
             <h2>Sorry, an error occurred</h2>
             <p>Secure files are not available at the moment - please try again later (Are you logged in?)</p>
           </div>
 
-          <div id="invalidRequest" class="invalidRequest" hidden$="[[ isValidRequest ]]">
+          <div id="invalidRequest" class="invalidRequest" hidden$="[[ !isPanelInvalidRequest ]]">
             <h2>Invalid file location</h2>
             <h3>Sorry, this is not a valid file location.</h3>
             <p>Please check the link you have used.</p>
           </div>
 
-          <div id="copyright" class="copyright" hidden$="[[ hideCopyrightMessage ]]">
+          <div id="copyright" class="copyright" hidden$="[[ !isPanelCopyright ]]">
             <h1>Copyright Notice</h1>
             <p class="copyrightsubhead">This file is provided to support teaching and learning for the staff and students of the University of Queensland</p>
             <h2>COMMONWEALTH OF AUSTRALIA</h2>
@@ -112,7 +112,7 @@ Example:
 
           </div>
 
-          <div id="redirect" class="redirect" hidden$="[[ !isRedirect ]]">
+          <div id="redirect" class="redirect" hidden$="[[ !isPanelRedirect ]]">
             <p>We have the file ready for you.</p>
             <p><a href="[[ deliveryFilename ]]">Click here</a> if the page does not redirect.</p>
           </div>

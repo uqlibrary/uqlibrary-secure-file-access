@@ -11,77 +11,30 @@
       //   value: 'SecureFileAccess'
       // },
 
-      isValidRequest: {
-        type: Boolean,
-        value: true
-      },
+      // showPanel: {
+      //   type: String,
+      //   value: 'unknown',
+      //   observer: 'isPanel'
+      // },
 
-      isRedirect: {
+      isPanelFilesUnavailable: {
         type: Boolean,
         value: false
       },
 
-      pathProperties: {
-        type: Array,
-        value: [
-          {
-            name: 'coursebank', // pdf
-            // dev notes - remove later
-            oldPHP: '/coursebank/get.php',
-            oldFileLocation: '/coursematerials/coursebank/', // unused? , included for transparency
-            urlPath: '/collection/pdf/get/' // unused? , included for transparency
-          },
-          {
-            name: 'exams',
-            oldPHP: 'pdfserve.php',
-            oldFileLocation: '/coursematerials/exams/',
-            urlPath: '/collection/exams/get/'
-          },
-          // { // these folders havent been implemented yet
-          //   name: 'coursematerials',
-          //   oldPHP: 'eget.php', // ???
-          //   oldFileLocation: '/coursematerials/',
-          //   urlPath: '/collection/coursematerials/'
-          // },
-          // {
-          //   name: 'cdbooks',
-          //   oldPHP: 'acdb.php',
-          //   oldFileLocation: '/cdbooks/',
-          //   urlPath: '/collection/acdb/',
-          //   fileId: 'rid'
-          // },
-          // {
-          //   name: 'doc',
-          //   oldPHP: 'pdfget.php',
-          //   oldFileLocation: '/uqdocserv/',
-          //   urlPath: '/collection/doc/',
-          //   fileId: 'image'
-          // },
-          // {
-          //   name: 'software',
-          //   oldPHP: 'swget.php',
-          //   oldFileLocation: '/uqsoftserv/',
-          //   urlPath: '/collection/software/',
-          // },
-          // {
-          //   name: 'bom',
-          //   oldPHP: 'bom.php',
-          //   oldFileLocation: '/bom/',
-          //   urlPath: '/collection/bom/',
-          //   pageHeader: 'Bureau of Meteorology - Climate Data',
-          //   // pageSubheader: 'Bureau of Meteorology - Climate Data',
-          //   content: 'Access to files in these datasets is restricted to UQ users.'
-          //   hasList: true
-          // },
-          {
-            name: 'thomson',
-            oldPHP: 'thomson',
-            oldFileLocation: '/thomson/',
-            urlPath: '/collection/thomson/',
-            pageHeader: 'Thomson Reuters Collections',
-            hasList: true // this will be used in future to determine if list is a valid method to show a list of files page. it should default to false
-          }
-        ]
+      isPanelInvalidRequest: {
+        type: Boolean,
+        value: false
+      },
+
+      isPanelCopyright: {
+        type: Boolean,
+        value: false
+      },
+
+      isPanelRedirect: {
+        type: Boolean,
+        value: false
       },
 
       pageHeader: {
@@ -89,35 +42,10 @@
         value: 'UQ Library secure file collection'
       },
 
-      filesAvailable: {
-        type: Boolean,
-        value: true
-      },
-
-      hideCopyrightMessage: {
-        type: Boolean,
-        value: true
-      },
-
       collectionType: {
         type: String,
         value: ''
       },
-
-      // collectionTypeDefault: {
-      //   type: String,
-      //   value: ''
-      // },
-
-      // filePath: {
-      //   type: String,
-      //   value: ''
-      // },
-      //
-      // filePathDefault: {
-      //   type: String,
-      //   value: ''
-      // },
 
       pathname: {
         type: String,
@@ -147,41 +75,30 @@
         this.pathname = this.setupPath(window.location.pathname);
       }
 
-      if (!this.checkValidRequest()) {
-        this.filesAvailable = false;
-        return;
-      }
-
-      // this will be used once we are getting lists
-//      this.methodType = this.getVariableFromUrl('method', this.methodTypeDefault); // list for thomson or bom; missing otherwise - get or serve options handled by s3
+      var account = document.querySelector('uqlibrary-api-account');
 
       var self = this;
-      window.addEventListener('WebComponentsReady', function () {
-
-        var account = document.querySelector('uqlibrary-api-account');
-
-        account.addEventListener('uqlibrary-api-account-loaded', function (e) {
-          if (e.detail.hasSession) {
+      account.addEventListener('uqlibrary-api-account-loaded', function (e) {
+        if (e.detail.hasSession) {
 console.log('Logged in as ' + e.detail.id);
-            self.requestCollectionFile();
-          } else {
+          self.requestCollectionFile();
+        } else {
 console.log('Not logged in');
-            self.filesAvailable = false;
-// comment out for dev | uncomment for prod (or loops endlessly)
-            account.login(window.location.href);
-          }
-        });
-        account.get();
+          self.selectPanel("invalidRequest");
 
+// comment out for dev | uncomment for prod (or loops endlessly)
+          account.login(window.location.href);
+        }
       });
+      account.get();
+
 // uncomment for dev | comment out for prod
-//      this.filesAvailable = true;
-//      this.requestCollectionFile();
+//      self.requestCollectionFile();
     },
 
     /**
-     * in test and prod, we will pass something like '/folder/somwething.pdf'
-     * in dev, we will get 'collection.html?
+     * in test and prod, we will pass something like '/folder/something.pdf'
+     * in dev, we will get '/collection.html'
      * @param newPathname
      */
     setupPath: function(newPathname) {
@@ -189,7 +106,7 @@ console.log('Not logged in');
       // if we get a paramter based url in dev, we must construct it first
       if (newPathname === undefined || newPathname === '') {
         // this should never happen
-        console.log('ERROR: setupPath called without path');
+        console.log('ERROR: setupPath called without path in uqlibrary-secure-file-access');
       } else if (newPathname === '/collection.html') {
         // we are in dev
         if (this.search !== '') {
@@ -200,8 +117,7 @@ console.log('Not logged in');
           this.search = window.location.search;
         }
         // we are in dev and must join the params into a path
-        var startChar = '?'.length;
-        var query = this.search.substring(startChar);
+        var query = this.stripFirstChar(this.search);
         var parts = query.split("&");
         this.pathname = '/' + parts.map(function(kk,vv) {
           return kk.split('=').pop();
@@ -217,42 +133,32 @@ console.log('Not logged in');
 
 
     requestCollectionFile: function() {
-      this.collection = this.loadCollectionDetail();
-      if (false === this.collection) {
-        this.isValidRequest = false;
-      }
-
-      // this.checkValidRequest(); // needs to be set as it controls block display on page
-
       var linkToEncode = '';
 
-      if (this.checkValidRequest()) {
-
-        this.fileExtension =  this.getFileExtension();
+      this.fileExtension =  this.getFileExtension();
 
 //        var fileList = [];
-        // thomson and bom supply a list page
-        if (this.methodType === 'list') {
-          // list: tbd
-          // get an aws keyed url from api/files
-          // if ( !preg_match('/^(apps|lectures|sustainable_tourism)/', fileid) ) {
-          //   set this.isValidRequest = false
-          // }
-          // vary deliver on method = get/serve
+      // thomson and bom supply a list page
+      if (this.methodType === 'list') {
+        // list: tbd
+        // get an aws keyed url from api/files
+        // if ( !preg_match('/^(apps|lectures|sustainable_tourism)/', fileid) ) {
+        //   set this.isValidRequest = false
+        // }
+        // vary deliver on method = get/serve
 //          fileList = 'something'; // replace with aws thingy
-          // then display on page as list
-        } else {
-          //strip opening slash
-          linkToEncode = this.stripFirstChar(this.pathname) + '?copyright';
+        // then display on page as list
+      } else {
+        linkToEncode = this.stripFirstChar(this.pathname) + '?copyright'; //strip opening slash
 
-          // if ( !preg_match('/^(apps|lectures|sustainable_tourism)/', fileid) ) {
-          //   set this.isValidRequest = false
-          // }
-          // vary deliver on method = get/serve
+        // if ( !preg_match('/^(apps|lectures|sustainable_tourism)/', fileid) ) {
+        //   set this.isValidRequest = false
+        // }
+        // vary deliver on method = get/serve
 
 
-        }
       }
+      // }
 
       if ('' !== linkToEncode) {
         this.$.encodedUrlApi.get({plainUrl: linkToEncode});
@@ -272,83 +178,56 @@ console.log('Not logged in');
       // ok: {url: "https://files.library.uq.edu.au/secure/exams/0001/3e201.pdf"}
       if (e.detail.url === undefined || e.detail.response === true) {
         // an error occurred
-        this.filesAvailable = false;
+        this.selectPanel('invalidRequest');
         return;
       }
 
-      this.filesAvailable = true;
-
-      this._setAccessCopyrightMessage(); // TODO: or do this with watcher?
-
       if (e.detail.isOpenaccess) {
-        // it is? we shouldnt be here... show the other message and redirect
+        // it is? show the message and redirect
+        this.selectPanel('redirect');
 
-        this.isRedirect = true;
-        this._setAccessCopyrightMessage(); // TODO: or do this with watcher?
+        // this.isRedirect = true;
+        // this._setAccessCopyrightMessage(); // TODO: or do this with watcher?
 
         this.deliveryFilename = e.detail.url;
 console.log('handleLoadedFile: SHOULD REDIRECT TO ' + this.deliveryFilename);
-
-// included for dev only
-        this.isOpenaccess = true;
 
 // commented out for dev
 //        window.location.href = finalHref;
 
       } else {
-        this.isOpenaccess = false; // this will need to be more complicated for bom & thomson lists
+        this.selectPanel('copyright');
 
         this.deliveryFilename = e.detail.url;
 
       }
     },
 
-    /**
-     * determine whether we should show the 'this file is under copyright' message
-     */
-    _setAccessCopyrightMessage: function() {
-      if (this.isOpenaccess) {
-        this.hideCopyrightMessage = true; // not required - the file is openaccess
-        return;
-      }
-      if (!this.isValidRequest) {
-        this.hideCopyrightMessage = true; // we will show the 'invalid' panel
-        return;
-      }
-      if (!this.filesAvailable) {
-        this.hideCopyrightMessage = true; // we will show the 'offline/needs login' panel
-        return;
-      }
-      if (this.isRedirect) {
-        this.hideCopyrightMessage = true; // we will show the 'redirect to file' panel
-        return;
-      }
+    selectPanel: function (panelname) {
+      if (panelname === 'filesUnavailable') {
+        this.isPanelFilesUnavailable = false;
+        this.isPanelInvalidRequest = false;
+        this.isPanelCopyright = false;
+        this.isPanelRedirect = false;
 
-      this.hideCopyrightMessage = false; // show the 'copyright' panel
-    },
+      } else if (panelname === 'invalidRequest') {
+        this.isPanelFilesUnavailable = false;
+        this.isPanelInvalidRequest = true;
+        this.isPanelCopyright = false;
+        this.isPanelRedirect = false;
 
-    /**
-     * determine if the url parameters ask for a valid file
-     * @param collectionName - supplied for unit test
-     * @returns boolean
-     */
-    checkValidRequest: function(collectionName) {
-      if (collectionName === undefined || collectionName === '') {
-        collectionName = this.getCollectionFolder();
+      } else if (panelname === 'copyright') {
+        this.isPanelFilesUnavailable = false;
+        this.isPanelInvalidRequest = false;
+        this.isPanelCopyright = true;
+        this.isPanelRedirect = false;
+
+      } else if (panelname === 'redirect') {
+        this.isPanelFilesUnavailable = false;
+        this.isPanelInvalidRequest = false;
+        this.isPanelCopyright = false;
+        this.isPanelRedirect = true;
       }
-      var requestedUrl = '';
-      this.isValidRequest = false;
-      if (this.pathname === undefined || this.pathname === false) {
-        return this.isValidRequest;
-      }
-
-      var that = this;
-      var testCollection = this.pathProperties.filter(function (e) {
-        return collectionName === e.name;
-      });
-      this.isValidRequest =  (testCollection.length !== 0);
-
-      return this.isValidRequest;
     },
 
     getCollectionFolder: function() {
@@ -356,7 +235,7 @@ console.log('handleLoadedFile: SHOULD REDIRECT TO ' + this.deliveryFilename);
         parts = this.pathname.split('/');
         if (parts.length >= 3) {
           parts.shift(); // discard the first bit = its from the initial slash
-          return parts.shift();
+          return parts.shift(); // the next bit is the collection name
         }
       }
       return false;
@@ -369,25 +248,6 @@ console.log('handleLoadedFile: SHOULD REDIRECT TO ' + this.deliveryFilename);
     },
     */
 
-
-    /**
-     * get the details for the specific folder out of the array
-     * @returns array|boolean
-     */
-    loadCollectionDetail: function() {
-      var collection = false;
-
-      that = this;
-      collection = this.pathProperties.filter(function (e) {
-        return that.collectionType === e.name;
-      });
-
-      if (collection) {
-        return collection[0];
-      } else {
-        return false;
-      }
-    },
 
     /**
      * if the filename has a '.' in it then we return the file extension to tell the user to make sure the file extension is set
