@@ -86,14 +86,13 @@ console.log('Logged in as ' + e.detail.id);
           self.requestCollectionFile();
         } else {
 console.log('Not logged in');
-          self.selectPanel("invalidRequest");
-
           account.login(window.location.href);
         }
       });
+// comment out for dev or it will loop infinitely
       account.get();
 // comment out for prod - required in dev as login never happens
-//      this.requestCollectionFile();
+//     this.requestCollectionFile();
     },
 
     /**
@@ -182,10 +181,18 @@ console.log('linkToEncode = '+linkToEncode);
     handleLoadedFile: function(e) {
 console.log('start of handleLoadedFile');
       // error: {response: true, responseText: "An unknown error occurred"}
+      // no such folder: {response: "No such collection"}
       // ok: {url: "https://dddnk7oxlhhax.cloudfront.net/secure/exams/0001/3e201.pdf?...", isOpenaccess: false}
-      if (e.detail.url === undefined || e.detail.response === true) {
-        // an error occurred
+console.log(e.detail);
+      if (e.detail.response === 'No such collection') {
+        // the folder they requested is invalid (is not in the json - add it to the json in api at package file config if it is new
+        console.log('the folder ' + this.getCollectionFolder() + ' is invalid or not yet available');
         this.selectPanel('invalidRequest');
+        return;
+      } else if (e.detail.url === undefined || e.detail.response === true) {
+console.log('something unexpected went wrong, eg api is dead');
+        // an error occurred - something unexpected went wrong, eg api is dead
+        this.selectPanel('filesUnavailable');
         return;
       }
 
@@ -210,7 +217,7 @@ console.log('handleLoadedFile: SHOULD REDIRECT TO ' + this.deliveryFilename);
     selectPanel: function (panelname) {
 console.log('start of selectPanel: panelname = ' + panelname);
       if (panelname === 'filesUnavailable') {
-        this.isPanelFilesUnavailable = false;
+        this.isPanelFilesUnavailable = true;
         this.isPanelInvalidRequest = false;
         this.isPanelCopyright = false;
         this.isPanelRedirect = false;
@@ -235,16 +242,16 @@ console.log('start of selectPanel: panelname = ' + panelname);
       }
     },
 
-    // getCollectionFolder: function() {
-    //   if (this.pathname.startsWith('/')) {
-    //     parts = this.pathname.split('/');
-    //     if (parts.length >= 3) {
-    //       parts.shift(); // discard the first bit = its from the initial slash
-    //       return parts.shift(); // the next bit is the collection name
-    //     }
-    //   }
-    //   return false;
-    // },
+    getCollectionFolder: function() {
+      if (this.pathname.startsWith('/')) {
+        parts = this.pathname.split('/');
+        if (parts.length >= 3) {
+          parts.shift(); // discard the first bit = its from the initial slash
+          return parts.shift(); // the next bit is the collection name
+        }
+      }
+      return false;
+    },
 
     /*
     _showList: function () {
