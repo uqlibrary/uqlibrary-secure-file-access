@@ -30,22 +30,6 @@
       element = fixture('element');
     });
 
-    test('it should not get an invalid folder', function() {
-      var expected = false;
-      var actual = element.checkValidRequest('missingabczyx');
-      expect(expected).to.equal(actual);
-    });
-
-    test('it should get a valid folder', function() {
-      element.pathProperties.push({
-        name: 'test'
-      });
-
-      var expected = true;
-      var actual = element.checkValidRequest('test');
-      expect(expected).to.equal(actual);
-    });
-
     test('will be able to manually load a parameter path in dev', function (done) {
       element.setSearch('?collection=exams&file=0001/3e201.pdf');
       element.setupPath('/collection.html');
@@ -172,7 +156,7 @@
     });
 
     test('it should show the copyright page for copyrighted files with non-params url', function (done) {
-      element.setupPath("/exams/someFile.pdf");
+      element.setupPath("/exams/3e201.pdf");
 
       flush(function () {
         var body = element.$.layout;

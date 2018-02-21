@@ -75,25 +75,25 @@
         this.pathname = this.setupPath(window.location.pathname);
       }
 
-      var account = document.querySelector('uqlibrary-api-account');
+      var account = this.$.account;
 
       var self = this;
-      account.addEventListener('uqlibrary-api-account-loaded', function (e) {
-        if (e.detail.hasSession) {
+        account.addEventListener('uqlibrary-api-account-loaded', function (e) {
+          if (e.detail.hasSession) {
 console.log('Logged in as ' + e.detail.id);
-          self.requestCollectionFile();
-        } else {
+            self.requestCollectionFile();
+          } else {
 console.log('Not logged in');
-          self.selectPanel("invalidRequest");
+            self.selectPanel("invalidRequest");
 
+            account.login(window.location.href);
+          }
 // comment out for dev | uncomment for prod (or loops endlessly)
-          account.login(window.location.href);
-        }
-      });
-      account.get();
+        account.get();
 
 // uncomment for dev | comment out for prod
-//      self.requestCollectionFile();
+//        self.requestCollectionFile();
+      });
     },
 
     /**
