@@ -90,9 +90,8 @@ console.log('Not logged in');
 
           account.login(window.location.href);
         }
-        account.get();
-
       });
+      account.get();
 // comment out for prod - required in dev as login never happens
 //      this.requestCollectionFile();
     },
