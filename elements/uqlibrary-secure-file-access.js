@@ -70,6 +70,7 @@
     },
 
     ready: function () {
+console.log('start of ready');
       if (this.pathname === '') {
         // called if it has not been initialised (in test)
         this.pathname = this.setupPath(window.location.pathname);
@@ -78,22 +79,22 @@
       var account = this.$.account;
 
       var self = this;
-        account.addEventListener('uqlibrary-api-account-loaded', function (e) {
-          if (e.detail.hasSession) {
+      account.addEventListener('uqlibrary-api-account-loaded', function (e) {
+console.log('in addEventListener');
+        if (e.detail.hasSession) {
 console.log('Logged in as ' + e.detail.id);
-            self.requestCollectionFile();
-          } else {
+          self.requestCollectionFile();
+        } else {
 console.log('Not logged in');
-            self.selectPanel("invalidRequest");
+          self.selectPanel("invalidRequest");
 
-            account.login(window.location.href);
-          }
-// comment out for dev | uncomment for prod (or loops endlessly)
+          account.login(window.location.href);
+        }
         account.get();
 
-// uncomment for dev | comment out for prod
-//        self.requestCollectionFile();
       });
+// comment out for prod - required in dev as login never happens
+//      this.requestCollectionFile();
     },
 
     /**
@@ -102,6 +103,7 @@ console.log('Not logged in');
      * @param newPathname
      */
     setupPath: function(newPathname) {
+console.log('start of setupPath: newPathname = '+newPathname);
       // we pass the window.location.pathname along directly to the api
       // if we get a paramter based url in dev, we must construct it first
       if (newPathname === undefined || newPathname === '') {
@@ -116,23 +118,28 @@ console.log('Not logged in');
         } else {
           this.search = window.location.search;
         }
+console.log('this.search = '+this.search);
         // we are in dev and must join the params into a path
         var query = this.stripFirstChar(this.search);
+console.log('query = '+query);
         var parts = query.split("&");
+console.log('parts = ');
+console.log(parts);
         this.pathname = '/' + parts.map(function(kk,vv) {
           return kk.split('=').pop();
         }).join('/');
-        // this.pathname = '/' + parts. replace(',', '/');
       } else {
         // we are in prod
         this.pathname = newPathname
       }
+console.log('this.pathname = '+this.pathname);
       return this.pathname;
     },
 
 
 
     requestCollectionFile: function() {
+console.log('start of requestCollectionFile');
       var linkToEncode = '';
 
       this.fileExtension =  this.getFileExtension();
@@ -150,7 +157,7 @@ console.log('Not logged in');
         // then display on page as list
       } else {
         linkToEncode = this.stripFirstChar(this.pathname) + '?copyright'; //strip opening slash
-
+console.log('linkToEncode = '+linkToEncode);
         // if ( !preg_match('/^(apps|lectures|sustainable_tourism)/', fileid) ) {
         //   set this.isValidRequest = false
         // }
@@ -174,8 +181,9 @@ console.log('Not logged in');
      * @param e
      */
     handleLoadedFile: function(e) {
+console.log('start of handleLoadedFile');
       // error: {response: true, responseText: "An unknown error occurred"}
-      // ok: {url: "https://files.library.uq.edu.au/secure/exams/0001/3e201.pdf"}
+      // ok: {url: "https://dddnk7oxlhhax.cloudfront.net/secure/exams/0001/3e201.pdf?...", isOpenaccess: false}
       if (e.detail.url === undefined || e.detail.response === true) {
         // an error occurred
         this.selectPanel('invalidRequest');
@@ -185,9 +193,6 @@ console.log('Not logged in');
       if (e.detail.isOpenaccess) {
         // it is? show the message and redirect
         this.selectPanel('redirect');
-
-        // this.isRedirect = true;
-        // this._setAccessCopyrightMessage(); // TODO: or do this with watcher?
 
         this.deliveryFilename = e.detail.url;
 console.log('handleLoadedFile: SHOULD REDIRECT TO ' + this.deliveryFilename);
@@ -204,6 +209,7 @@ console.log('handleLoadedFile: SHOULD REDIRECT TO ' + this.deliveryFilename);
     },
 
     selectPanel: function (panelname) {
+console.log('start of selectPanel: panelname = ' + panelname);
       if (panelname === 'filesUnavailable') {
         this.isPanelFilesUnavailable = false;
         this.isPanelInvalidRequest = false;
@@ -230,16 +236,16 @@ console.log('handleLoadedFile: SHOULD REDIRECT TO ' + this.deliveryFilename);
       }
     },
 
-    getCollectionFolder: function() {
-      if (this.pathname.startsWith('/')) {
-        parts = this.pathname.split('/');
-        if (parts.length >= 3) {
-          parts.shift(); // discard the first bit = its from the initial slash
-          return parts.shift(); // the next bit is the collection name
-        }
-      }
-      return false;
-    },
+    // getCollectionFolder: function() {
+    //   if (this.pathname.startsWith('/')) {
+    //     parts = this.pathname.split('/');
+    //     if (parts.length >= 3) {
+    //       parts.shift(); // discard the first bit = its from the initial slash
+    //       return parts.shift(); // the next bit is the collection name
+    //     }
+    //   }
+    //   return false;
+    // },
 
     /*
     _showList: function () {
