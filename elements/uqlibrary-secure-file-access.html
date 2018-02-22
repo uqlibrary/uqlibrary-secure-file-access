@@ -19,6 +19,11 @@ Example:
         font-size: var(--body-font-size);
       }
 
+      div#layout {
+        margin-top: 16px;
+        margin-top: 1rem;
+      }
+
       div#download {
         text-align: center;
       }
@@ -28,20 +33,19 @@ Example:
         padding: 1rem;
       }
 
-      div#layout {
-        margin-top: 16px;
-        margin-top: 1rem;
+      h1 {
+        padding-left: 16px;
+        padding-left: 1rem;
       }
-
       div.card-content {
         padding: 0 16px 16px;
         padding: 0 1rem 1rem;
       }
 
-      #copyright h1, #copyright h2, #copyright h3, #copyright h4, #copyright p.copyrightsubhead {
+      #copyright h2, #copyright h3, #copyright h4, #copyright h5, #copyright p.copyrightsubhead {
         text-align: center;
       }
-      #copyright h1 {
+      #copyright h2 {
         margin-top: 0;
       }
 
@@ -51,10 +55,11 @@ Example:
                                           on-uqlibrary-api-collection-encoded-url="handleLoadedFile"></uqlibrary-api-collection-encoded-url>
     <uqlibrary-api-account id="account" on-uqlibrary-api-account="accountLoaded"></uqlibrary-api-account>
 
-    <uqlibrary-ga id="ga" app-name="[[_gaAppName]]"></uqlibrary-ga>
+    <uqlibrary-ga id="ga" app-name="SecureFileAccess"></uqlibrary-ga>
 
     <div id="layout">
-      <paper-card heading="[[ pageHeader ]]">
+      <paper-card>
+        <h1>Secure file collection</h1>
         <div class="card-content">
 
           <!--
@@ -85,18 +90,18 @@ Example:
           </div>
 
           <div id="invalidRequest" class="invalidRequest" hidden$="[[ !isPanelInvalidRequest ]]">
-            <h2>Invalid file location</h2>
-            <h3>Sorry, this is not a valid file location.</h3>
+            <h2>This file does not exist or is unavailable</h2>
             <p>Please check the link you have used.</p>
+            <p>Email us as <a href="mailto:[[ emailLink ]]?Subject=[[ emailSubject ]]&body=[[ emailBody ]]">[[ emailLink ]]</a> to report broken links.</p>
           </div>
 
           <div id="copyright" class="copyright" hidden$="[[ !isPanelCopyright ]]">
-            <h1>Copyright Notice</h1>
+            <h2>Copyright Notice</h2>
             <p class="copyrightsubhead">This file is provided to support teaching and learning for the staff and students of the University of Queensland</p>
-            <h2>COMMONWEALTH OF AUSTRALIA</h2>
-            <h3>Copyright Regulations 1969</h3>
+            <h3>COMMONWEALTH OF AUSTRALIA</h3>
+            <h4>Copyright Regulations 1969</h4>
 
-            <h4>WARNING</h4>
+            <h5>WARNING</h5>
             <p>This material has been reproduced and communicated to you by or on behalf of the University of Queensland pursuant to Part VB of the Copyright Act 1968 (the Act).</p>
             <p>The material in this communication may be subject to copyright under the Act. Any further reproduction or communication of this material by you may be the subject of copyright protection under the Act.</p>
 
@@ -113,8 +118,8 @@ Example:
           </div>
 
           <div id="redirect" class="redirect" hidden$="[[ !isPanelRedirect ]]">
-            <p>We have the file ready for you.</p>
-            <p><a href="[[ deliveryFilename ]]">Click here</a> if the page does not redirect.</p>
+            <p>We are preparing the file, you should be redirected shortly.</p>
+            <p><a href="[[ deliveryFilename ]]">Download the file</a> if the page does not redirect.</p>
           </div>
 
         </div>

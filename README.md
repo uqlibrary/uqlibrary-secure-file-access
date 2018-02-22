@@ -7,7 +7,7 @@ uqlibrary-secure-file-access provides logged in access to files stored on AWS
 
 There is currently no documentation at [GitHub Pages](http://uqlibrary.github.io/uqlibrary-secure-file-access).
 
-This component is called from secure.html in uqlibrary-pages to show a copyright acknowledgement page before viewing eg a pdf file stored in s3 at uql_secure_files on AWS
+This component is called from collection.html in uqlibrary-pages to show a copyright acknowledgement page before viewing eg a pdf file stored in s3 at uql_secure_files on AWS
 
 ### Getting Started
 Install Node.JS and run the following oneliner in the project directory:

@@ -3,20 +3,9 @@
     is: 'uqlibrary-secure-file-access',
 
     properties: {
-      /**
-       * Application name for google analytics records.
+      /*
+       * show-hide the 4 panels on the page
        */
-      // gaAppName: {
-      //   type: String,
-      //   value: 'SecureFileAccess'
-      // },
-
-      // showPanel: {
-      //   type: String,
-      //   value: 'unknown',
-      //   observer: 'isPanel'
-      // },
-
       isPanelFilesUnavailable: {
         type: Boolean,
         value: false
@@ -35,11 +24,6 @@
       isPanelRedirect: {
         type: Boolean,
         value: false
-      },
-
-      pageHeader: {
-        type: String,
-        value: 'UQ Library secure file collection'
       },
 
       collectionType: {
@@ -65,6 +49,21 @@
       urlRequested: {
         type: String,
         value: ''
+      },
+
+      emailLink: {
+        type: String,
+        value: ''
+      },
+
+      emailSubject: {
+        type: String,
+        value: ''
+      },
+
+      emailBody: {
+        type: String,
+        value: ''
       }
     },
 
@@ -75,16 +74,11 @@
     },
 
     ready: function () {
-console.log('start of ready');
-console.log('urlRequested = '+this.urlRequested);
       if (this.pathname === '') {
-console.log('ready: 1');
         // called if it has not been initialised (in test)
         if (this.urlRequested !== '') {
-console.log('ready: 1.1');
           this.pathname = this.setupPath(this.urlRequested);
         } else {
-console.log('ready: 1.2');
           this.pathname = this.setupPath(window.location.pathname);
         }
       }
@@ -92,14 +86,10 @@ console.log('ready: 1.2');
       var account = this.$.account;
 
       var self = this;
-console.log('window.location.href = '+window.location.href);
       account.addEventListener('uqlibrary-api-account-loaded', function (e) {
-console.log('in secure ready addEventListener');
         if (e.detail.hasSession) {
-console.log('Logged in as ' + e.detail.id);
           self.requestCollectionFile();
         } else {
-console.log('Not logged in');
           account.login(window.location.href);
         }
       });
@@ -107,8 +97,6 @@ console.log('Not logged in');
       account.get();
 // comment out for prod - required in dev as login never happens
 //     this.requestCollectionFile();
-
-console.log('secure ready complete');
     },
 
     /**
@@ -117,43 +105,39 @@ console.log('secure ready complete');
      * @param newPathname
      */
     setupPath: function(newPathname) {
-console.log('start of setupPath: newPathname = '+newPathname);
       // we pass the window.location.pathname along directly to the api
       // if we get a paramter based url in dev, we must construct it first
       if (newPathname === undefined || newPathname === '') {
         // this should never happen
         console.log('ERROR: setupPath called without path in uqlibrary-secure-file-access');
-      } else if (newPathname === '/collection.html') {
+        return;
+      }
+
+      if (newPathname !== '/collection.html') {
+        // we are in prod
+        this.pathname = newPathname;
+      } else {
         // we are in dev
         if (this.search !== '') {
           // has been set by call to this.setSearch
         } else if (window.location.search === undefined) {
           // this should never happen
         } else {
-          this.search = window.location.search;
+          this.setSearch(window.location.search);
         }
-console.log('this.search = '+this.search);
+
         // we are in dev and must join the params into a path
         var query = this.stripFirstChar(this.search);
-console.log('query = '+query);
         var parts = query.split("&");
-console.log('parts = ');
-console.log(parts);
-        this.pathname = '/' + parts.map(function(kk,vv) {
+        this.pathname = '/';
+        this.pathname += parts.map(function(kk,vv) {
           return kk.split('=').pop();
         }).join('/');
-      } else {
-        // we are in prod
-        this.pathname = newPathname
       }
-console.log('this.pathname = '+this.pathname);
       return this.pathname;
     },
 
-
-
     requestCollectionFile: function() {
-console.log('start of requestCollectionFile');
       var linkToEncode = '';
 
       this.fileExtension =  this.getFileExtension();
@@ -171,7 +155,6 @@ console.log('start of requestCollectionFile');
         // then display on page as list
       } else {
         linkToEncode = this.stripFirstChar(this.pathname) + '?copyright'; //strip opening slash
-console.log('linkToEncode = '+linkToEncode);
         // if ( !preg_match('/^(apps|lectures|sustainable_tourism)/', fileid) ) {
         //   set this.isValidRequest = false
         // }
@@ -179,17 +162,45 @@ console.log('linkToEncode = '+linkToEncode);
 
 
       }
-      // }
 
       if ('' !== linkToEncode) {
-console.log('about to fire uqlibrary-api-collection-encoded-url');
         this.$.encodedUrlApi.get({plainUrl: linkToEncode});
       }
     },
 
     stripFirstChar: function(input) {
-console.log('stripFirstChar of ' + input);
       return input.substring(1);
+    },
+
+    /**
+     * the folder they requested is not known in the api
+     * new folder? it should be added to the json in the api repo at package file config to enable it
+     */
+    setInvalid: function () {
+      console.log('the folder ' + this.getCollectionFolder() + ' is invalid or not yet available');
+
+      this.emailLink = 'webmaster@library.uq.edu.au';
+
+      var emailSubject = 'Broken link to the Secure File Collection';
+      // add the refer to the email they are prompted to send, where available
+      if (document.referrer !== '') {
+        emailSubject += ' from ' + document.referrer;
+      }
+      this.emailSubject = encodeURI(emailSubject);
+
+      var emailBody = 'Hi there!' + "\n\n";
+
+      emailBody += 'I\'d like to report a problem with the Secure File Collection.' + "\n";
+      if (document.referrer !== '') {
+        emailBody += 'I was visiting ' + document.referrer + ' and clicked a link.' + "\n";
+      }
+      emailBody += 'I landed on ' + window.location.href + ' but it said the link wasnt valid.' + "\n\n";
+
+      emailBody += '(include any other detail that will help us provide the file here, including where you were coming from)';
+
+      this.emailBody = encodeURIComponent(emailBody);
+
+      this.selectPanel('invalidRequest');
     },
 
     /**
@@ -197,18 +208,13 @@ console.log('stripFirstChar of ' + input);
      * @param e
      */
     handleLoadedFile: function(e) {
-console.log('start of handleLoadedFile');
       // error: {response: true, responseText: "An unknown error occurred"}
       // no such folder: {response: "No such collection"}
       // ok: {url: "https://dddnk7oxlhhax.cloudfront.net/secure/exams/0001/3e201.pdf?...", isOpenaccess: false}
-console.log(e.detail);
       if (e.detail.response === 'No such collection') {
-        // the folder they requested is invalid (is not in the json - add it to the json in api at package file config if it is new
-        console.log('the folder ' + this.getCollectionFolder() + ' is invalid or not yet available');
-        this.selectPanel('invalidRequest');
+        this.setInvalid();
         return;
       } else if (e.detail.url === undefined || e.detail.response === true) {
-console.log('something unexpected went wrong, eg api is dead');
         // an error occurred - something unexpected went wrong, eg api is dead
         this.selectPanel('filesUnavailable');
         return;
@@ -219,7 +225,6 @@ console.log('something unexpected went wrong, eg api is dead');
         this.selectPanel('redirect');
 
         this.deliveryFilename = e.detail.url;
-console.log('handleLoadedFile: SHOULD REDIRECT TO ' + this.deliveryFilename);
 
 // commented out for dev
 //        window.location.href = finalHref;
@@ -233,7 +238,6 @@ console.log('handleLoadedFile: SHOULD REDIRECT TO ' + this.deliveryFilename);
     },
 
     selectPanel: function (panelname) {
-console.log('start of selectPanel: panelname = ' + panelname);
       if (panelname === 'filesUnavailable') {
         this.isPanelFilesUnavailable = true;
         this.isPanelInvalidRequest = false;
