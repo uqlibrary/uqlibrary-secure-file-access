@@ -32,20 +32,15 @@
 
 
     test('it should show the copyright page for copyrighted files', function (done) {
-console.log('test: about to fire');
-//      element.addEventListener('uqlibrary-secure-file-access-loaded', function () {
-console.log('test: encoded returned');
         setTimeout(function () {
-//          flush(function() {
             var body = element.$.layout;
-            var header = body.querySelector('#copyright h2');
-            console.log('header = ' + header);
-            expect(header.textContent).to.contain('COMMONWEALTH OF AUSTRALIA');
 
             var copyright = body.querySelector('#copyright');
 
+            var header = body.querySelector('#copyright h2');
+            expect(header.textContent).to.contain('COMMONWEALTH OF AUSTRALIA');
+
             var els = body.querySelector('#copyright #download');
-            console.log('els = ' + els);
             expect(els.textContent).to.contain('Acknowledge Copyright and Download');
 
             var invalidRequest = body.querySelector('#invalidRequest');
@@ -54,14 +49,7 @@ console.log('test: encoded returned');
             var redirectparagraph = body.querySelector('#redirect p');
             expect(redirectparagraph).to.have.property('hidden');
             done();
-//          });
         }, 50);
-//      });
-//          element.setupPath('/exams/0001/3e201.pdf');
-
-console.log('test: fire set');
-
-//      element.$.collection.get();
     });
 
 
@@ -70,7 +58,7 @@ console.log('test: fire set');
 
       flush(function () {
         var body = element.$.layout;
-        console.log(body);
+
         var header = body.querySelector('#copyright h2');
         expect(header.textContent).to.contain('COMMONWEALTH OF AUSTRALIA');
 

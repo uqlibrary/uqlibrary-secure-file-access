@@ -31,10 +31,10 @@
     });
 
     test('will be able to manually load a parameter path in dev', function (done) {
-      element.setSearch('?collection=exams&file=coursecode.pdf');
+      element.setSearch('?collection=exams&file=0001/coursecode.pdf');
       element.setupPath('/collection.html');
 
-      var expected = '/exams/coursecode.pdf';
+      var expected = '/exams/0001/coursecode.pdf';
       var actual = element.pathname;
       expect(expected).to.equal(actual);
 
@@ -42,7 +42,8 @@
     });
 
     test('it should get the file extension', function (done) {
-      element.setupPath('/someFile/someFile.pdf');
+      element.setSearch('?collection=thomson&file=0001/coursecode.pdf');
+      element.setupPath('/thomson/someFile.pdf');
 
       var expected = 'pdf';
       var actual = element.getFileExtension();
@@ -52,7 +53,8 @@
     });
 
     test('it should skip a missing file extension', function (done) {
-      element.setupPath('/someFile/someFile');
+      element.setSearch('?collection=thomson&file=0001/coursecode.pdf');
+      element.setupPath('/thomson/someFile');
 
       var expected = false;
       var actual = element.getFileExtension();
