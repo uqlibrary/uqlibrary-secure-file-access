@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=no">
+  <title>uqlibrary-secure-file-access test</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../test-fixture/test-fixture-mocha.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+
+
+  <link rel="import" href="../elements/uqlibrary-secure-file-access.html">
+</head>
+<body>
+
+<test-fixture id="element">
+  <template>
+<!--    <uqlibrary-secure-file-access url-requested="collection.html?collection=invalid&file=blah.pdf"></uqlibrary-secure-file-access> -->
+    <uqlibrary-secure-file-access url-requested="/invalid/blah.pdf"></uqlibrary-secure-file-access>
+  </template>
+</test-fixture>
+
+<script>
+  suite('<uqlibrary-secure-file-access> invalid tests', function () {
+    var element;
+
+    setup(function () {
+      document.cookie = "UQLMockData=enabled";
+      element = fixture('element');
+    });
+
+
+    test('it should handle invalid file requests', function (done) {
+//      element.addEventListener('uqlibrary-api-collection-encoded-url-loaded', function() {
+
+        setTimeout(function() {
+          var body = element.$.layout;
+
+          var invalidRequest = body.querySelector('#invalidRequest');
+
+          var header = invalidRequest.querySelector('#invalidRequest h2');
+          expect(header.textContent).to.contain('Invalid file location');
+
+          var header2 = invalidRequest.querySelector('h3');
+          expect(header2.textContent).to.contain('Sorry, this is not a valid file location.');
+
+          var copyright = body.querySelector('#copyright');
+          expect(copyright).to.have.property('hidden');
+
+          var redirectparagraph = body.querySelector('#redirect p');
+          expect(redirectparagraph).to.have.property('hidden');
+
+          done();
+        }, 1000);
+        done();
+//      });
+    });
+
+  });
+
+
+</script>
+
+</body>
+</html>

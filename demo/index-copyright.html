@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+
+  <title>uqlibrary-secure-file-access</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+  <link rel="import" href="../elements/uqlibrary-secure-file-access.html">
+  <style>
+    body {
+      padding: 40px;
+    }
+  </style>
+</head>
+<body class="fullbleed">
+
+<uqlibrary-api-account id="accountApi"></uqlibrary-api-account>
+
+<uqlibrary-secure-file-access url-requested="/exams/0001/3e201.pdf" id="collection"></uqlibrary-secure-file-access>
+
+<script>
+  //    element.setSearch('?collection=thomson&file=classic_legal_texts/Baker_Introduction_to_Torts_2e.pdf');
+  (function () {
+    document.cookie="UQLMockData=enabled";
+    console.log(document.cookie);
+
+  }());
+</script>
+</body>
+</html>

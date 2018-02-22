@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=no">
+  <title>uqlibrary-secure-file-access unit test</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../test-fixture/test-fixture-mocha.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+
+
+  <link rel="import" href="../elements/uqlibrary-secure-file-access.html">
+</head>
+<body>
+
+<test-fixture id="element">
+  <template>
+    <uqlibrary-secure-file-access></uqlibrary-secure-file-access>
+  </template>
+</test-fixture>
+
+<script>
+  suite('<uqlibrary-secure-file-access> unit tests', function () {
+    var element;
+
+    setup(function () {
+      document.cookie="UQLMockData=enabled";
+      element = fixture('element');
+    });
+
+    test('will be able to manually load a parameter path in dev', function (done) {
+      element.setSearch('?collection=exams&file=coursecode.pdf');
+      element.setupPath('/collection.html');
+
+      var expected = '/exams/coursecode.pdf';
+      var actual = element.pathname;
+      expect(expected).to.equal(actual);
+
+      done();
+    });
+
+    test('it should get the file extension', function (done) {
+      element.setupPath('/someFile/someFile.pdf');
+
+      var expected = 'pdf';
+      var actual = element.getFileExtension();
+      expect(expected).to.equal(actual);
+
+      done();
+    });
+
+    test('it should skip a missing file extension', function (done) {
+      element.setupPath('/someFile/someFile');
+
+      var expected = false;
+      var actual = element.getFileExtension();
+      expect(expected).to.equal(actual);
+
+      done();
+    });
+
+
+  });
+
+
+</script>
+
+</body>
+</html>

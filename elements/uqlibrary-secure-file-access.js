@@ -60,6 +60,11 @@
       methodType: {
         type: String,
         value: ''
+      },
+
+      urlRequested: {
+        type: String,
+        value: ''
       }
     },
 
@@ -71,16 +76,25 @@
 
     ready: function () {
 console.log('start of ready');
+console.log('urlRequested = '+this.urlRequested);
       if (this.pathname === '') {
+console.log('ready: 1');
         // called if it has not been initialised (in test)
-        this.pathname = this.setupPath(window.location.pathname);
+        if (this.urlRequested !== '') {
+console.log('ready: 1.1');
+          this.pathname = this.setupPath(this.urlRequested);
+        } else {
+console.log('ready: 1.2');
+          this.pathname = this.setupPath(window.location.pathname);
+        }
       }
 
       var account = this.$.account;
 
       var self = this;
+console.log('window.location.href = '+window.location.href);
       account.addEventListener('uqlibrary-api-account-loaded', function (e) {
-console.log('in addEventListener');
+console.log('in secure ready addEventListener');
         if (e.detail.hasSession) {
 console.log('Logged in as ' + e.detail.id);
           self.requestCollectionFile();
@@ -93,6 +107,8 @@ console.log('Not logged in');
       account.get();
 // comment out for prod - required in dev as login never happens
 //     this.requestCollectionFile();
+
+console.log('secure ready complete');
     },
 
     /**
@@ -166,11 +182,13 @@ console.log('linkToEncode = '+linkToEncode);
       // }
 
       if ('' !== linkToEncode) {
+console.log('about to fire uqlibrary-api-collection-encoded-url');
         this.$.encodedUrlApi.get({plainUrl: linkToEncode});
       }
     },
 
     stripFirstChar: function(input) {
+console.log('stripFirstChar of ' + input);
       return input.substring(1);
     },
 

@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=no">
+  <title>uqlibrary-secure-file-access test</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../test-fixture/test-fixture-mocha.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+
+
+  <link rel="import" href="../elements/uqlibrary-secure-file-access.html">
+</head>
+<body>
+
+<test-fixture id="element">
+  <template>
+    <uqlibrary-secure-file-access url-requested="/thomson/someFile.pdf"></uqlibrary-secure-file-access>
+  </template>
+</test-fixture>
+
+<script>
+  suite('<uqlibrary-secure-file-access> open access tests', function () {
+    var element;
+
+    setup(function () {
+      document.cookie = "UQLMockData=enabled";
+      element = fixture('element');
+    });
+
+
+    test('it should redirect open access files to the correct url', function (done) {
+//      element.addEventListener('uqlibrary-api-collection-encoded-url-loaded', function () {
+
+        setTimeout(function () {
+          var body = element.$.layout;
+
+          var redirectparagraph = body.querySelector('#redirect p');
+          expect(redirectparagraph.textContent).to.contain('We have the file ready for you');
+
+          var link = body.querySelector('#redirect p a');
+          expect(link.textContent).to.contain('Click here');
+
+          var copyright = body.querySelector('#copyright');
+          expect(copyright).to.have.property('hidden');
+
+          var invalidRequest = body.querySelector('#invalidRequest');
+          expect(invalidRequest).to.have.property('hidden');
+
+
+
+
+          done();
+        }, 1000);
+        done();
+//      });
+    });
+
+
+
+
+
+    test('it should redirect open access files to the correct url with non-params url', function (done) {
+      element.setupPath("/collection.html?collection=thomson&file=someFile.pdf");
+
+      flush(function () {
+        var body = element.$.layout;
+
+        var redirectparagraph = body.querySelector('#redirect p');
+        expect(redirectparagraph.textContent).to.contain('We have the file ready for you');
+
+        var link = body.querySelector('#redirect p a');
+        expect(link.textContent).to.contain('Click here');
+
+        var copyright = body.querySelector('#copyright');
+        expect(copyright).to.have.property('hidden');
+
+        var invalidRequest = body.querySelector('#invalidRequest');
+        expect(invalidRequest).to.have.property('hidden');
+        done();
+      });
+    });
+
+
+  });
+
+
+</script>
+
+</body>
+</html>

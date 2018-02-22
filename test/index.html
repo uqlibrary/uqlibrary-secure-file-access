@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=no">
   <title>Tests</title>
 
-  <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+  <script src="../../webcomponentsjs/webcomponents.min.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
 </head>
 
@@ -14,7 +14,10 @@
   document.cookie = "UQLMockData=enabled";
   // Load and run all tests (.html, .js) as one suite:
   WCT.loadSuites([
-    'uqlibrary-secure-file-access-test.html'
+    'uqlibrary-secure-file-access-test-unit.html',
+    'uqlibrary-secure-file-access-test-copyright.html',
+    'uqlibrary-secure-file-access-test-openaccess.html',
+    'uqlibrary-secure-file-access-test-invalid.html'
   ]);
 </script>
 </body>
