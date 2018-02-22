@@ -6,12 +6,13 @@
       /*
        * show-hide the 4 panels on the page
        */
-      isPanelFilesUnavailable: {
+      isPanelInvalidRequest: {
         type: Boolean,
         value: false
       },
 
-      isPanelInvalidRequest: {
+      // generally, something has gone wrong, but api being unavailable is the most likely cause
+      isPanelApiUnavailable: {
         type: Boolean,
         value: false
       },
@@ -51,9 +52,9 @@
         value: ''
       },
 
-      emailLink: {
+      emailAddress: {
         type: String,
-        value: ''
+        value: 'webmaster@library.uq.edu.au'
       },
 
       emailSubject: {
@@ -179,8 +180,6 @@
     setInvalid: function () {
       console.log('the folder ' + this.getCollectionFolder() + ' is invalid or not yet available');
 
-      this.emailLink = 'webmaster@library.uq.edu.au';
-
       var emailSubject = 'Broken link to the Secure File Collection';
       // add the refer to the email they are prompted to send, where available
       if (document.referrer !== '') {
@@ -189,15 +188,12 @@
       this.emailSubject = encodeURI(emailSubject);
 
       var emailBody = 'Hi there!' + "\n\n";
-
       emailBody += 'I\'d like to report a problem with the Secure File Collection.' + "\n";
       if (document.referrer !== '') {
         emailBody += 'I was visiting ' + document.referrer + ' and clicked a link.' + "\n";
       }
       emailBody += 'I landed on ' + window.location.href + ' but it said the link wasnt valid.' + "\n\n";
-
       emailBody += '(include any other detail that will help us provide the file here, including where you were coming from)';
-
       this.emailBody = encodeURIComponent(emailBody);
 
       this.selectPanel('invalidRequest');
@@ -239,25 +235,25 @@
 
     selectPanel: function (panelname) {
       if (panelname === 'filesUnavailable') {
-        this.isPanelFilesUnavailable = true;
+        this.isPanelApiUnavailable = true;
         this.isPanelInvalidRequest = false;
         this.isPanelCopyright = false;
         this.isPanelRedirect = false;
 
       } else if (panelname === 'invalidRequest') {
-        this.isPanelFilesUnavailable = false;
+        this.isPanelApiUnavailable = false;
         this.isPanelInvalidRequest = true;
         this.isPanelCopyright = false;
         this.isPanelRedirect = false;
 
       } else if (panelname === 'copyright') {
-        this.isPanelFilesUnavailable = false;
+        this.isPanelApiUnavailable = false;
         this.isPanelInvalidRequest = false;
         this.isPanelCopyright = true;
         this.isPanelRedirect = false;
 
       } else if (panelname === 'redirect') {
-        this.isPanelFilesUnavailable = false;
+        this.isPanelApiUnavailable = false;
         this.isPanelInvalidRequest = false;
         this.isPanelCopyright = false;
         this.isPanelRedirect = true;

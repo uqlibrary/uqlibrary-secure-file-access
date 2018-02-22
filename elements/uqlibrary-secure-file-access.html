@@ -84,15 +84,15 @@ Example:
                     </div>
           -->
 
-          <div id="filesUnavailable" class="filesUnavailable" hidden$="[[ !isPanelFilesUnavailable ]]">
-            <h2>Sorry, an error occurred</h2>
-            <p>Secure files are not available at the moment - please try again later (Are you logged in?)</p>
+          <div id="filesUnavailable" class="filesUnavailable" hidden$="[[ !isPanelApiUnavailable ]]">
+            <h2>System temporarily unavailable</h2>
+            <p>We're working on the issue and will have service restored as soon as possible. Please try again later.</p>
           </div>
 
           <div id="invalidRequest" class="invalidRequest" hidden$="[[ !isPanelInvalidRequest ]]">
-            <h2>This file does not exist or is unavailable</h2>
+            <h2>This file does not exist or is unavailable.</h2>
             <p>Please check the link you have used.</p>
-            <p>Email us as <a href="mailto:[[ emailLink ]]?Subject=[[ emailSubject ]]&body=[[ emailBody ]]">[[ emailLink ]]</a> to report broken links.</p>
+            <p>Email us as <a href="mailto:[[ emailAddress ]]?Subject=[[ emailSubject ]]&body=[[ emailBody ]]">[[ emailAddress ]]</a> to report broken links.</p>
           </div>
 
           <div id="copyright" class="copyright" hidden$="[[ !isPanelCopyright ]]">
