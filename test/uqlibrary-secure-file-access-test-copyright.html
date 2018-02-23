@@ -37,7 +37,7 @@
 
             var copyright = body.querySelector('#copyright');
 
-            var header = body.querySelector('#copyright h2');
+            var header = body.querySelector('#copyright h3');
             expect(header.textContent).to.contain('COMMONWEALTH OF AUSTRALIA');
 
             var els = body.querySelector('#copyright #download');
@@ -50,32 +50,6 @@
             expect(redirectparagraph).to.have.property('hidden');
             done();
         }, 50);
-    });
-
-
-    test('it should show the copyright page for copyrighted files with non-params url', function (done) {
-      element.setupPath("/exams/0001/3e201.pdf");
-
-      flush(function () {
-        var body = element.$.layout;
-
-        var header = body.querySelector('#copyright h2');
-        expect(header.textContent).to.contain('COMMONWEALTH OF AUSTRALIA');
-
-        var copyright = body.querySelector('#copyright');
-
-        var els = body.querySelector('#copyright #download');
-        expect(els.textContent).to.contain('Acknowledge Copyright and Download');
-
-        var invalidRequest = body.querySelector('#invalidRequest');
-        expect(invalidRequest).to.have.property('hidden');
-
-        var redirectparagraph = body.querySelector('#redirect p');
-        expect(redirectparagraph).to.have.property('hidden');
-
-        done();
-
-      });
     });
   });
 

@@ -32,13 +32,11 @@
 
 
     test('it should redirect open access files to the correct url', function (done) {
-//      element.addEventListener('uqlibrary-api-collection-encoded-url-loaded', function () {
-
         setTimeout(function () {
           var body = element.$.layout;
 
           var redirectparagraph = body.querySelector('#redirect p');
-          expect(redirectparagraph.textContent).to.contain('We have the file ready for you');
+          expect(redirectparagraph.textContent).to.contain('you should be redirected');
 
           var link = body.querySelector('#redirect p a');
           expect(link.textContent).to.contain('Click here');
@@ -55,35 +53,7 @@
           done();
         }, 1000);
         done();
-//      });
     });
-
-
-
-
-
-    test('it should redirect open access files to the correct url with non-params url', function (done) {
-      element.setupPath("/collection.html?collection=thomson&file=someFile.pdf");
-
-      flush(function () {
-        var body = element.$.layout;
-
-        var redirectparagraph = body.querySelector('#redirect p');
-        expect(redirectparagraph.textContent).to.contain('We have the file ready for you');
-
-        var link = body.querySelector('#redirect p a');
-        expect(link.textContent).to.contain('Click here');
-
-        var copyright = body.querySelector('#copyright');
-        expect(copyright).to.have.property('hidden');
-
-        var invalidRequest = body.querySelector('#invalidRequest');
-        expect(invalidRequest).to.have.property('hidden');
-        done();
-      });
-    });
-
-
   });
 
 
