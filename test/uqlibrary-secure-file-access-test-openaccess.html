@@ -33,18 +33,23 @@
 
     test('it should redirect open access files to the correct url', function (done) {
         setTimeout(function () {
-          var body = element.$.layout;
+          const body = element.$.layout;
 
-          var redirectparagraph = body.querySelector('#redirect p');
+          const redirectparagraph = body.querySelector('#redirect p');
           expect(redirectparagraph.textContent).to.contain('you should be redirected');
 
-          var link = body.querySelector('#redirect p a');
+          const link = body.querySelector('#redirect p a');
           expect(link.textContent).to.contain('Click here');
 
-          var copyright = body.querySelector('#copyright');
-          expect(copyright).to.have.property('hidden');
 
-          var invalidRequest = body.querySelector('#invalidRequest');
+
+          const copyright1 = body.querySelector('#statutoryCopyright');
+          expect(copyright1).to.have.property('hidden');
+
+          const copyright2 = body.querySelector('#commercialCopyright');
+          expect(copyright2).to.have.property('hidden');
+
+          const invalidRequest = body.querySelector('#invalidRequest');
           expect(invalidRequest).to.have.property('hidden');
 
 

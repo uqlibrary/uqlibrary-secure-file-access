@@ -34,30 +34,28 @@
       element.setSearch('?collection=exams&file=0001/coursecode.pdf');
       element.setupPath('/collection.html');
 
-      var expected = '/exams/0001/coursecode.pdf';
-      var actual = element.pathname;
+      const expected = '/exams/0001/coursecode.pdf';
+      const actual = element.pathname;
       expect(expected).to.equal(actual);
 
       done();
     });
 
     test('it should get the file extension', function (done) {
-      element.setSearch('?collection=thomson&file=0001/coursecode.pdf');
       element.setupPath('/thomson/someFile.pdf');
 
-      var expected = 'pdf';
-      var actual = element.getFileExtension();
+      const expected = 'pdf';
+      const actual = element.getFileExtension();
       expect(expected).to.equal(actual);
 
       done();
     });
 
     test('it should skip a missing file extension', function (done) {
-      element.setSearch('?collection=thomson&file=0001/coursecode.pdf');
       element.setupPath('/thomson/someFile');
 
-      var expected = false;
-      var actual = element.getFileExtension();
+      const expected = false;
+      const actual = element.getFileExtension();
       expect(expected).to.equal(actual);
 
       done();
@@ -65,24 +63,28 @@
 
 
 
-    test('it should show the copyright page for copyrighted files with non-params url', function (done) {
-      element.setupPath("/exams/0001/3e201.pdf");
+    test('it should show the copyright page for copyrighted files by param', function (done) {
+      element.setupPath('/collection.html?collection=coursebank&file=someFile.pdf');
 
       flush(function () {
-        var body = element.$.layout;
+        const body = element.$.layout;
 
-        var header = body.querySelector('#copyright h3');
-        expect(header.textContent).to.contain('COMMONWEALTH OF AUSTRALIA');
+        const copyright = body.querySelector('#statutoryCopyright');
 
-        var copyright = body.querySelector('#copyright');
+        const header = copyright.querySelector('h2');
+        expect(header.textContent).to.contain('WARNING');
 
-        var els = body.querySelector('#copyright #download');
+        const els = copyright.querySelector('#download');
         expect(els.textContent).to.contain('Acknowledge Copyright and Download');
 
-        var invalidRequest = body.querySelector('#invalidRequest');
+
+        const invalidRequest = body.querySelector('#invalidRequest');
         expect(invalidRequest).to.have.property('hidden');
 
-        var redirectparagraph = body.querySelector('#redirect p');
+        const copyright2 = body.querySelector('#commercialCopyright');
+        expect(copyright2).to.have.property('hidden');
+
+        const redirectparagraph = body.querySelector('#redirect p');
         expect(redirectparagraph).to.have.property('hidden');
 
         done();
@@ -90,22 +92,26 @@
       });
     });
 
-    test('it should redirect open access files to the correct url with non-params url', function (done) {
+    test('it should redirect open access files to the correct url by param', function (done) {
       element.setupPath("/collection.html?collection=thomson&file=someFile.pdf");
 
       flush(function () {
-        var body = element.$.layout;
+        const body = element.$.layout;
 
-        var redirectparagraph = body.querySelector('#redirect p');
+        const redirectparagraph = body.querySelector('#redirect p');
         expect(redirectparagraph.textContent).to.contain('you should be redirected');
 
-        var link = body.querySelector('#redirect p a');
+        const link = body.querySelector('#redirect p a');
         expect(link.textContent).to.contain('Download the file');
 
-        var copyright = body.querySelector('#copyright');
+
+        const copyright = body.querySelector('#statutoryCopyright');
         expect(copyright).to.have.property('hidden');
 
-        var invalidRequest = body.querySelector('#invalidRequest');
+        const copyright2 = body.querySelector('#commercialCopyright');
+        expect(copyright).to.have.property('hidden');
+
+        const invalidRequest = body.querySelector('#invalidRequest');
         expect(invalidRequest).to.have.property('hidden');
         done();
       });

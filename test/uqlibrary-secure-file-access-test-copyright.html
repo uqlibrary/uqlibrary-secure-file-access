@@ -17,7 +17,7 @@
 
 <test-fixture id="basic">
   <template>
-    <uqlibrary-secure-file-access id="collection" url-requested="/exams/0001/3e201.pdf"></uqlibrary-secure-file-access>
+    <uqlibrary-secure-file-access id="collection" url-requested="/coursebank/something.pdf"></uqlibrary-secure-file-access>
   </template>
 </test-fixture>
 
@@ -33,20 +33,22 @@
 
     test('it should show the copyright page for copyrighted files', function (done) {
         setTimeout(function () {
-            var body = element.$.layout;
+            const body = element.$.layout;
 
-            var copyright = body.querySelector('#copyright');
+            const copyright = body.querySelector('#statutoryCopyright');
 
-            var header = body.querySelector('#copyright h3');
-            expect(header.textContent).to.contain('COMMONWEALTH OF AUSTRALIA');
+            const header = copyright.querySelector('h2');
+            expect(header.textContent).to.contain('WARNING');
 
-            var els = body.querySelector('#copyright #download');
+            const els = copyright.querySelector('#download');
             expect(els.textContent).to.contain('Acknowledge Copyright and Download');
 
-            var invalidRequest = body.querySelector('#invalidRequest');
+
+
+            const invalidRequest = body.querySelector('#invalidRequest');
             expect(invalidRequest).to.have.property('hidden');
 
-            var redirectparagraph = body.querySelector('#redirect p');
+            const redirectparagraph = body.querySelector('#redirect p');
             expect(redirectparagraph).to.have.property('hidden');
             done();
         }, 50);
