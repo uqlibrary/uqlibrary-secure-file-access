@@ -91,29 +91,53 @@
     },
 
     ready: function () {
-      if (this.pathnameLogin === '') {
-        // called if it has not been initialised (in test)
-        if (this.urlRequested !== '') {
-          this.setupPath(this.urlRequested, 'testcollection');
-        } else {
-          this.setupPath(window.location.pathname, 'testcollection');
+      if (this.apiVersion === 'upgrade') {
+        if (urlRequested === '') {
+          return false;
         }
+        this.setupPath(this.urlRequested, 'testcollection');
+
+        this.requestCollectionFile('testcollection');
+
+        this.loginAndGetApi();
+      } else {
+        if (this.pathname === '') {
+          // called if it has not been initialised (in test)
+          if (this.urlRequested !== '') {
+            this.pathname = this.setupPath(this.urlRequested);
+          } else {
+            this.pathname = this.setupPath(window.location.pathname);
+          }
+        }
+
+        var account = this.$.account;
+
+        var self = this;
+        account.addEventListener('uqlibrary-api-account-loaded', function (e) {
+          if (e.detail.hasSession) {
+            self.requestCollectionFile();
+          } else {
+            account.login(window.location.href);
+          }
+        });
+// comment out for dev or it will loop infinitely
+        account.get();
+// comment out for prod - required in dev as login never happens
+//     this.requestCollectionFile();
       }
-
-      this.requestCollectionFile('testcollection');
-
-      this.loginAndGetApi();
     },
 
     /**
      * in test and prod, we will pass something like '/folder/something.pdf'
      * in dev, we will get '/collection.html'
-     * @param newPathname
+     * @param pathName
+     * @param typeRequest
+     * @returns {*|string}
      */
-    setupPath: function(newPathname, typeRequest) {
+    setupPath: function(pathName, typeRequest) {
       // we pass the window.location.pathname along directly to the api
       // if we get a paramter based url in dev, we must construct it first
-      if (newPathname === undefined || newPathname === '') {
+      if (pathName === undefined || pathName === '') {
         // this should never happen
         console.log('ERROR: setupPath called without path in secure-file-access');
         return;
@@ -127,10 +151,10 @@
       var query, parts, pathname;
       if (this.apiVersion === 'upgrade') {
         console.log('calling upgrade api');
-        if (newPathname !== '/collection.html' && newPathname !== '/collection2.html') {
+        if (pathName !== '/collection.html' && pathName !== '/collection2.html') {
           // we are in prod
-          this.pathnameLogin = '/testlogin' + newPathname;
-          this.pathnameDetail = '/2' + newPathname + '?acknowledged';
+          this.pathnameLogin = '/testlogin' + pathName;
+          this.pathnameDetail = '/2' + pathName + '?acknowledged';
           console.log('4 this.pathnameDetail = '+this.pathnameDetail);
           console.log('4 this.pathnameLogin = '+this.pathnameLogin);
         } else {
@@ -171,9 +195,9 @@
         }
       } else {
         console.log('calling old api');
-        if (newPathname !== '/collection.html' && newPathname !== '/collection2.html') {
+        if (pathName !== '/collection.html' && pathName !== '/collection2.html') {
           // we are in prod
-          this.pathname = newPathname;
+          this.pathname = pathName;
         } else {
           // we are in dev
           if (this.search !== '') {
@@ -199,29 +223,29 @@
 
     requestCollectionFile: function(typeRequest) {
       console.log('requestCollectionFile - ' + typeRequest);
-      var linkToEncode;
+      var apiUrl;
       if (this.apiVersion === 'upgrade') {
         if (typeRequest !== 'testcollection' && typeRequest !== 'collection') {
           return false;
         }
 
-        linkToEncode = '';
+        apiUrl = '';
         if (typeRequest === 'testcollection') {
           console.log('requestCollectionFile: testcollection - this.pathnameLogin = ' + this.pathnameLogin);
-          linkToEncode = this.stripFirstChar(this.pathnameLogin); //strip opening slash
+          apiUrl = this.stripFirstChar(this.pathnameLogin); //strip opening slash
         } else {
           console.log('requestCollectionFile: collection - this.pathnameDetail = ' + this.pathnameDetail);
-          linkToEncode = this.stripFirstChar(this.pathnameDetail); //strip opening slash
+          apiUrl = this.stripFirstChar(this.pathnameDetail); //strip opening slash
 
         }
-        if ('' !== linkToEncode) {
-          this.$.encodedUrlApi.get({plainUrl: linkToEncode});
+        if ('' !== apiUrl) {
+          this.$.encodedUrlApi.get({plainUrl: apiUrl});
         }
 
         this.fileExtension =  this.getFileExtension();
       } else {
         // old code
-        linkToEncode = '';
+        apiUrl = '';
 
         this.fileExtension =  this.getFileExtension();
 
@@ -237,7 +261,7 @@
 //          fileList = 'something'; // replace with aws thingy
           // then display on page as list
         } else {
-          linkToEncode = this.stripFirstChar(this.pathname) + '?copyright'; //strip opening slash
+          apiUrl = this.stripFirstChar(this.pathname) + '?copyright'; //strip opening slash
           // if ( !preg_match('/^(apps|lectures|sustainable_tourism)/', fileid) ) {
           //   set this.isValidRequest = false
           // }
@@ -246,8 +270,8 @@
 
         }
 
-        if ('' !== linkToEncode) {
-          this.$.encodedUrlApi.get({plainUrl: linkToEncode});
+        if ('' !== apiUrl) {
+          this.$.encodedUrlApi.get({plainUrl: apiUrl});
         }
       }
     },
@@ -287,9 +311,9 @@
         self.requestCollectionFile('collection');
       });
 // comment out for dev or it will loop infinitely
-//       account.get();
+       account.get();
 // comment out for prod
-      this.requestCollectionFile('collection');
+//      this.requestCollectionFile('collection');
     }, /**
      * called when the api uqlibrary-api-collection-encoded-url returns
      * @param e
