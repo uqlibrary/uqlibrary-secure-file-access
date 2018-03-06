@@ -11,13 +11,18 @@
         value: false
       },
 
-      // generally, something has gone wrong, but api being unavailable is the most likely cause
+      // generally, something has gone wrong, api being unavailable is the most likely cause
       isPanelApiUnavailable: {
         type: Boolean,
         value: false
       },
 
-      isPanelCopyright: {
+      isPanelStatutoryCopyright: {
+        type: Boolean,
+        value: false
+      },
+
+      isPanelCommercialCopyright: {
         type: Boolean,
         value: false
       },
@@ -32,7 +37,12 @@
         value: ''
       },
 
-      pathname: {
+      pathnameLogin: {
+        type: String,
+        value: ''
+      },
+
+      pathnameDetail: {
         type: String,
         value: ''
       },
@@ -65,6 +75,12 @@
       emailBody: {
         type: String,
         value: ''
+      },
+
+      // temporary variable to allow access to the new api
+      apiVersion: {
+        type: String,
+        value: ''
       }
     },
 
@@ -75,29 +91,18 @@
     },
 
     ready: function () {
-      if (this.pathname === '') {
+      if (this.pathnameLogin === '') {
         // called if it has not been initialised (in test)
         if (this.urlRequested !== '') {
-          this.pathname = this.setupPath(this.urlRequested);
+          this.setupPath(this.urlRequested, 'testcollection');
         } else {
-          this.pathname = this.setupPath(window.location.pathname);
+          this.setupPath(window.location.pathname, 'testcollection');
         }
       }
 
-      var account = this.$.account;
+      this.requestCollectionFile('testcollection');
 
-      var self = this;
-      account.addEventListener('uqlibrary-api-account-loaded', function (e) {
-        if (e.detail.hasSession) {
-          self.requestCollectionFile();
-        } else {
-          account.login(window.location.href);
-        }
-      });
-// comment out for dev or it will loop infinitely
-      account.get();
-// comment out for prod - required in dev as login never happens
-//     this.requestCollectionFile();
+      this.loginAndGetApi();
     },
 
     /**
@@ -105,67 +110,145 @@
      * in dev, we will get '/collection.html'
      * @param newPathname
      */
-    setupPath: function(newPathname) {
+    setupPath: function(newPathname, typeRequest) {
       // we pass the window.location.pathname along directly to the api
       // if we get a paramter based url in dev, we must construct it first
       if (newPathname === undefined || newPathname === '') {
         // this should never happen
-        console.log('ERROR: setupPath called without path in uqlibrary-secure-file-access');
+        console.log('ERROR: setupPath called without path in secure-file-access');
         return;
       }
 
-      if (newPathname !== '/collection.html') {
-        // we are in prod
-        this.pathname = newPathname;
-      } else {
-        // we are in dev
-        if (this.search !== '') {
-          // has been set by call to this.setSearch
-        } else if (window.location.search === undefined) {
-          // this should never happen
+      if (typeRequest === undefined || typeRequest === '' || typeof typeRequest === undefined) {
+        // this should never happen
+        typeRequest = 'testcollection';
+      }
+      console.log('this.apiVersion = '+this.apiVersion);
+      var query, parts, pathname;
+      if (this.apiVersion === 'upgrade') {
+        console.log('calling upgrade api');
+        if (newPathname !== '/collection.html' && newPathname !== '/collection2.html') {
+          // we are in prod
+          this.pathnameLogin = '/testlogin' + newPathname;
+          this.pathnameDetail = '/2' + newPathname + '?acknowledged';
+          console.log('4 this.pathnameDetail = '+this.pathnameDetail);
+          console.log('4 this.pathnameLogin = '+this.pathnameLogin);
         } else {
-          this.setSearch(window.location.search);
-        }
+          // we are in dev
+          if (this.search !== '') {
+            // has been set by call to this.setSearch
+          } else if (window.location.search === undefined) {
+            // this should never happen
+          } else {
+            this.setSearch(window.location.search);
+          }
 
-        // we are in dev and must join the params into a path
-        var query = this.stripFirstChar(this.search);
-        var parts = query.split("&");
-        this.pathname = '/';
-        this.pathname += parts.map(function(kk,vv) {
-          return kk.split('=').pop();
-        }).join('/');
+          // we are in dev and must join the params into a path
+          console.log('this.search = '+this.search);
+          // get rid of any erroneous trailing ?
+          parts = this.search.split("?");
+          parts.shift();
+          if (parts.length > 1) {
+            path = '?' + parts.shift();
+          } else {
+            path = this.search;
+          }
+          console.log('path = '+path);
+          query = this.stripFirstChar(path);
+          console.log('query = '+query);
+          parts = query.split("&");
+
+          pathname = '/';
+          pathname += parts.map(function (kk, vv) {
+            return kk.split('=').pop();
+          }).join('/');
+          console.log('typeRequest = '+typeRequest);
+          console.log('1 pathname = '+pathname);
+          this.pathnameLogin = '/testlogin' + pathname; // check if login is required
+          this.pathnameDetail = '/2' + pathname + '?copyright'; // request the loggedin file
+          console.log('2 this.pathnameDetail = '+this.pathnameDetail);
+          console.log('2 this.pathnameLogin = '+this.pathnameLogin);
+        }
+      } else {
+        console.log('calling old api');
+        if (newPathname !== '/collection.html' && newPathname !== '/collection2.html') {
+          // we are in prod
+          this.pathname = newPathname;
+        } else {
+          // we are in dev
+          if (this.search !== '') {
+            // has been set by call to this.setSearch
+          } else if (window.location.search === undefined) {
+            // this should never happen
+          } else {
+            this.setSearch(window.location.search);
+          }
+
+          // we are in dev and must join the params into a path
+          query = this.stripFirstChar(this.search);
+          parts = query.split("&");
+          this.pathname = '/';
+          this.pathname += parts.map(function (kk, vv) {
+            return kk.split('=').pop();
+          }).join('/');
+          console.log('3 this.pathname = '+this.pathname);
+        }
       }
       return this.pathname;
     },
 
-    requestCollectionFile: function() {
-      var linkToEncode = '';
+    requestCollectionFile: function(typeRequest) {
+      console.log('requestCollectionFile - ' + typeRequest);
+      var linkToEncode;
+      if (this.apiVersion === 'upgrade') {
+        if (typeRequest !== 'testcollection' && typeRequest !== 'collection') {
+          return false;
+        }
 
-      this.fileExtension =  this.getFileExtension();
+        linkToEncode = '';
+        if (typeRequest === 'testcollection') {
+          console.log('requestCollectionFile: testcollection - this.pathnameLogin = ' + this.pathnameLogin);
+          linkToEncode = this.stripFirstChar(this.pathnameLogin); //strip opening slash
+        } else {
+          console.log('requestCollectionFile: collection - this.pathnameDetail = ' + this.pathnameDetail);
+          linkToEncode = this.stripFirstChar(this.pathnameDetail); //strip opening slash
+
+        }
+        if ('' !== linkToEncode) {
+          this.$.encodedUrlApi.get({plainUrl: linkToEncode});
+        }
+
+        this.fileExtension =  this.getFileExtension();
+      } else {
+        // old code
+        linkToEncode = '';
+
+        this.fileExtension =  this.getFileExtension();
 
 //        var fileList = [];
-      // thomson and bom supply a list page
-      if (this.methodType === 'list') {
-        // list: tbd
-        // get an aws keyed url from api/files
-        // if ( !preg_match('/^(apps|lectures|sustainable_tourism)/', fileid) ) {
-        //   set this.isValidRequest = false
-        // }
-        // vary deliver on method = get/serve
+        // thomson and bom supply a list page
+        if (this.methodType === 'list') {
+          // list: tbd
+          // get an aws keyed url from api/files
+          // if ( !preg_match('/^(apps|lectures|sustainable_tourism)/', fileid) ) {
+          //   set this.isValidRequest = false
+          // }
+          // vary deliver on method = get/serve
 //          fileList = 'something'; // replace with aws thingy
-        // then display on page as list
-      } else {
-        linkToEncode = this.stripFirstChar(this.pathname) + '?copyright'; //strip opening slash
-        // if ( !preg_match('/^(apps|lectures|sustainable_tourism)/', fileid) ) {
-        //   set this.isValidRequest = false
-        // }
-        // vary deliver on method = get/serve
+          // then display on page as list
+        } else {
+          linkToEncode = this.stripFirstChar(this.pathname) + '?copyright'; //strip opening slash
+          // if ( !preg_match('/^(apps|lectures|sustainable_tourism)/', fileid) ) {
+          //   set this.isValidRequest = false
+          // }
+          // vary deliver on method = get/serve
 
 
-      }
+        }
 
-      if ('' !== linkToEncode) {
-        this.$.encodedUrlApi.get({plainUrl: linkToEncode});
+        if ('' !== linkToEncode) {
+          this.$.encodedUrlApi.get({plainUrl: linkToEncode});
+        }
       }
     },
 
@@ -173,13 +256,7 @@
       return input.substring(1);
     },
 
-    /**
-     * the folder they requested is not known in the api
-     * new folder? it should be added to the json in the api repo at package file config to enable it
-     */
-    setInvalid: function () {
-      console.log('the folder ' + this.getCollectionFolder() + ' is invalid or not yet available');
-
+    setupEmail: function () {
       var emailSubject = 'Broken link to the Secure File Collection';
       // add the refer to the email they are prompted to send, where available
       if (document.referrer !== '') {
@@ -193,83 +270,150 @@
         emailBody += 'I was visiting ' + document.referrer + ' and clicked a link.' + "\n";
       }
       emailBody += 'I landed on ' + window.location.href + ' but it said the link wasnt valid.' + "\n\n";
-      emailBody += '(include any other detail that will help us provide the file here, including where you were coming from)';
+      emailBody += '(You can also include any other detail that will help us provide the file here, including where you were coming from)';
       this.emailBody = encodeURIComponent(emailBody);
-
-      this.selectPanel('invalidRequest');
     },
 
-    /**
+    loginAndGetApi: function () {
+      var account = this.$.account;
+
+      var self = this;
+      account.addEventListener('uqlibrary-api-account-loaded', function (e) {
+        if (e.detail.hasSession) {
+          self.requestCollectionFile('collection');
+        } else {
+          account.login(window.location.href);
+        }
+        self.requestCollectionFile('collection');
+      });
+// comment out for dev or it will loop infinitely
+//       account.get();
+// comment out for prod
+      this.requestCollectionFile('collection');
+    }, /**
      * called when the api uqlibrary-api-collection-encoded-url returns
      * @param e
      */
     handleLoadedFile: function(e) {
+      console.log('handleLoadedFile');
       // error: {response: true, responseText: "An unknown error occurred"}
       // no such folder: {response: "No such collection"}
-      // ok: {url: "https://dddnk7oxlhhax.cloudfront.net/secure/exams/0001/3e201.pdf?...", isOpenaccess: false}
+      // ok: {url: "https://dddnk7oxlhhax.cloudfront.net/secure/exams/0001/3e201.pdf?...", displaypanel: 'redirect'}
+      console.log(e.detail);
       if (e.detail.response === 'No such collection') {
-        this.setInvalid();
+        // the folder they requested is not known in the api
+        // new folder? it should be added to the json in the api repo at package file config to enable it
+        console.log('the folder is invalid or not yet available - '+e.detail.baseURI);
+        this.setupEmail();
+        this.showThisPanel('invalidRequest');
         return;
+
+      } else if (e.detail.response === 'Login required') {
+        this.loginAndGetApi();
+        return;
+
       } else if (e.detail.url === undefined || e.detail.response === true) {
         // an error occurred - something unexpected went wrong, eg api is dead
-        this.selectPanel('filesUnavailable');
+        this.showThisPanel('filesUnavailable');
         return;
       }
 
-      if (e.detail.isOpenaccess) {
-        // it is? show the message and redirect
-        this.selectPanel('redirect');
+      if (this.apiVersion === 'upgrade') {
+        var panelName = '';
+        if (!(e.detail.displaypanel === undefined)) {
+          // it is? show the message and redirect
+          panelName = this.getPanelName(e.detail.displaypanel);
+          this.showThisPanel(panelName);
+        }
 
-        this.deliveryFilename = e.detail.url;
+        if (!(e.detail.url === undefined)) {
+          this.deliveryFilename = e.detail.url;
+          if ('redirect' === panelName) {
+// commented out for dev
+//        window.location.href = this.deliveryFilename;
+          }
+        }
+      } else {
+        console.log('here');
+        if (e.detail.isOpenaccess) {
+          // it is? show the message and redirect
+          this.showThisPanel('redirect');
+
+          this.deliveryFilename = e.detail.url;
 
 // commented out for dev
 //        window.location.href = finalHref;
 
-      } else {
-        this.selectPanel('copyright');
+        } else {
+          this.showThisPanel('statutoryCopyright');
 
-        this.deliveryFilename = e.detail.url;
+          this.deliveryFilename = e.detail.url;
 
+        }
       }
+
     },
 
-    selectPanel: function (panelname) {
+    // adding a new panel?
+    // Add to getPanelName, showThisPanel & hideAllPanels
+    getPanelName: function(panelname) {
+      var validPanels = [
+        'commercialCopyright',
+        'statutoryCopyright',
+        'redirect'
+      ];
+      if (validPanels.indexOf(panelname) === -1) {
+        $result = 'invalidRequest';
+      } else {
+        $result = panelname;
+      }
+      console.log('getPanelName = '+$result);
+      return $result;
+    },
+
+    // sadly we have to hardcode the panels
+    showThisPanel: function(panelname) {
+      console.log('showThisPanel '+panelname);
       if (panelname === 'filesUnavailable') {
+        this.hideAllPanels();
         this.isPanelApiUnavailable = true;
-        this.isPanelInvalidRequest = false;
-        this.isPanelCopyright = false;
-        this.isPanelRedirect = false;
 
       } else if (panelname === 'invalidRequest') {
-        this.isPanelApiUnavailable = false;
+        this.hideAllPanels();
         this.isPanelInvalidRequest = true;
-        this.isPanelCopyright = false;
-        this.isPanelRedirect = false;
 
-      } else if (panelname === 'copyright') {
-        this.isPanelApiUnavailable = false;
-        this.isPanelInvalidRequest = false;
-        this.isPanelCopyright = true;
-        this.isPanelRedirect = false;
+      } else if (panelname === 'commercialCopyright') {
+        this.hideAllPanels();
+        this.isPanelCommercialCopyright = true;
+
+      } else if (panelname === 'statutoryCopyright') {
+        this.hideAllPanels();
+        this.isPanelStatutoryCopyright = true;
 
       } else if (panelname === 'redirect') {
-        this.isPanelApiUnavailable = false;
-        this.isPanelInvalidRequest = false;
-        this.isPanelCopyright = false;
+        this.hideAllPanels();
         this.isPanelRedirect = true;
       }
     },
 
-    getCollectionFolder: function() {
-      if (this.pathname.startsWith('/')) {
-        parts = this.pathname.split('/');
-        if (parts.length >= 3) {
-          parts.shift(); // discard the first bit = its from the initial slash
-          return parts.shift(); // the next bit is the collection name
-        }
-      }
-      return false;
+    hideAllPanels: function() {
+      this.isPanelApiUnavailable = false;
+      this.isPanelInvalidRequest = false;
+      this.isPanelCommercialCopyright = false;
+      this.isPanelStatutoryCopyright = false;
+      this.isPanelRedirect = false;
     },
+
+    // getCollectionFolder: function(pathname) {
+    //   if ('/' === pathname.substring(0, 1)) {
+    //     parts = pathname.split('/');
+    //     if (parts.length >= 3) {
+    //       parts.shift(); // discard the first bit = its from the initial slash
+    //       return parts.shift(); // the next bit is the collection name
+    //     }
+    //   }
+    //   return false;
+    // },
 
     /*
     _showList: function () {
