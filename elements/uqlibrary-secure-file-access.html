@@ -42,10 +42,10 @@ Example:
         padding: 0 1rem 1rem;
       }
 
-      .copyright h2, .copyright h3, .copyright h4, .copyright h5, .copyright p {
+      #copyright div * {
         text-align: center;
       }
-      .copyright h2 {
+      #copyright h2 {
         margin-top: 0;
       }
 
@@ -89,59 +89,28 @@ Example:
             <p>We're working on the issue and will have service restored as soon as possible. Please try again later.</p>
           </div>
 
-
           <div id="invalidRequest" class="invalidRequest" hidden$="[[ !isPanelInvalidRequest ]]">
             <h2>This file does not exist or is unavailable.</h2>
             <p>Please check the link you have used.</p>
-            <p>Email us at <a href="mailto:[[ emailAddress ]]?Subject=[[ emailSubject ]]&body=[[ emailBody ]]">[[ emailAddress ]]</a> to report broken links.</p>
+            <p>Email us as <a href="mailto:[[ emailAddress ]]?Subject=[[ emailSubject ]]&body=[[ emailBody ]]">[[ emailAddress ]]</a> to report broken links.</p>
           </div>
 
+          <div id="copyright" class="copyright" hidden$="[[ !isPanelCopyright ]]">
+            <div>
+              <h2>WARNING</h2>
+              <p>This material has been reproduced and communicated to you by or on behalf of The University of Queensland in accordance with section 113P of the Copyright Act 1968 (Act).
+                The material in this communication may be subject to copyright under the Act.</p>
+              <p>Any further reproduction or communication of this material by you may be the subject of copyright protection under the Act.</p>
 
-
-
-          <div id="statutoryCopyright" class="copyright" hidden$="[[ !isPanelStatutoryCopyright ]]">
-            <h2>WARNING</h2>
-            <p>This material has been reproduced and communicated to you by or on behalf of The University of Queensland in accordance with section 113P of the Copyright Act 1968 (Act).
-              The material in this communication may be subject to copyright under the Act.</p>
-            <p>Any further reproduction or communication of this material by you may be the subject of copyright protection under the Act.</p>
-
-            <div id="download">
-              <paper-button class="button-colored-accent">
-                <a href="[[ deliveryFilename ]]">Acknowledge Copyright and Download</a>
-              </paper-button>
+              <div id="download">
+                <paper-button class="button-colored-accent">
+                  <a href="[[ deliveryFilename ]]">Acknowledge Copyright and Download</a>
+                </paper-button>
+              </div>
             </div>
 
-            <div hidden$="[[ !fileExtension ]]">
-              <p>Save the file with a name ending in <b>.[[ fileExtension ]]</b> so your system will know how to open it.</p>
-            </div>
+            <p hidden$="[[ !fileExtension ]]">Save the file with a name ending in <b>.[[ fileExtension ]]</b> so your system will know how to open it.</p>
           </div>
-
-
-
-
-          <div id="commercialCopyright" class="copyright" hidden$="[[ !isPanelCommercialCopyright ]]">
-            <h2>Copyright Notice</h2>
-            <p class="copyrightsubhead">This file is provided to support teaching and learning for the staff and students of the University of Queensland</p>
-            <h3>COMMONWEALTH OF AUSTRALIA</h3>
-            <h4>Copyright Regulations 1969</h4>
-
-            <h5>WARNING</h5>
-            <p>This material has been reproduced and communicated to you by or on behalf of the University of Queensland pursuant to Part VB of the Copyright Act 1968 (the Act).</p>
-            <p>The material in this communication may be subject to copyright under the Act. Any further reproduction or communication of this material by you may be the subject of copyright protection under the Act.</p>
-
-            <div id="download">
-              <paper-button class="button-colored-accent">
-                <a href="[[ deliveryFilename ]]">Acknowledge Copyright and Download</a>
-              </paper-button>
-            </div>
-
-            <div hidden$="[[ !fileExtension ]]">
-              <p>Save the file with a name ending in <b>.[[ fileExtension ]]</b> so your system will know how to open it.</p>
-            </div>
-
-          </div>
-
-
 
           <div id="redirect" class="redirect" hidden$="[[ !isPanelRedirect ]]">
             <p>We are preparing the file, you should be redirected shortly.</p>
