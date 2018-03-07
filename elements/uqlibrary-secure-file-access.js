@@ -277,6 +277,9 @@
     },
 
     stripFirstChar: function(input) {
+      if (input === undefined || 0 >= input.length) {
+        return input;
+      }
       return input.substring(1);
     },
 
