@@ -11,13 +11,13 @@
   <link rel="import" href="../../test-fixture/test-fixture.html">
 
 
-  <link rel="import" href="../elements/uqlibrary-secure-file-access.html">
+  <link rel="import" href="../elements/uqlibrary-secure-file-access2.html">
 </head>
 <body>
 
 <test-fixture id="element">
   <template>
-    <uqlibrary-secure-file-access></uqlibrary-secure-file-access>
+    <uqlibrary-secure-file-access2></uqlibrary-secure-file-access2>
   </template>
 </test-fixture>
 
@@ -31,31 +31,31 @@
     });
 
     test('will be able to manually load a parameter path in dev', function (done) {
-      element.setSearch('?collection=exams&file=0001/coursecode.pdf');
-      element.setupPath('/collection.html');
+      element.setSearch('?collection=exams&file=0001/coursecode.pdf?acknowledged');
+      element.setupPath('/collection2.html');
 
-      const expected = '/exams/0001/coursecode.pdf';
-      const actual = element.pathname;
+      const expected = '/2/exams/0001/coursecode.pdf?acknowledged';
+      const actual = element.pathnameDetail;
       expect(expected).to.equal(actual);
+
+      const expected2 = '/testlogin/exams/0001/coursecode.pdf?acknowledged';
+      const actual2 = element.pathnameLogin;
+      expect(expected2).to.equal(actual2);
 
       done();
     });
 
     test('it should get the file extension', function (done) {
-      element.setupPath('/thomson/someFile.pdf');
-
       const expected = 'pdf';
-      const actual = element.getFileExtension();
+      const actual = element.getFileExtension('/thomson/someFile.pdf');
       expect(expected).to.equal(actual);
 
       done();
     });
 
     test('it should skip a missing file extension', function (done) {
-      element.setupPath('/thomson/someFile');
-
       const expected = false;
-      const actual = element.getFileExtension();
+      const actual = element.getFileExtension('/thomson/someFile');
       expect(expected).to.equal(actual);
 
       done();
@@ -65,7 +65,7 @@
 
     test('it should show the copyright page for copyrighted files by param', function (done) {
       element.setSearch('?collection=coursebank&file=someFile.pdf');
-      element.setupPath('/collection.html');
+      element.setupPath('/collection2.html');
 
       flush(function () {
         const body = element.$.layout;
@@ -94,7 +94,8 @@
     });
 
     test('it should redirect open access files to the correct url by param', function (done) {
-      element.setupPath("/collection.html?collection=thomson&file=someFile.pdf");
+      element.setSearch('?collection=thomson&file=someFile.pdf');
+      element.setupPath('/collection2.html');
 
       flush(function () {
         const body = element.$.layout;

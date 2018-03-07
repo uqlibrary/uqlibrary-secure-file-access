@@ -11,13 +11,13 @@
   <link rel="import" href="../../test-fixture/test-fixture.html">
 
 
-  <link rel="import" href="../elements/uqlibrary-secure-file-access2.html">
+  <link rel="import" href="../elements/uqlibrary-secure-file-access.html">
 </head>
 <body>
 
 <test-fixture id="basic">
   <template>
-    <uqlibrary-secure-file-access2 url-requested="/coursebank/someFile.pdf"></uqlibrary-secure-file-access2>
+    <uqlibrary-secure-file-access id="collection" url-requested="/coursebank/someFile.pdf"></uqlibrary-secure-file-access>
   </template>
 </test-fixture>
 
@@ -32,26 +32,26 @@
 
 
     test('it should show the copyright page for copyrighted files', function (done) {
-        setTimeout(function () {
-            const body = element.$.layout;
+      setTimeout(function () {
+        const body = element.$.layout;
 
-            const copyright = body.querySelector('#statutoryCopyright');
+        const copyright = body.querySelector('#copyright');
 
-            const header = copyright.querySelector('h2');
-            expect(header.textContent).to.contain('WARNING');
+        const header = copyright.querySelector('h2');
+        expect(header.textContent).to.contain('WARNING');
 
-            const els = copyright.querySelector('#download');
-            expect(els.textContent).to.contain('Acknowledge Copyright and Download');
+        const els = copyright.querySelector('#download');
+        expect(els.textContent).to.contain('Acknowledge Copyright and Download');
 
 
 
-            const invalidRequest = body.querySelector('#invalidRequest');
-            expect(invalidRequest).to.have.property('hidden');
+        const invalidRequest = body.querySelector('#invalidRequest');
+        expect(invalidRequest).to.have.property('hidden');
 
-            const redirectparagraph = body.querySelector('#redirect p');
-            expect(redirectparagraph).to.have.property('hidden');
-            done();
-        }, 50);
+        const redirectparagraph = body.querySelector('#redirect p');
+        expect(redirectparagraph).to.have.property('hidden');
+        done();
+      }, 50);
     });
   });
 
