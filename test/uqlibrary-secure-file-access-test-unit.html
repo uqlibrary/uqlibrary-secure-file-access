@@ -61,6 +61,23 @@
       done();
     });
 
+    test('it should know we are in dev', function (done) {
+      const pathname = '/master/pages/collection2.html';
+      var expected = false;
+      var actual = element._endsWith(pathname, 'frogs');
+      expect(expected).to.equal(actual);
+
+      expected = false;
+      actual = element._endsWith(pathname, '/collection.html');
+      expect(expected).to.equal(actual);
+
+      expected = true;
+      actual = element._endsWith(pathname, '/collection2.html');
+      expect(expected).to.equal(actual);
+
+      done();
+    });
+
 
 
     test('it should show the copyright page for copyrighted files by param', function (done) {

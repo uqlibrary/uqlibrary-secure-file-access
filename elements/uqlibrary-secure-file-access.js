@@ -114,9 +114,6 @@
         return;
       }
 
-      if (newPathname.endsWith('x')) {
-
-      }
       if (!this._endsWith(newPathname, '/collection.html')) {
         // we are in prod
         this.pathname = newPathname;

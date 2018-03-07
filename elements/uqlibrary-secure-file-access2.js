@@ -117,7 +117,7 @@
       console.log('this.apiVersion = ' + this.apiVersion);
       var query, parts;
       console.log('will call upgraded api');
-      if (pathName !== '/collection.html' && pathName !== '/collection2.html') {
+      if (!(this._endsWith(pathName, '/collection2.html'))) {
         // we are in prod
         console.log('prod format');
       } else {
@@ -142,6 +142,12 @@
       console.log('2 this.pathnameDetail = ' + this.pathnameDetail);
       console.log('2 this.pathnameLogin = ' + this.pathnameLogin);
       return this.pathname;
+    },
+
+    _endsWith: function(haystack, needle) {
+      const pattern = '(.*)' + needle;
+      var regExp = new RegExp(pattern, "g");
+      return regExp.test(haystack);
     },
 
     buildPathnameFromSearchParams: function() {
