@@ -95,9 +95,9 @@
         }
       });
 // comment out for dev or it will loop infinitely
-//      account.get();
+      account.get();
 // comment out for prod - required in dev as login never happens
-      this.requestCollectionFile();
+//      this.requestCollectionFile();
     },
 
     /**
@@ -114,7 +114,10 @@
         return;
       }
 
-      if (newPathname !== '/collection.html') {
+      if (newPathname.endsWith('x')) {
+
+      }
+      if (!this._endsWith(newPathname, '/collection.html')) {
         // we are in prod
         this.pathname = newPathname;
       } else {
@@ -136,6 +139,12 @@
         }).join('/');
       }
       return this.pathname;
+    },
+
+    _endsWith: function(haystack, needle) {
+      const pattern = '(.*)' + needle;
+      var regExp = new RegExp(pattern, "g");
+      return regExp.test(haystack);
     },
 
     requestCollectionFile: function() {
