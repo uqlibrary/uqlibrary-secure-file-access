@@ -64,7 +64,8 @@
 
 
     test('it should show the copyright page for copyrighted files by param', function (done) {
-      element.setupPath('/collection.html?collection=coursebank&file=someFile.pdf');
+      element.setSearch('?collection=coursebank&file=someFile.pdf');
+      element.setupPath('/collection.html');
 
       flush(function () {
         const body = element.$.layout;
