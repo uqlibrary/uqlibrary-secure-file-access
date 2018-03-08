@@ -111,7 +111,7 @@
       }
 
       var query, parts;
-      if (!(this._endsWith(pathName, '/collection2.html'))) {
+      if (!(this._endsWith(pathName, '/collection.html'))) {
         // we are in prod
       } else {
         // we are in dev
