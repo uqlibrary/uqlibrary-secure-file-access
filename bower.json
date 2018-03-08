@@ -7,7 +7,7 @@
     "iron-elements": "PolymerElements/iron-elements#^1.0.0",
     "paper-elements": "PolymerElements/paper-elements#^1.0.0",
     "polymer": "Polymer/polymer#1.9.3",
-    "uqlibrary-api": "uqlibrary/uqlibrary-api#file-152226514",
+    "uqlibrary-api": "uqlibrary/uqlibrary-api#v1.5.5",
     "uqlibrary-ga": "uqlibrary/uqlibrary-ga#v1.0.3",
     "uqlibrary-styles": "uqlibrary/uqlibrary-styles#v1.0.5",
     "webcomponentsjs": "^0.7.12"
