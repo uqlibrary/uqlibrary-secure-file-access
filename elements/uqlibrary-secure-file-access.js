@@ -253,8 +253,7 @@
       if (!(e.detail.url === undefined)) {
         this.deliveryFilename = e.detail.url;
         if ('redirect' === panelName) {
-// commented out for dev
-//        window.location.href = this.deliveryFilename;
+          window.location.href = this.deliveryFilename;
         }
       }
 
