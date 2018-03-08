@@ -128,7 +128,7 @@
       }
 
       this.pathnameLogin = '/testlogin' + pathName + '?acknowledged'; // check if login is required
-      this.pathnameDetail = '/2' + pathName + '?acknowledged'; // request the loggedin file
+      this.pathnameDetail = pathName + '?acknowledged'; // request the loggedin file
 
       return this.pathname;
     },
