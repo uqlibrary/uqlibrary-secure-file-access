@@ -141,17 +141,18 @@
 
     buildPathnameFromSearchParams: function() {
       // we are in dev and must join the params into a path
-      parts = this.search.split("?"); // get rid of any erroneous trailing ?
+      var parts = this.search.split("?"); // get rid of any erroneous trailing ?
       parts.shift();
+      var path;
       if (parts.length > 1) {
         path = '?' + parts.shift();
       } else {
         path = this.search;
       }
-      query = this.stripFirstChar(path);
+      var query = this.stripFirstChar(path);
       parts = query.split("&");
 
-      pathname = '/';
+      var pathname = '/';
       pathname += parts.map(function (kk, vv) {
         return kk.split('=').pop();
       }).join('/');
@@ -214,10 +215,12 @@
         }
         // self.requestCollectionFile('collection');
       });
-// comment out for dev or it will loop infinitely
+
+      // comment out for dev or it will loop infinitely
       account.get();
-// comment out for prod
-//      this.requestCollectionFile('collection');
+
+      // comment out for prod
+      // this.requestCollectionFile('collection');
     }, /**
      * called when the api uqlibrary-api-collection-encoded-url returns
      * @param e
@@ -262,16 +265,12 @@
     // adding a new panel?
     // Add to getPanelName, showThisPanel & hideAllPanels
     getPanelName: function(panelname) {
-      var validPanels = [
+      const validPanels = [
         'commercialCopyright',
         'statutoryCopyright',
         'redirect'
       ];
-      if (validPanels.indexOf(panelname) === -1) {
-        $result = 'invalidRequest';
-      } else {
-        $result = panelname;
-      }
+      const $result = (validPanels.indexOf(panelname) === -1) ? 'invalidRequest': panelname;
       return $result;
     },
 
