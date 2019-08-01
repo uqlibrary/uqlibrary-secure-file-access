@@ -1,6 +1,6 @@
 {
   "name": "uqlibrary-secure-file-access",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Web component to display logged in access to files stored on AWS",
   "license": "MIT",
   "main": "index.html",
