@@ -32,6 +32,11 @@
         value: false
       },
 
+      isPanelNoAccess: {
+        type: Boolean,
+        value: false
+      },
+
       collectionType: {
         type: String,
         value: ''
@@ -228,6 +233,7 @@
     handleLoadedFile: function(e) {
       // error: {response: true, responseText: "An unknown error occurred"}
       // no such folder: {response: "No such collection"}
+      // unauthorised user: {response: "Invalid User"}
       // ok: {url: "https://dddnk7oxlhhax.cloudfront.net/secure/exams/0001/3e201.pdf?...", displaypanel: 'redirect'}
       if (e.detail.response === 'No such collection') {
         // the folder they requested is not known in the api
@@ -235,6 +241,11 @@
         console.log('the folder is invalid or not yet available');
         this.setupEmail();
         this.showThisPanel('invalidRequest');
+        return;
+
+      } else if (e.detail.response === 'Invalid User') {
+        // only staff and students have access - others, eg em users, dont
+        this.showThisPanel('noAccess');
         return;
 
       } else if (e.detail.response === 'Login required') {
@@ -268,7 +279,8 @@
       const validPanels = [
         'commercialCopyright',
         'statutoryCopyright',
-        'redirect'
+        'redirect',
+        'isPanelNoAccess'
       ];
       const $result = (validPanels.indexOf(panelname) === -1) ? 'invalidRequest': panelname;
       return $result;
@@ -295,6 +307,11 @@
       } else if (panelname === 'redirect') {
         this.hideAllPanels();
         this.isPanelRedirect = true;
+
+      } else if (panelname === 'noAccess') {
+        this.hideAllPanels();
+        this.isPanelNoAccess = true;
+
       }
     },
 
@@ -304,6 +321,7 @@
       this.isPanelCommercialCopyright = false;
       this.isPanelStatutoryCopyright = false;
       this.isPanelRedirect = false;
+      this.isPanelNoAccess = false;
     },
 
     // getCollectionFolder: function(pathname) {

@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=no">
+  <title>uqlibrary-secure-file-access test</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../test-fixture/test-fixture-mocha.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+
+
+  <link rel="import" href="../elements/uqlibrary-secure-file-access.html">
+</head>
+<body>
+
+<test-fixture id="element">
+  <template>
+    <uqlibrary-secure-file-access url-requested="/coursebank/noaccess-blah.pdf"></uqlibrary-secure-file-access>
+  </template>
+</test-fixture>
+
+<script>
+    suite('<uqlibrary-secure-file-access> invalid tests', function () {
+        var element;
+
+        setup(function () {
+            document.cookie = "UQLMockData=enabled";
+            element = fixture('element');
+        });
+
+
+        test('it should handle file requests by unprivileged users', function (done) {
+            setTimeout(function() {
+                const body = element.$.layout;
+
+                const invalidRequest = body.querySelector('#noAccess');
+
+                const content = invalidRequest.querySelector('p');
+                expect(content.textContent).to.contain('Access to this file is only available to UQ staff and students.');
+
+
+
+                const copyright1 = body.querySelector('#statutoryCopyright');
+                expect(copyright1).to.have.property('hidden');
+
+                const copyright2 = body.querySelector('#commercialCopyright');
+                expect(copyright2).to.have.property('hidden');
+
+                const redirectparagraph = body.querySelector('#redirect');
+                expect(redirectparagraph).to.have.property('hidden');
+
+                const invalidRequestparagraph = body.querySelector('#invalidRequest');
+                expect(redirectparagraph).to.have.property('hidden');
+
+                done();
+            }, 1000);
+            done();
+        });
+
+    });
+
+
+</script>
+
+</body>
+</html>
