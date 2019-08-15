@@ -1,6 +1,6 @@
 {
   "name": "uqlibrary-secure-file-access",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "private": false,
   "main": "uqlibrary-secure-file-access.html",
   "dependencies": {
@@ -10,8 +10,7 @@
     "polymer": "Polymer/polymer#^1.11.3",
     "uqlibrary-api": "uqlibrary/uqlibrary-api",
     "uqlibrary-ga": "uqlibrary/uqlibrary-ga",
-    "uqlibrary-styles": "uqlibrary/uqlibrary-styles",
-    "webcomponentsjs": "^0.7.12"
+    "uqlibrary-styles": "uqlibrary/uqlibrary-styles"
   },
   "devDependencies": {
     "web-component-tester": "*",
