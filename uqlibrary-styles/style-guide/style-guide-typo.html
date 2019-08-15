@@ -1,0 +1,91 @@
+<link rel="import" href="../elements.html">
+
+<dom-module id="style-guide-typo">
+
+  <template>
+    <style is="custom-style" include="common-styles">
+      :host {
+        font-family: var(--font-family);
+      }
+
+    </style>
+
+      <h3>Headings</h3>
+
+      <h1>&lt;h1&gt; Title h1</h1>
+      <h2>&lt;h2&gt; Title h2</h2>
+      <h3>&lt;h3&gt; Title h3</h3>
+      <h4>&lt;h4&gt; Title h4</h4>
+      <h5>&lt;h5&gt; Title h5</h5>
+      <h6>&lt;h6&gt; Title h6</h6>
+
+      <h3>Text Styles</h3>
+
+      <div class="headline"> .headline </div>
+      <div class="title"> .title </div>
+      <div class="subhead"> .subhead </div>
+      <div class="body2"> .body2 </div>
+      <div class="body1"> .body1 </div>
+
+    <div class="caption"> .caption </div>
+      <div class="menu"> .menu </div>
+      <div class="button"> .button </div>
+      <div class="button-small"> .button-small </div>
+      <div><a href="#abc">link style</a></div>
+
+    <h3>Misc Styles</h3>
+    <div class="error"> .error </div>
+
+    <div style="background-color: #333;">
+        <h3 class="inverse">Headings</h3>
+
+        <h1 class="inverse">&lt;h1&gt; Title h1</h1>
+        <h2 class="inverse">&lt;h2&gt; Title h2</h2>
+        <h3 class="inverse">&lt;h3&gt; Title h3</h3>
+        <h4 class="inverse">&lt;h4&gt; Title h4</h4>
+        <h5 class="inverse">&lt;h5&gt; Title h5</h5>
+        <h6 class="inverse">&lt;h6&gt; Title h6</h6>
+
+        <h3 class="inverse">Text Styles</h3>
+
+        <div class="headline inverse"> .headline </div>
+        <div class="title inverse"> .title.inverse </div>
+        <div class="subhead inverse"> .subhead.inverse </div>
+        <div class="body2 inverse"> .body2.inverse </div>
+        <div class="body1 inverse"> .body1.inverse </div>
+        <div class="caption inverse"> .caption.inverse </div>
+        <div class="menu inverse"> .menu.inverse </div>
+        <div class="button inverse"> .button.inverse </div>
+        <div class="button-small inverse">.button-small.inverse </div>
+        <div><a href="#abc">link style</a></div>
+      </div>
+
+    <div>
+      <h3>Compact Styles</h3>
+      <p>As used in computers, hours, training:</p>
+      <paper-item class="compact header">&lt;paper-item class="compact header"&gt;Heading&lt;/paper-item&gt;</paper-item>
+
+      <paper-item class$="detail-item compact">&lt;paper-item class$="detail-item compact"&gt;Repeating&nbsp;detail&nbsp;items&lt;/paper-item&gt;</paper-item>
+
+      &lt;paper-item&gt;&lt;div class="linked-item"&gt;<paper-item><div class="linked-item">Item that
+          is blue, to indicate a
+        link</div></paper-item>&lt;/div&gt;&lt;/paper-item&gt;
+
+    </div>
+
+  </template>
+
+  <script>
+    (function () {
+      Polymer({
+        is: 'style-guide-typo',
+        properties: {
+        },
+
+        ready: function() {
+        }
+      });
+    })();
+  </script>
+
+</dom-module>

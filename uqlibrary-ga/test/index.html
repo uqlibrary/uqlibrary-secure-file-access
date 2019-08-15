@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=no">
+  <title>Core Elements Test Runner</title>
+  <meta charset="UTF-8">
+
+  <script src="../../webcomponentsjs/webcomponents.min.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+</head>
+
+<body>
+
+<script>
+  document.cookie="UQLMockData=enabled";
+  WCT.loadSuites([
+    'uqlibrary-ga-test.html',
+    'uqlibrary-gtm-test.html'
+  ]);
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+<link rel="import" href="elements.html">
+
+<!--
+Element providing collection file addresses.
+
+##### Example
+
+    <uqlibrary-api-file></uqlibrary-api-file>
+
+@element uqlibrary-api-file
+@blurb Element providing encoded urls for S3 access on aws
+@homepage https://github.com/uqlibrary/uqlibrary-api
+ -->
+<dom-module id="uqlibrary-api-collection-encoded-url">
+  <template>
+    <uqlibrary-api id="collection"></uqlibrary-api>
+  </template>
+  <script>
+    (function () {
+      Polymer({
+        is: 'uqlibrary-api-collection-encoded-url',
+        properties: {
+          baseUri: {
+            type: String,
+            value: '/file/collection'
+          },
+          publicUrl: {
+            type: String,
+            value: ''
+          }
+        },
+        /**
+         * Fired when the object has loaded.
+         *
+         * @event uqlibrary-api-account-loans-loaded
+         */
+        created: function () {
+        },
+        ready: function () {
+          var that = this;
+          this.$.collection.addEventListener('uqlibrary-api', function (e) {
+            that.collection = e.detail; //.url;
+            if (that.collection) {
+              that.fire('uqlibrary-api-collection-encoded-url', that.collection);
+            }
+          });
+        },
+        /**
+         * @method get
+         */
+        get: function (args) {
+          if (args && args.plainUrl) {
+            this.publicUrl = args.plainUrl;
+            this.set('$.collection.uri', this.baseUri + '/' + args.plainUrl);
+            this.$.collection.get();
+          }
+        }
+      });
+    }());
+  </script>
+</dom-module>
+

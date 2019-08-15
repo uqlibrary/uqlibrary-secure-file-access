@@ -1,0 +1,223 @@
+<link rel="import" href="elements.html">
+
+<!--
+Element providing search suggestions.
+
+##### Example
+
+    <uqlibrary-api-search-suggestions></uqlibrary-api-search-suggestions>
+
+@element uqlibrary-api-search-suggestions
+@blurb Element providing search suggestions.
+
+Library frontend components using autosuggest to Primo should call primo 'apis' directly rather than
+going via library API backends because they so unstable we can't trust them
+Other autosuggest calls use api.library
+
+-->
+
+<link rel="import" href="elements.html">
+
+<dom-module id="uqlibrary-api-search-suggestions">
+  <template>
+    <byutv-jsonp
+            id="suggestions"
+            url="{{url}}"
+            params="{{params}}"
+            on-response="handleResponse"
+            last-error="handleError"
+            debounce-duration="300"></byutv-jsonp>
+  </template>
+
+  <script>
+    (function() {
+      Polymer({
+
+        is: 'uqlibrary-api-search-suggestions',
+
+        properties: {
+          baseLibraryApiUrl: {
+            type: String,
+            value: 'https://api.library.uq.edu.au/v1'
+          },
+
+          baseLibrarySearchUri: {
+            type: String,
+            value: '/search_suggestions'
+          },
+
+          basePrimoApiUrl: {
+            type: String,
+            value: 'https://primo-instant-apac.hosted.exlibrisgroup.com/solr/ac'
+          },
+
+          type: {
+            type: String,
+            value: '',
+            notify: true
+          },
+
+          uri: {
+            type: String,
+            value: ''
+          },
+
+          method: {
+            type: String,
+            value: 'GET'
+          },
+
+          masqueradeCookie: {
+            type: String,
+            value: 'UQLMasquerade'
+          }
+        },
+
+        useMockData: false,
+
+        isMasquerade: false,
+
+        ready: function() {
+          var cookie = this.getCookie('UQLMockData');
+
+          if (typeof cookie !== "undefined") {
+            this.useMockData = (cookie === 'enabled');
+          }
+
+          this.isMasquerading();
+        },
+
+        isMasquerading: function (uid) {
+          var UQLMasquerade = this.getCookie(this.masqueradeCookie);
+
+          if (typeof UQLMasquerade !== "undefined") {
+            this.isMasquerade = true;
+            if (uid && UQLMasquerade !== uid) {
+              this.isMasquerade = false;
+              this.deleteMasqueradeCookie();
+            }
+          }
+        },
+
+        handleResponse: function (e) {
+          var output;
+          if (this.callingPrimo()) {
+            output = e.detail.response.docs.map(function (item) {
+              return {
+                type: "primo",
+                name: item.text,
+                url: null
+              }
+            });
+          } else {
+            output = e.detail;
+          }
+          this.fire('uqlibrary-api-search-suggestions-loaded', output);
+        },
+
+        handleError: function (event, object, sender) {
+          this.fire('byutv-jsonp', {
+            response: true,
+            responseText: "An unknown error occurred"
+          });
+        },
+
+        loadMockData: function() {
+          var that = this;
+
+          var xobj = new XMLHttpRequest();
+          var fileName = this.resolveUrl('mock/search_suggestions_get.json');
+          xobj.open('GET', fileName, true);
+          xobj.onreadystatechange = function () {
+            if (xobj.readyState === 4 && xobj.status === 200) {
+              var response = xobj.responseText;
+              that.fire('uqlibrary-api-search-suggestions-loaded', JSON.parse(response));
+            }
+          };
+          xobj.send(null);
+        },
+
+        callingPrimo: function () {
+          return this.type === 'primoLocal' || this.type === 'primoAll';
+        },
+
+        /**
+         * Submits request
+         * args - optional parameters
+         * args = {
+         *  addTimestamp : true //to avoid browser cache
+         *  body: {} //data to be passed in the body as json (not form data)
+         * }
+         * @method get
+         */
+        get: function (args) {
+          if (this.useMockData) {
+            this.loadMockData();
+          } else {
+            if (this.type !== '' && typeof args !== 'undefined' && args.trim() !== '') {
+              var url;
+              var callbackKey;
+              if (this.callingPrimo()) {
+                url = this.basePrimoApiUrl;
+
+                var rowCount = 10;
+                params = {
+                  q: args
+                  , facet: "off"
+                  , fq: "scope:()+AND+context:(B)"
+                  , rows: rowCount
+                  , wt: "json"
+                };
+                callbackKey = "json.wrf";
+              } else {
+                // will call api.library.uq.edu.au
+                url = this.baseLibraryApiUrl + this.baseLibrarySearchUri;
+                params = {
+                  type: this.type
+                  , prefix: args
+                };
+                if ((args && args.addTimestamp) || this.isMasquerade) {
+                  params.timestamp = (new Date()).getTime();
+                }
+                callbackKey = "callback";
+              }
+
+              this.set('$.suggestions.callbackKey', callbackKey);
+              this.set('$.suggestions.url', url);
+              this.set('$.suggestions.params', params);
+            }
+
+            this.$.suggestions.generateRequest();
+          }
+        },
+
+        /**
+         * Gets a cookie by name
+         * @param name the name of the cookie to return
+         * @returns {String}
+         */
+        getCookie: function (name) {
+          var parts = document.cookie.split(";");
+          for (var i = 0, l = parts.length; i < l; i++) {
+            var cookieParts = parts[i].trim().split('=');
+            if (cookieParts[0] === name) {
+              return cookieParts[1];
+            }
+          }
+        },
+        /**
+         * Delete a cookie by name
+         * @param name the name of the cookie to delete
+         */
+        deleteCookie: function (name) {
+          document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        },
+        deleteMasqueradeCookie: function () {
+          this.deleteCookie(this.masqueradeCookie);
+        }
+      });
+    })();
+  </script>
+
+</dom-module>
+

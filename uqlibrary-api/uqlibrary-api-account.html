@@ -1,0 +1,104 @@
+<link rel="import" href="elements.html">
+
+<!--
+Element providing access to a user account.
+
+##### Example
+
+    <uqlibrary-api-account></uqlibrary-api-account>
+
+    <script>
+    (function () {
+
+      window.addEventListener('polymer-ready', function() {
+
+        var account = document.querySelector('uqlibrary-api-account');
+
+        account.addEventListener('uqlibrary-api-account-loaded', function(e) {
+          if (e.detail.hasSession) {
+            alert('Logged in as ' + e.detail.id);
+          } else {
+            alert('Not logged in');
+          }
+        });
+
+        account.get();
+
+      });
+
+    }());
+  </script>
+
+@element uqlibrary-api-account
+@blurb Element providing access to a user account.
+@status alpha
+@homepage https://github.com/uqlibrary/uqlibrary-api
+-->
+<dom-module id="uqlibrary-api-account">
+
+  <template>
+    <uqlibrary-api id="account" uri="{{uri}}"></uqlibrary-api>
+  </template>
+
+  <script>
+    (function() {
+      Polymer({
+
+        is: 'uqlibrary-api-account',
+
+        properties: {
+          auto: {
+            type: Boolean,
+            value: false
+          }
+        },
+
+        uri: '/account',
+
+        ready: function () {
+          var that = this;
+
+          this.$.account.addEventListener('uqlibrary-api', function(e) {
+            that.$.account.isMasquerading(e.detail.id);
+            that.fire('uqlibrary-api-account-loaded', e.detail);
+          });
+
+          if (this.auto)
+            this.get();
+        },
+
+        /**
+         * Gets the user account.
+         *
+         * @method get
+         */
+        get: function () {
+          var now = new Date().getTime();
+          this.uri = '/account?' + now;
+
+          this.$.account.get();
+        },
+
+        /**
+         * Redirect to login with a URL to return to.
+         *
+         * @param url
+         */
+        login: function (url) {
+          document.location.href = "https://auth.library.uq.edu.au/login?return=" + window.btoa(url);
+        },
+
+        /**
+         * Redirect to login with a URL to return to.
+         *
+         * @param url
+         */
+        logout: function () {
+          document.location.href = "https://auth.library.uq.edu.au/logout";
+          this.$.account.deleteMasqueradeCookie();
+        }
+      });
+    })();
+  </script>
+
+</dom-module>

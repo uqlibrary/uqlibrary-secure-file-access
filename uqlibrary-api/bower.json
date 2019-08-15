@@ -1,0 +1,31 @@
+{
+  "name": "uqlibrary-api",
+  "version": "1.5.23",
+  "description": "Elements providing access to a UQ Library's API.",
+  "main": "uqlibrary-api.html",
+  "license": "MIT",
+  "private": true,
+  "homepage": "https://github.com/uqlibrary/uqlibrary-api/",
+  "ignore": [
+    "/.*",
+    "/tests/"
+  ],
+  "keywords": [
+    "seed",
+    "polymer",
+    "web-components"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.11.3",
+    "iron-elements": "PolymerElements/iron-elements#^1.0.0",
+    "iron-component-page": "PolymerElements/iron-component-page#^1.1.4",
+    "byutv-jsonp": "^1.3.1"
+  },
+  "devDependencies": {
+    "web-component-tester": "*",
+    "test-fixture": "PolymerElements/test-fixture#^1.1.2"
+  },
+  "resolutions": {
+    "test-fixture": "^1.1.2"
+  }
+}

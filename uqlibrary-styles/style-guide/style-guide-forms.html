@@ -1,0 +1,73 @@
+<link rel="import" href="../elements.html">
+
+<dom-module id="style-guide-forms">
+
+  <template>
+
+    <style is="custom-style" include="common-styles">
+      :host {
+        font-family: var(--font-family);
+      }
+
+    </style>
+
+    <h3>Text box</h3>
+    <paper-input label="Input label"></paper-input>
+
+    <h3>Select box</h3>
+    <paper-dropdown-menu label="Search" vertical-align="top" no-animations>
+      <paper-menu class="dropdown-content">
+        <paper-item>
+          <iron-icon icon="social:public"></iron-icon> Search
+        </paper-item>
+        <paper-item>
+          <iron-icon icon="communication:import-contacts"></iron-icon>
+          Books</paper-item>
+        <paper-item>
+          <iron-icon icon="social:school"></iron-icon>
+          Journal articles
+        </paper-item>
+        <paper-item>
+          <iron-icon icon="icons:theaters"></iron-icon> Multimedia
+        </paper-item>
+        <paper-item>
+          <iron-icon icon="editor:insert-drive-file"></iron-icon>
+          Journals
+        </paper-item>
+        <paper-item>
+          <iron-icon icon="editor:format-align-justify"></iron-icon>
+          Databases
+        </paper-item>
+
+        <paper-item>
+          <iron-icon icon="icons:inbox"></iron-icon>
+
+          Catalogue</paper-item>
+
+        <paper-item>
+          <iron-icon icon="icons:assessment"></iron-icon> Past exam papers
+        </paper-item>
+
+        <paper-item>
+          <iron-icon icon="icons:list"></iron-icon> Course reading lists
+        </paper-item>
+
+      </paper-menu>
+    </paper-dropdown-menu>
+
+  </template>
+
+  <script>
+    (function () {
+      Polymer({
+        is: 'style-guide-forms',
+        properties: {
+        },
+
+        ready: function() {
+        }
+      });
+    })();
+  </script>
+
+</dom-module>

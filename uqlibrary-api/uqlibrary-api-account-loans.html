@@ -1,0 +1,48 @@
+<link rel="import" href="elements.html">
+
+<!--
+Element providing account loans.
+
+##### Example
+
+    <uqlibrary-api-account-loans></uqlibrary-api-account-loans>
+
+@element uqlibrary-api-account-loans
+@blurb Element providing account loans.
+@status alpha
+@homepage https://github.com/uqlibrary/uqlibrary-api
+-->
+<dom-module id="uqlibrary-api-account-loans">
+  <template>
+    <uqlibrary-api id="loans" uri="/account/loans"></uqlibrary-api>
+  </template>
+  <script>
+    (function () {
+      Polymer({
+        is: 'uqlibrary-api-account-loans',
+        /**
+         * Fired when the object has loaded.
+         *
+         * @event uqlibrary-api-account-loans-loaded
+         */
+        created: function () {
+        },
+        ready: function () {
+          var that = this;
+          this.$.loans.addEventListener('uqlibrary-api', function (e) {
+            that.loans = e.detail;
+            that.fire('uqlibrary-api-account-loans-loaded', that.loans);
+          });
+        },
+        /**
+         * Gets the user account.
+         *
+         * @method get
+         */
+        get: function () {
+          this.$.loans.get();
+        }
+      });
+    }());
+  </script>
+</dom-module>

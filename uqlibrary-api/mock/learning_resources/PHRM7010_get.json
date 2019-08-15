@@ -1,0 +1,27 @@
+[
+  {
+    "title": "PHRM7010",
+    "course_title": "Advanced Skills for Clinical Pharmacy Practice",
+    "reading_lists": [
+      {
+        "title": "PHRM7010 PACE",
+        "campus": "PACE",
+        "url": "http:\/\/lr.library.uq.edu.au\/lists\/2664CB58-3CF2-F6A2-77B3-4E6630093261",
+        "period": "Semester 1 2015"
+      },
+      {
+        "title": "PHRM7010 PACE",
+        "campus": "PACE",
+        "url": "http:\/\/lr.library.uq.edu.au\/lists\/811445F8-443B-9D7A-2868-B4D28425BE50",
+        "period": "Semester 1 2016"
+      },
+      {
+        "title": "PHRM7010 PACE",
+        "campus": "PACE",
+        "url": "http:\/\/lr.library.uq.edu.au\/lists\/48AAE909-EE17-3D71-DC0D-003CC3A08E26",
+        "period": "Semester 2 2016"
+      }
+    ],
+    "exam_papers": []
+  }
+]

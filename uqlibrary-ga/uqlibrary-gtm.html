@@ -1,0 +1,146 @@
+<link rel="import" href="elements.html">
+
+<!--
+
+Custom web element for Google Tag Manager
+
+Example:
+
+    <uqlibrary-gtm container-id='GTM-1234-5' app-name='TestApp'></uqlibrary-gtm>
+
+-->
+
+<dom-module id="uqlibrary-gtm">
+
+ <script>
+
+    Polymer({
+
+      is: 'uqlibrary-gtm',
+
+      properties: {
+
+        /**
+         * The `appName` application name to prefix page views
+         */
+        appName: {
+          type: String,
+          value: 'UQLAPP'
+        },
+
+        /**
+         * The `containerId` Google Tag Manager container ID
+         */
+        containerId: {
+          type: String,
+          value: '<GTM-CONTAINER-ID>'
+        },
+
+        /**
+         * Defines whether the element works in test mode and uses mock data
+         */
+        useMockData: {
+          type: Boolean,
+          value: false
+        }
+      },
+
+      attached: function() {
+        if(typeof dataLayer === 'undefined') {
+          (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+          '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+          })(window,document,'script','dataLayer',this.containerId);
+        }
+      },
+
+      ready: function() {
+        var cookie = this.getCookie('UQLMockData');
+
+        this.useMockData = false;
+        if (cookie) {
+          this.useMockData = (cookie === 'enabled');
+        }
+
+      },
+
+      /**
+       * The `addPageView` method records a pageview
+       *
+       * @method addPageView
+       * @param page
+       */
+      addPageView: function(page) {
+        if (!this.useMockData){
+          page = "/" + this.appName + "/" + page;
+
+          var data = {
+            'event':'Pageview',
+            'page': page,
+            'title': page
+          }
+         this.fireEvent(data);
+        }
+      },
+
+      /**
+       *  The `addEvent` method records an action of the event
+       *  Event is recorded with category set to 'AppName' and action set to '/AppName/action'
+       *
+       * @method addEvent
+       * @param action
+       * @param label
+       */
+      addEvent: function(action, label) {
+        if (!this.useMockData && !this.isOutboundLink(label)) {
+          var data = {
+            'event': 'Click',
+            'label': label,
+            'category': this.appName,
+            'action': '/' + this.appName + '/' + action
+          };
+          this.fireEvent(data);
+        }
+      },
+
+      /**
+       *  The `fireEvent` method pushes data to the dataLayer
+       *
+       * @method fireEvent
+       * @param data
+       */
+      fireEvent: function(data){
+        try {
+          dataLayer.push(data);
+        } catch (err) {
+        }
+      },
+
+      /**
+       * Gets a cookie by name
+       * @param name the name of the cookie to return
+       * @returns {String}
+       */
+      getCookie: function (name) {
+        var value = "; " + document.cookie,
+            parts = value.split("; " + name + "=");
+        if (parts.length === 2) return parts.pop().split(";").shift();
+      },
+
+      /**
+       * Simple check on the click event label, any link not match http(s)://*.library.uq.edu.au is an outbound link
+       *
+       * @param link
+       * @return boolean
+       */
+      isOutboundLink: function(link) {
+       var regex = /^http(s)?:\/\/((?!library\.uq\.edu\.au).)*$/i;
+       return regex.test(link);
+      }
+
+    });
+
+  </script>
+
+</dom-module>

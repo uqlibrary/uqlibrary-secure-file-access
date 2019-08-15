@@ -1,0 +1,63 @@
+<link rel="import" href="elements.html">
+
+<!--
+Element providing library hours
+
+##### Example
+
+    <uqlibrary-api-library-hours></uqlibrary-api-library-hours>
+
+@element uqlibrary-api-library-hours
+@blurb Element providing library hours.
+@status alpha
+@homepage https://github.com/uqlibrary/uqlibrary-api
+-->
+<dom-module id="uqlibrary-api-library-hours">
+  <template>
+    <uqlibrary-api id="list"></uqlibrary-api>
+  </template>
+  <script>
+    (function () {
+      Polymer({
+        is: 'uqlibrary-api-library-hours',
+        properties: {
+          baseUri: {
+            type: String,
+            value: '/library_hours'
+          },
+          mode: {
+            type: String,
+            value: 'day'
+          }
+        },
+        /**
+         * Fired when the object has loaded.
+         *
+         * @event uqlibrary-api-library-hours
+         */
+        created: function () {
+        },
+        ready: function () {
+          var that = this;
+          this.$.list.addEventListener('uqlibrary-api', function (e) {
+            that.list = e.detail;
+            that.fire('uqlibrary-api-library-hours', that.list);
+          });
+        },
+        /**
+         * Gets library hours
+         *
+         * @method get
+         */
+        get: function (args) {
+
+          if (args && args.mode) {
+            this.mode = args.mode;
+          }
+          this.set('$.list.uri', this.baseUri + '/' + this.mode);
+          this.$.list.get();
+        }
+      });
+    }());
+  </script>
+</dom-module>

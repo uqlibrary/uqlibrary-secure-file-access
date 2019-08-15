@@ -1,0 +1,54 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="uqlibrary-api.html">
+
+<!--
+Element providing computer availability.
+
+##### Example
+
+    <uqlibrary-api-computer-availability></uqlibrary-api-computer-availability>
+
+@element uqlibrary-api-computer-availability
+@blurb Element providing computer availability.
+@status alpha
+@homepage https://github.com/uqlibrary/uqlibrary-api
+-->
+<dom-module id="uqlibrary-api-papercut">
+  <template>
+    <uqlibrary-api id="papercut" uri="/papercut/balance" on-uqlibrary-api="fireResponse"></uqlibrary-api>
+  </template>
+  <script>
+    (function () {
+      Polymer({
+        is: 'uqlibrary-api-papercut',
+        properties: {
+          /**
+           * Fired when the object has loaded.
+           *
+           * @event uqlibrary-api-computer-availability-loaded
+           */
+          baseUri: {
+            type: String,
+            value: '/papercut/balance'
+          }
+        },
+        created: function () {
+        },
+        fireResponse: function (e) {
+          this.papercut = e.detail;
+          this.fire('uqlibrary-api-papercut-loaded', this.papercut);
+        },
+        /**
+         * Gets the computer availability.
+         *
+         * @method get
+         */
+        get: function () {
+          this.set('$.papercut.uri', this.baseUri);
+          this.$.papercut.get();
+        }
+      });
+    }());
+  </script>
+</dom-module>

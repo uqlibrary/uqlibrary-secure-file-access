@@ -1,0 +1,107 @@
+<link rel="import" href="elements.html">
+
+<!--
+Element providing computer availability.
+
+##### Example
+
+    <uqlibrary-api-computer-availability></uqlibrary-api-computer-availability>
+
+@element uqlibrary-api-computer-availability
+@blurb Element providing computer availability.
+@status alpha
+@homepage https://github.com/uqlibrary/uqlibrary-api
+-->
+<dom-module id="uqlibrary-api-computer-availability">
+  <template>
+    <uqlibrary-api id="computers" uri="/computer_availability"></uqlibrary-api>
+  </template>
+  <script>
+    (function () {
+      Polymer({
+        is: 'uqlibrary-api-computer-availability',
+        properties: {
+          baseUri: {
+            type: String,
+            value: '/computer_availability'
+          }
+        },
+        created: function () {
+        },
+        ready: function () {
+          var that = this;
+          this.$.computers.addEventListener('uqlibrary-api', function(e) {
+            that.computers = e.detail;
+
+            //library names correspond to library abbreviations
+            var names = [
+              "Architecture &amp; Music Library",
+              "Biological Sciences Library",
+              "D.H. Engineering &amp; Sciences Library",
+              "Duhig Building",
+              "Gatton Campus Library",
+              "Herston Health Sciences Library",
+              "Mater Hospital Library",
+              "PACE Health Sciences Library",
+              "Central Library",
+              "Law Library",
+              "Whitty"
+            ];
+
+            var abbrs = [
+              "Arch Music",
+              "Biol Sci",
+              "DHEngSci",
+              "DuhigStudy",
+              "Gatton",
+              "Herston",
+              "Mater",
+              "PACE",
+              "Central",
+              "Law Library",
+              "Whitty"
+            ];
+
+            var campusImages = {
+                'Arch Music': 'https://app.library.uq.edu.au/assets/images/uq-buildings/st_lucia/zelman_cowan_bldg_51.jpg',
+                'Biol Sci': 'https://app.library.uq.edu.au/assets/images/uq-buildings/st_lucia/biological_sciences_library_94.jpg',
+                'DHEngSci': 'https://app.library.uq.edu.au/assets/images/uq-buildings/st_lucia/hawken_bldg_50.jpg',
+                'DuhigStudy': 'https://app.library.uq.edu.au/assets/images/uq-buildings/st_lucia/duhig_bldg_2.jpg',
+                'Gatton': 'https://app.library.uq.edu.au/assets/images/uq-buildings/gatton/gatton_campus_bldg_8102.jpg',
+                'Herston': 'https://app.library.uq.edu.au/assets/images/uq-buildings/herston/clinical_bldg_block_6.jpg',
+                'Mater': 'https://app.library.uq.edu.au/assets/images/uq-buildings/mater/mater_hospital_bldg.jpg',
+                'PACE': 'https://app.library.uq.edu.au/assets/images/uq-buildings/pace/library.jpg',
+                'Central': 'https://app.library.uq.edu.au/assets/images/uq-buildings/st_lucia/duhig_bldg_12_12a.jpg',
+                'Law Library': 'https://app.library.uq.edu.au/assets/images/uq-buildings/st_lucia/law.jpg',
+                "Whitty": 'https://app.library.uq.edu.au/assets/images/uq-buildings/mater/mater_hospital_bldg.jpg'
+            };
+
+            //add abbreviations to response
+            that.computers.forEach(function(item){
+
+              var index = names.indexOf(item.library);
+              if (index >=0) {
+                item.abbr = abbrs[index];
+                item.image = campusImages[item.abbr];
+              } else {
+                item.abbr = item.library.replace(/[a-z];/g, '');
+                item.image = item.library.replace(/[a-z];/g, '');
+              }
+            });
+
+            that.fire('uqlibrary-api-computer-availability-loaded', that.computers);
+          });
+        },
+        /**
+         * Gets the computer availability.
+         *
+         * @method get
+         */
+        get: function () {
+          this.set('$.computers.uri', this.baseUri);
+          this.$.computers.get();
+        }
+      });
+    }());
+  </script>
+</dom-module>

@@ -1,0 +1,56 @@
+<link rel="import" href="elements.html">
+<!--
+Element providing library guides
+
+##### Example
+
+    <uqlibrary-api-library-guides></uqlibrary-api-library-guides>
+
+@element uqlibrary-api-library-guides
+@blurb Element providing library guides.
+@status alpha
+@homepage https://github.com/uqlibrary/uqlibrary-api
+-->
+<dom-module id="uqlibrary-api-library-guides">
+  <template>
+    <uqlibrary-api id="list" on-uqlibrary-api="fireResponse"></uqlibrary-api>
+  </template>
+  <script>
+    (function () {
+      Polymer({
+        is: 'uqlibrary-api-library-guides',
+        properties: {
+          baseUri: {
+            type: String,
+            value: '/library_guides'
+          },
+          subjectCode: {
+            type: String,
+            value: ''
+          }
+        },
+        /**
+         * Fired when the object has loaded.
+         *
+         * @event uqlibrary-api-library-guides
+         */
+        fireResponse: function (e) {
+          this.list = e.detail;
+          this.fire('uqlibrary-api-library-guides', this.list);
+        },
+        /**
+         * Gets learning resources.
+         *
+         * @method get
+         */
+        get: function (args) {
+          if (args && args.code) {
+            this.subjectCode = args.code;
+            this.set('$.list.uri', this.baseUri + '/' + args.code);
+            this.$.list.get();
+          }
+        }
+      });
+    }());
+  </script>
+</dom-module>

@@ -1,0 +1,33 @@
+{
+  "name": "uqlibrary-ga",
+  "version": "1.1.5",
+  "keywords": [
+    "seed",
+    "polymer",
+    "web-components"
+  ],
+  "private": true,
+  "main": "index.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.11.3",
+    "iron-elements": "PolymerElements/iron-elements#^1.0.0",
+    "iron-component-page": "PolymerElements/iron-component-page#^1.1.4"
+  },
+  "devDependencies": {
+    "web-component-tester": "*",
+    "test-fixture": "PolymerElements/test-fixture#^1.1.2"
+  },
+  "resolutions": {
+    "test-fixture": "^1.1.2"
+  },
+  "homepage": "https://github.com/uqlibrary/uqlibrary-ga",
+  "_release": "1.1.5",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.1.5",
+    "commit": "c1d4a4c46eb46840174ee12a29080aac0821d6b6"
+  },
+  "_source": "https://github.com/uqlibrary/uqlibrary-ga.git",
+  "_target": "*",
+  "_originalSource": "uqlibrary/uqlibrary-ga"
+}

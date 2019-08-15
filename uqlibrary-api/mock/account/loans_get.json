@@ -1,0 +1,331 @@
+{
+  "recordNumber": "s1234567",
+  "checkedOut":
+  [
+    {
+      "title": "The contemporary conflict resolution reader / [edited by] Tom Woodhouse, Hugh Miall, Oliver Ramsbotham and Christopher Mitchell.",
+      "dueDate": "2016-01-01T23:59:00+10:00",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountLoan.do?command=details&loanID=1744351460003131",
+      "callNumber": "HM1126 .C66 2015",
+      "barcodes": "34067034393289",
+      "itemStatus": "RENEW"
+    },
+    {
+      "title": "The contemporary conflict resolution reader / [edited by] Tom Woodhouse, Hugh Miall, Oliver Ramsbotham and Christopher Mitchell.",
+      "dueDate": "{LESSTHANONEHOUR}",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountLoan.do?command=details&loanID=1744351460003131",
+      "callNumber": "HM1126 .C66 2015",
+      "barcodes": "34067034393289",
+      "itemStatus": "RENEW"
+    },
+    {
+      "title": "Feminist research practice : a primer / Sharlene Nagy Hesse-Biber, Boston College.",
+      "dueDate": "{LESSTHANONEHOUR}",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountLoan.do?command=details&loanID=1744441500003131",
+      "callNumber": "HQ1180 .H47 2014",
+      "barcodes": "34067033965012",
+      "itemStatus": "RENEW"
+    },
+    {
+      "title": "Te Puāwai o Ngāi Tahu : twelve contemporary Ngāi Tahu artists / [curators, Jonathan Mane-Wheoki, Felicity Milburn, Megan Tamati-Quennell].",
+      "dueDate": "{LESSTHANONEHOUR}",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountLoan.do?command=details&loanID=1744575920003131",
+      "callNumber": "N7406.7 .T4 2003",
+      "barcodes": "34067031145104",
+      "itemStatus": "NORMAL"
+    },
+    {
+      "title": "Hostile shores : catastrophic events in prehistoric New Zealand and their impact on Māori coastal communities / Bruce McFadgen.",
+      "dueDate": "{AFTERONEDAY}",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountLoan.do?command=details&loanID=1744621800003131",
+      "callNumber": "DU423.A55 M53 2007",
+      "barcodes": "34067030835671",
+      "itemStatus": "NORMAL"
+    },
+    {
+      "title": "Emergent conflict and peaceful change / Hugh Miall.",
+      "dueDate": "{AFTERONEDAY}",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountLoan.do?command=details&loanID=1744636220003131",
+      "callNumber": "HM1121 .M52 2007",
+      "barcodes": "34067030767197",
+      "itemStatus": "RENEW"
+    },
+    {
+      "title": "Taonga Māori.",
+      "dueDate": "{AFTERONEDAY}",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountLoan.do?command=details&loanID=1744680840003131",
+      "callNumber": "DU423.I53 M97 2006",
+      "barcodes": "34067030250046",
+      "itemStatus": "NORMAL"
+    },
+    {
+      "title": "Feminist perspectives on social research / edited by Sharlene Nagy Hesse-Biber, Michelle L. Yaiser.",
+      "dueDate": "{AFTERONEWEEK}",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountLoan.do?command=details&loanID=1744906600003131",
+      "callNumber": "HQ1180 .F455 2004",
+      "barcodes": "34067027390789",
+      "itemStatus": "RENEW"
+    },
+    {
+      "title": "The evolution of cooperation / Robert Axelrod ; foreword by Richard Dawkins.",
+      "dueDate": "{AFTERONEWEEK}",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountLoan.do?command=details&loanID=1745150060003131",
+      "callNumber": "HM131 .A89 1990",
+      "barcodes": "34067021865083",
+      "itemStatus": "RENEW"
+    },
+    {
+      "title": "Te Iwi Maori : a New Zealand population past, present & projected / Ian Pool.",
+      "dueDate": "{AFTERONEWEEK}",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountLoan.do?command=details&loanID=1745306040003131",
+      "callNumber": "DU423.P66 P67 1991",
+      "barcodes": "34067017769471",
+      "itemStatus": "NORMAL"
+    },
+    {
+      "title": "Maori symbolism : being an account of the origin, migration, and culture of the New Zealand Maori as recorded in certain sacred legends / report made by Ettie A. Rout from the evidence of Hohepa Te Rake (an Arawa noble) ; with a preface by Sir William Arbuthnot Lane.",
+      "dueDate": "{AFTERONEWEEK}",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountLoan.do?command=details&loanID=1745370260003131",
+      "callNumber": "DU423.A1 H67 1926",
+      "barcodes": "34067005333462",
+      "itemStatus": "NORMAL"
+    },
+    {
+      "title": "Traditions and superstitions of the New Zealanders : with illustrations of their manners and customs / by Edward Shortland.",
+      "dueDate": "{AFTERONEMONTH}",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountLoan.do?command=details&loanID=1745386120003131",
+      "callNumber": "DU423.A1 S45 1980",
+      "barcodes": "34067004078837",
+      "itemStatus": "NORMAL"
+    },
+    {
+      "title": "Economics of the New Zealand Maori / by Raymond Firth ; with a preface by R.H. Tawney.",
+      "dueDate": "{AFTERONEMONTH}",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountLoan.do?command=details&loanID=1745390140003131",
+      "callNumber": "DU423.E3 F57 1959",
+      "barcodes": "34067016405002",
+      "itemStatus": "NORMAL"
+    },
+    {
+      "title": "Fishing methods and devices of the Maori / by Elsdon Best.",
+      "dueDate": "{AFTERONEMONTH}",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountLoan.do?command=details&loanID=1745486440003131",
+      "callNumber": "DU423.F5 B47 1977",
+      "barcodes": "34067002960119",
+      "itemStatus": "NORMAL"
+    }
+  ],
+  "holds": [
+    {
+      "title": "Distributed urbanism : cities after Google earth / edited by Gretchen Wilkins.",
+      "datePlaced": "2016-06-14T10:00:00+10:00",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountRequest.do?command=details&requestId=1126891940003131",
+      "status": "IN_PROCESS",
+      "pickupLocation": "PACE Health Sciences Library"
+    },
+    {
+      "title": "The apple / by Sir A. Daniel Hall and M.B. Crane.",
+      "datePlaced": "2016-06-14T10:00:00+10:00",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountRequest.do?command=details&requestId=1126891770003131",
+      "status": "IN_PROCESS",
+      "pickupLocation": "Central"
+    }
+  ],
+  "fines": [
+    {
+      "title": null,
+      "fineAmount": 5,
+      "fineType": "Card renewal",
+      "dateAssessed": "2016-06-14T06:16:18.757Z",
+      "dueDate": null,
+      "dateReturned": null,
+      "description": "Test fine by Eric",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountFee.do?command=details&feeId=1126899040003131"
+    },
+    {
+      "title": "The apple / by Sir A. Daniel Hall and M.B. Crane.",
+      "fineAmount": 8,
+      "fineType": "Other",
+      "dateAssessed": "2016-06-14T06:16:42.726Z",
+      "dueDate": null,
+      "dateReturned": null,
+      "description": "Test fine by Eric",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountFee.do?command=details&feeId=1126899050003131"
+    },
+    {
+      "type": "Other",
+      "fineAmount": 1314.8,
+      "dateAssessed": "2016-03-10T10:59:00Z",
+      "description": "Outstanding fineAmount at conversion from Millennium",
+      "title": null,
+      "barcode": null,
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountFee.do?command=details&feeId=802642680003131"
+    },
+    {
+      "type": "Lost item process fee",
+      "fineAmount": 20,
+      "dateAssessed": "2016-04-29T13:08:32.411Z",
+      "description": null,
+      "title": "Textbook on international law / Martin Dixon.",
+      "barcode": null,
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountFee.do?command=details&feeId=989379600003131"
+    },
+    {
+      "type": "Lost item replacement fee",
+      "fineAmount": 125,
+      "dateAssessed": "2016-04-29T13:08:32.444Z",
+      "description": null,
+      "title": "Textbook on international law / Martin Dixon.",
+      "barcode": null,
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountFee.do?command=details&feeId=989379610003131"
+    },
+    {
+      "type": "Lost item process fee",
+      "fineAmount": 20,
+      "dateAssessed": "2016-04-29T13:07:16.421Z",
+      "description": null,
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountFee.do?command=details&feeId=989360140003131",
+      "title": "Aircraft accident reconstruction and litigation / Barnes W. McCormick, M.P. Papadakis ; contributing authors, Joseph J. Asselta ... [et al.].",
+      "barcode": null
+    },
+    {
+      "type": "Lost item replacement fee",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountFee.do?command=details&feeId=989379610003131",
+      "fineAmount": 125,
+      "dateAssessed": "2016-04-29T13:07:16.503Z",
+      "description": null,
+      "title": "Aircraft accident reconstruction and litigation / Barnes W. McCormick, M.P. Papadakis ; contributing authors, Joseph J. Asselta ... [et al.].",
+      "barcode": null
+    },
+    {
+      "type": "Lost item process fee",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountFee.do?command=details&feeId=989360140003131",
+      "fineAmount": 20,
+      "dateAssessed": "2016-04-29T13:07:19.124Z",
+      "description": null,
+      "title": "The impact of international law on international cooperation : theoretical perspectives / edited by Eyal Benvenisti, Moshe Hirsch.",
+      "barcode": null
+    },
+    {
+      "type": "Lost item replacement fee",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountFee.do?command=details&feeId=989360150003131",
+      "fineAmount": 125,
+      "dateAssessed": "2016-04-29T13:07:19.227Z",
+      "description": null,
+      "title": "The impact of international law on international cooperation : theoretical perspectives / edited by Eyal Benvenisti, Moshe Hirsch.",
+      "barcode": null
+    },
+    {
+      "type": "Lost item process fee",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountFee.do?command=details&feeId=989360840003131",
+      "fineAmount": 20,
+      "dateAssessed": "2016-04-29T13:07:44.336Z",
+      "description": null,
+      "title": "Torts in New Zealand : cases and materials / Bill Atkin and Geoff McLay with the assistance of David Neild.",
+      "barcode": null
+    },
+    {
+      "type":  "Lost item replacement fee",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountFee.do?command=details&feeId=989360850003131",
+      "fineAmount": 125,
+      "dateAssessed": "2016-04-29T13:07:44.438Z",
+      "description": null,
+      "title": "Torts in New Zealand : cases and materials / Bill Atkin and Geoff McLay with the assistance of David Neild.",
+      "barcode": null
+    },
+    {
+      "type": "Lost item process fee",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountFee.do?command=details&feeId=989367420003131",
+      "fineAmount": 20,
+      "dateAssessed": "2016-04-29T13:08:11.964Z",
+      "description": null,
+      "title": "An introduction to air law / I.H. Ph. Diederiks-Verschoor ; revised by Pablo Mendes de Leon in cooperation with Michael Butler.",
+      "barcode": null
+    },
+    {
+      "type": "Lost item replacement fee",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountFee.do?command=details&feeId=989367430003131",
+      "fineAmount": 125,
+      "dateAssessed": "2016-04-29T13:08:12.002Z",
+      "description": null,
+      "title": "An introduction to air law / I.H. Ph. Diederiks-Verschoor ; revised by Pablo Mendes de Leon in cooperation with Michael Butler.",
+      "barcode": null
+    },
+    {
+      "type": "Lost item process fee",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountFee.do?command=details&feeId=989373860003131",
+      "fineAmount": 20,
+      "dateAssessed": "2016-04-29T13:15:34.833Z",
+      "description": null,
+      "title": "Remedies in international law : the institutional dilemma / edited by Malcolm D. Evans.",
+      "barcode": null
+    },
+    {
+      "type": "Lost item replacement fee",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountFee.do?command=details&feeId=989373870003131",
+      "fineAmount": 125,
+      "dateAssessed": "2016-04-29T13:15:34.956Z",
+      "description": null,
+      "title": "Remedies in international law : the institutional dilemma / edited by Malcolm D. Evans.",
+      "barcode": null
+    },
+    {
+      "type": "Lost item process fee",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountFee.do?command=details&feeId=989487260003131",
+      "fineAmount": 20,
+      "dateAssessed": "2016-04-29T13:11:11.377Z",
+      "description": null,
+      "title": "Space debris : legal and policy implications / Howard A. Baker.",
+      "barcode": null
+    },
+    {
+      "type":  "Lost item replacement fee",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountFee.do?command=details&feeId=989487270003131",
+      "fineAmount": 125,
+      "dateAssessed": "2016-04-29T13:11:11.446Z",
+      "description": null,
+      "title": "Space debris : legal and policy implications / Howard A. Baker.",
+      "barcode": null
+    },
+    {
+      "type":  "Lost item process fee",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountFee.do?command=details&feeId=989421740003131",
+      "fineAmount": 20,
+      "dateAssessed": "2016-04-29T13:11:25.660Z",
+      "description": null,
+      "title": "Strict liability : legal and economic analysis / Frank J. Vandall.",
+      "barcode": null
+    },
+    {
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountFee.do?command=details&feeId=989421750003131",
+      "fineAmount": 125,
+      "dateAssessed": "2016-04-29T13:11:25.736Z",
+      "description": null,
+      "title": "Strict liability : legal and economic analysis / Frank J. Vandall.",
+      "barcode": null
+    },
+    {
+      "type": "Lost item process fee",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountFee.do?command=details&feeId=989425530003131",
+      "fineAmount": 20,
+      "dateAssessed": "2016-04-29T13:13:15.711Z",
+      "description": null,
+      "title": "Outer space and legal liability / Morris D. Forkosch.",
+      "barcode": null
+    },
+    {
+      "type": "Lost item replacement fee",
+      "url": "http://search.library.uq.edu.au/primo_library/libweb/action/myAccountFee.do?command=details&feeId=989453110003131",
+      "fineAmount": 125,
+      "dateAssessed": "2016-04-29T13:13:15.745Z",
+      "description": null,
+      "title": "Outer space and legal liability / Morris D. Forkosch.",
+      "barcode": null
+    }
+  ],
+  "total_loans_count" : 13,
+  "total_holds_count": 2,
+  "total_fines_count": 21,
+  "total_fines_sum": 2632.8,
+  "retrievedAt": "2016-06-16T14:04:26+10:00"
+}

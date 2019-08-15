@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+
+  <title>uqlibrary-ga</title>
+
+  <script src="../webcomponentsjs/webcomponents-lite.min.js"></script>
+  <link rel="import" href="../iron-component-page/iron-component-page.html">
+</head>
+<body>
+<iron-component-page src="uqlibrary-ga.html"></iron-component-page>
+
+<script>
+  (function () {
+    document.cookie="UQLMockData=enabled";
+    document.cookie="UQLMockData-PType=1";
+  }());
+</script>
+</body>
+</html>

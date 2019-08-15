@@ -1,0 +1,57 @@
+[
+  {
+    "id": "ea31f2e0-ca03-11e5-90a9-4b663944ee97",
+    "start": "2016-02-02 00:00:00",
+    "end": "2016-02-21 23:59:59",
+    "title": "Library services for researchers",
+    "url": "https:\/\/www.library.uq.edu.au\/",
+    "img_url": "http://lorempixel.com/800/300/abstract",
+    "img_alt": "Library services for researchers",
+    "weight": 1,
+    "active": 1
+  },
+  {
+    "id": "d52932e0-d45c-11e5-a858-cbd5f6433c89",
+    "start": "2016-02-02 00:00:00",
+    "end": "2016-12-31 23:59:59",
+    "title": "UQ Research Staff",
+    "url": "https:\/\/www.library.uq.edu.au\/library-services\/services-for-researchers",
+    "img_url": "http://lorempixel.com/g/800/300/city",
+    "img_alt": "UQ Research Staff - Learn more about Library services & programs to assist you",
+    "weight": 1,
+    "active": 1
+  },
+  {
+    "id": "06aebfc0-d45d-11e5-bd89-f5f201a1931c",
+    "start": "2016-02-02 00:00:00",
+    "end": "2016-12-31 23:59:59",
+    "title": "Fryer Fellowship",
+    "url": "https:\/\/www.library.uq.edu.au\/locations-hours\/fryer-library-fellowship",
+    "img_url": "http://lorempixel.com/800/300/people",
+    "img_alt": "UQ Research Staff - Learn more about Library services & programs to assist you",
+    "weight": 2,
+    "active": 1
+  },
+  {
+    "id": "38fed150-d45d-11e5-a22f-254a3442170f",
+    "start": "2016-02-02 00:00:00",
+    "end": "2016-12-31 23:59:59",
+    "title": "UQ Teaching Staff",
+    "url": "https:\/\/www.library.uq.edu.au\/locations-hours\/fryer-library-fellowship",
+    "img_url": "http://lorempixel.com/g/800/300/nightlife",
+    "img_alt": "UQ Teaching Staff - Learn more about how the Library can support you in your teaching role",
+    "weight": 3,
+    "active": 1
+  },
+  {
+    "id": "523ffba0-d45d-11e5-b333-edfcc01535fa",
+    "start": "2016-02-02 00:00:00",
+    "end": "2016-12-31 23:59:59",
+    "title": "Need IT help?",
+    "url": "https:\/\/www.library.uq.edu.au\/blog\/2016\/01\/27\/need-it-help-ask-us",
+    "img_url": "http://lorempixel.com/800/300/technics",
+    "img_alt": "All the support IT you could want",
+    "weight": 4,
+    "active": 1
+  }
+]

@@ -1,0 +1,24 @@
+{
+  "name": "uqlibrary-styles",
+  "version": "1.1.10",
+  "description": "Web component to display styles",
+  "license": "MIT",
+  "main": "common-styles.html",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uqlibrary/uqlibrary-styles.git"
+  },
+  "keywords": [
+    "styles",
+    "uq",
+    "library"
+  ],
+  "bugs": {
+    "url": "https://github.com/uqlibrary/uqlibrary-styles/issues"
+  },
+  "engines": {
+    "npm": "^6.5.0",
+    "node": "^11.6.0"
+  },
+  "engine-strict": true
+}

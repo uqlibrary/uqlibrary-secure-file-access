@@ -1,0 +1,123 @@
+<link rel="import" href="../elements.html">
+
+<!--
+`<style-guide>` is a simple button which links to library search page.
+In the future, it will have a dynamic search text box.
+
+Example:
+      <style-guide button-title="Site Search"></style-guide>
+
+@demo style-guide/demo/index.html
+-->
+
+<dom-module id="style-guide-buttons">
+
+    <template>
+        <style is="custom-style" include="common-styles">
+            :host {
+                font-family: var(--font-family);
+                --style-guide-container: {
+                    padding: 10px;
+                }
+            }
+
+            div {
+                @apply(--style-guide-container);
+            }
+
+        </style>
+
+        <div>
+            <paper-button class="button-colored-theme">Theme Button</paper-button>
+            <paper-button class="button-colored-accent">Accent Button</paper-button>
+            <paper-button class="button-colored-secondary">Secondary Button</paper-button>
+        </div>
+
+        <div>
+            <paper-button class="button-colored-theme"><a href="#abc">Theme Button</a></paper-button>
+            <paper-button class="button-colored-accent"><a href="#abc">Accent Button</a></paper-button>
+            <paper-button class="button-colored-secondary"><a href="#abc">Secondary Button</a></paper-button>
+        </div>
+
+        <div>
+            <paper-button class="button-theme">Theme Button</paper-button>
+            <paper-button class="button-accent">Accent Button</paper-button>
+            <paper-button class="button-secondary">Secondary Button</paper-button>
+        </div>
+
+        <div>
+            <paper-button class="button-theme"><a href="#abc">Theme Button</a></paper-button>
+            <paper-button class="button-accent"><a href="#abc">Accent Button</a></paper-button>
+            <paper-button class="button-secondary"><a href="#abc">Secondary Button</a></paper-button>
+        </div>
+
+        <!-- Buttons with icon -->
+        <div>
+            <paper-button class="button-colored-theme">
+                <iron-icon icon="icons:search" aria-label="Search Library site"></iron-icon>
+
+                <div class="button-small inverse">Small Text</div>
+            </paper-button>
+
+            <paper-button class="button-colored-accent">
+                <iron-icon icon="icons:search" aria-label="Search Library site"></iron-icon>
+
+                <div class="button-small inverse">Small Text</div>
+            </paper-button>
+
+            <paper-button class="button-colored-secondary">
+                <iron-icon icon="icons:search" aria-label="Search Library site"></iron-icon>
+                <div class="button-small inverse">Small Text</div>
+            </paper-button>
+        </div>
+
+        <!-- Inverted button with icons -->
+        <div>
+            <paper-button class="button-colored-theme inverse">
+                <iron-icon icon="icons:search" aria-label="Search Library site"></iron-icon>
+
+                <div class="button-small">Small Text</div>
+            </paper-button>
+
+            <paper-button class="button-colored-accent inverse">
+                <iron-icon icon="icons:search" aria-label="search Library site"></iron-icon>
+
+                <div class="button-small">Small Text</div>
+            </paper-button>
+
+            <paper-button class="button-colored-secondary inverse">
+                <iron-icon icon="icons:search" aria-label="search Library site"></iron-icon>
+                <div class="button-small">Small Text</div>
+            </paper-button>
+        </div>
+
+        <div>
+            <paper-button class="button-colored-theme">
+                <iron-icon icon="icons:search" aria-label="search Library site"></iron-icon>
+            </paper-button>
+
+            <paper-button class="button-colored-accent">
+                <iron-icon icon="icons:search" aria-label="search Library site"></iron-icon>
+            </paper-button>
+
+            <paper-button class="button-colored-secondary">
+                <iron-icon icon="icons:search" aria-label="search Library site"></iron-icon>
+            </paper-button>
+
+        </div>
+
+    </template>
+
+    <script>
+        (function () {
+            Polymer({
+                is: 'style-guide-buttons',
+                properties: {},
+
+                ready: function () {
+                }
+            });
+        })();
+    </script>
+
+</dom-module>

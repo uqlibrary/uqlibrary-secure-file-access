@@ -1,0 +1,142 @@
+<link rel="import" href="../elements.html">
+
+<dom-module id="style-guide-colors">
+
+  <template>
+    <style is="custom-style" include="common-styles">
+      :host {
+        font-family: var(--font-family);
+        --style-guide-container: {
+          padding: 10px;
+        }
+      }
+
+      div {
+        @apply(--style-guide-container);
+      }
+
+      div.theme-color {
+        background-color: var(--theme-color);
+      }
+
+      div.theme-color-dark {
+        background-color: var(--theme-color-dark);
+      }
+
+      div.theme-color-lighter {
+        background-color: var(--theme-color-lighter);
+      }
+
+      div.theme-color-light {
+        background-color: var(--theme-color-light);
+      }
+
+      div.accent-color {
+        background-color: var(--accent-color);
+      }
+
+      div.accent-color-dark {
+        background-color: var(--accent-color-dark);
+      }
+
+      div.accent-color-light {
+        background-color: var(--accent-color-light);
+      }
+
+      div.accent-color-lighter {
+        background-color: var(--accent-color-lighter);
+      }
+
+      div.secondary-color {
+        background-color: var(--secondary-color);
+      }
+
+      div.secondary-color-dark {
+        background-color: var(--secondary-color-dark);
+      }
+
+      div.secondary-color-light {
+        background-color: var(--secondary-color-light);
+      }
+
+      div.error-color {
+        background-color: var(--error-color);
+      }
+
+      div.border-color {
+        background-color: var(--border-color);
+      }
+
+      div.available-color {
+        background-color: var(--available-color);
+      }
+
+      div.unavailable-color {
+        background-color: var(--unavailable-color);
+      }
+
+      div.alert-urgent {
+        padding: 10px;
+        color: var(--alert-text-color);
+        background-color: var(--alert-background-color);
+        border: 1px solid var(--alert-border-color);
+      }
+
+      div.alert-notice {
+        padding: 10px;
+
+        color: var(--notice-text-color);
+        background-color: var(--notice-background-color);
+        border: 1px solid var(--notice-border-color);
+      }
+
+    </style>
+
+    <h3>Theme colours</h3>
+    <div class="inverse theme-color">var(--theme-color)</div>
+    <div class="inverse theme-color-dark">var(--theme-color-dark)</div>
+    <div class="inverse theme-color-lighter">var(--theme-color-lighter)</div>
+    <div class="theme-color-light">var(--theme-color-light)</div>
+
+    <h3>Accent colours</h3>
+    <div class="inverse accent-color">var(--accent-color)</div>
+    <div class="inverse accent-color-dark">var(--accent-color-dark)</div>
+    <div class="inverse accent-color-light">var(--accent-color-light)</div>
+    <div class="accent-color-lighter">var(--accent-color-lighter)</div>
+
+    <h3>Secondary colours</h3>
+    <div class="inverse secondary-color">var(--secondary-color)</div>
+    <div class="inverse secondary-color-dark">var(--secondary-color-dark)</div>
+    <div class="secondary-color-light">var(--secondary-color-light)</div>
+
+    <h3>Misc colours</h3>
+    <div class="error-color">var(--error-color)</div>
+    <div class="border-color">var(--border-color)</div>
+    <div class="available-color">var(--available-color)</div>
+    <div class="unavailable-color">var(--unavailable-color)</div>
+
+    <h3>Alerts</h3>
+    <div class="alert-urgent">
+      <strong>Alert!</strong>this is an alert <a href="#">Read more details</a>
+    </div>
+
+    <div class="alert-notice">
+      <strong>Notice!</strong>this is a notice <a href="#">Read more details</a>
+    </div>
+
+  </template>
+
+  <script>
+    (function () {
+      Polymer({
+        is: 'style-guide-colors',
+        properties: {
+        },
+
+        ready: function() {
+        }
+      });
+    })();
+  </script>
+
+</dom-module>

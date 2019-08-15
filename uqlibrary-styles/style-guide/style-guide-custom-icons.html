@@ -1,0 +1,89 @@
+<link rel="import" href="../elements.html">
+
+<!--
+@demo style-guide/demo/index.html
+-->
+
+<dom-module id="style-guide-custom-icons">
+
+    <template>
+
+        <style is="custom-style" include="common-styles">
+            :host {
+                font-family: var(--font-family);
+                --style-guide-container: {
+                    padding: 10px;
+                }
+            }
+
+            div {
+                @apply(--style-guide-container);
+            }
+
+            .uqlibrary-icon-247.giant-icon {
+                color: red;
+                height: 100px;
+                width: 150px;
+            }
+
+
+        </style>
+
+        <h4>24/7 Icon</h4>
+        <hr>
+        <p><strong>Raw Icon:</strong><br><br>
+            <iron-icon icon="uq-icons:247-icon"></iron-icon><br><br>
+            &lt;iron-icon icon="uq-icons:247-icon"&gt;&lt;/iron-icon&gt;<br><br>
+            <strong>Note:</strong> Defaults to iron-icons 24x24px size, and will shrink the icon to fit.</p>
+        <hr style="opacity: 0.2;">
+        <p><strong>Default styling:</strong><br><br>
+            <iron-icon icon="uq-icons:247-icon" class="uqlibrary-icon-247"></iron-icon><br><br>
+            &lt;iron-icon icon="uq-icons:247-icon" class="uqlibrary-icon-247"&gt;&lt;/iron-icon&gt;<br><br>
+            <strong>Note:</strong> Uses the class <em>uqlibrary-icon-247</em> to add default <em>--available-color</em> and aspect ratio 37px*24px (1.54:1)
+        </p>
+        <hr style="opacity: 0.2;">
+        <p><strong>Custom styling:</strong><br><br>
+            <iron-icon icon="uq-icons:247-icon" class="uqlibrary-icon-247 giant-icon"></iron-icon><br><br>
+            &lt;iron-icon icon="uq-icons:247-icon" class="uqlibrary-icon-247 giant-icon"&gt;&lt;/iron-icon&gt;<br><br>
+            <strong>Note:</strong> Default styles can be overwritten with an inline class, such as:<br><br>
+        <blockquote>.uqlibrary-icon-247.giant-icon {<br>&nbsp;&nbsp;&nbsp;&nbsp;color: red;<br>&nbsp;&nbsp;&nbsp;&nbsp;  height: 100px;<br>&nbsp;&nbsp;&nbsp;&nbsp;  width: 150px<br>}</blockquote>
+        </p>
+
+        <h4 style="margin-bottom: 0px;">Twitter</h4>
+        <hr>
+        <p><strong>Raw Icon:</strong><br><br>
+            <iron-icon icon="uq-icons:twitter"></iron-icon><br><br>
+            &lt;iron-icon icon="uq-icons:twitter"&gt;&lt;/iron-icon&gt;</p>
+
+
+        <h4 style="margin-bottom: 0px;">YouTube</h4>
+        <hr>
+        <p><strong>Raw Icon:</strong><br><br>
+            <iron-icon icon="uq-icons:youtube"></iron-icon><br><br>
+            &lt;iron-icon icon="uq-icons:youtube"&gt;&lt;/iron-icon&gt;</p>
+
+
+        <h4 style="margin-bottom: 0px;">Facebook</h4>
+        <hr>
+        <p><strong>Raw Icon:</strong><br><br>
+            <iron-icon icon="uq-icons:facebook"></iron-icon><br><br>
+            &lt;iron-icon icon="uq-icons:facebook"&gt;&lt;/iron-icon&gt;</p>
+
+
+
+
+    </template>
+
+    <script>
+        (function () {
+            Polymer({
+                is: 'style-guide-custom-icons',
+                properties: {},
+
+                ready: function () {
+                }
+            });
+        })();
+    </script>
+
+</dom-module>

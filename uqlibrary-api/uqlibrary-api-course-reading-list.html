@@ -1,0 +1,63 @@
+<link rel="import" href="elements.html">
+
+<!--
+Element providing course reading lists.
+
+##### Example
+
+    <uqlibrary-api-course-reading-list></uqlibrary-api-course-reading-list>
+
+@element uqlibrary-api-course-reading-list
+@blurb Element providing course reading lists.
+@status alpha
+@homepage https://github.com/uqlibrary/uqlibrary-api
+ -->
+<dom-module id="uqlibrary-api-course-reading-list">
+  <template>
+    <uqlibrary-api id="list"></uqlibrary-api>
+  </template>
+  <script>
+    (function () {
+      Polymer({
+        is: 'uqlibrary-api-course-reading-list',
+        properties: {
+          baseUri: {
+            type: String,
+            value: '/course_reading_list'
+          },
+          listCode: {
+            type: String,
+            value: ''
+          }
+        },
+        /**
+         * Fired when the object has loaded.
+         *
+         * @event uqlibrary-api-account-loans-loaded
+         */
+        created: function () {
+        },
+        ready: function () {
+          var that = this;
+          this.$.list.addEventListener('uqlibrary-api', function (e) {
+            that.list = e.detail;
+            that.fire('uqlibrary-api-course-reading-list', that.list);
+          });
+        },
+        /**
+         * Gets the user account.
+         *
+         * @method get
+         */
+        get: function (args) {
+          if (args && args.code) {
+            this.listCode = args.code;
+            this.set('$.list.uri', this.baseUri + '/' + args.code);
+            this.$.list.get();
+          }
+        }
+      });
+    }());
+  </script>
+</dom-module>
+

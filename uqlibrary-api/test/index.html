@@ -1,0 +1,52 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<!doctype html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <title>Elements Test Runner</title>
+  <meta charset="UTF-8">
+
+  <script src="../../webcomponentsjs/webcomponents.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+</head>
+
+<body>
+
+<script>
+
+  //add a cookie to indicate usage of mock data
+  document.cookie="UQLMockData=enabled";
+  document.cookie="UQLMockData-PType=18";
+
+  WCT.loadSuites([
+    'uqlibrary-api-academic-stats-test.html',
+    'uqlibrary-api-account-test.html',
+    'uqlibrary-api-alerts-test.html',
+    'uqlibrary-api-collection-encoded-url-test.html',
+    'uqlibrary-api-computer-availability-test.html',
+    'uqlibrary-api-learning-resources-test.html',
+    'uqlibrary-api-library-hours-test.html',
+    'uqlibrary-api-spotlights-test.html',
+    'uqlibrary-api-chat-status-test.html',
+
+//    'uqlibrary-api-applications-test.html',
+    'uqlibrary-api-term-dates-test.html',
+//    'uqlibrary-api-academic-hindex-test.html',
+//    'uqlibrary-api-authors-search-test.html'
+  ]);
+
+</script>
+</body>
+</html>
+

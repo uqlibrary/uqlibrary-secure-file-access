@@ -1,0 +1,145 @@
+<link rel="import" href="../elements.html">
+<link rel="import" href="style-guide-buttons.html">
+<link rel="import" href="style-guide-typo.html">
+<link rel="import" href="style-guide-colors.html">
+<link rel="import" href="style-guide-forms.html">
+<link rel="import" href="style-preload.html">
+<link rel="import" href="style-guide-custom-icons.html">
+
+
+<!--
+`<style-guide>` is an implementation of UQL style guide
+
+Example:
+      <style-guide></style-guide>
+
+@demo style-guide/demo/index.html
+-->
+
+<dom-module id="style-guide">
+
+  <template>
+
+    <style is="custom-style" include="common-styles">
+
+      :host {
+        font-family: var(--font-family);
+      }
+
+      #content {
+        width: 90%;
+        margin: auto;
+      }
+
+      paper-card,
+      iframe {
+        width: 100%;
+        margin: 16px 0;
+      }
+
+
+    </style>
+
+    <paper-drawer-panel>
+      <paper-header-panel drawer>
+        <paper-toolbar>
+        </paper-toolbar>
+        <div>
+          <paper-menu selected="{{selected}}">
+            <paper-item>About</paper-item>
+            <paper-item>Preloading</paper-item>
+            <paper-item>Colours</paper-item>
+            <paper-item>Typography</paper-item>
+            <paper-item>Buttons</paper-item>
+            <paper-item>Forms</paper-item>
+            <paper-item>Components</paper-item>
+            <paper-item>Icons</paper-item>
+            <!--<li><a href="#sllist">Single line list</a></li>-->
+            <!--<li><a href="#twollist">Two-line list</a></li>-->
+            <!--<li><a href="#threellist">Three-line list</a></li>-->
+            <!--<li><a href="#containers">Containers (image, text containers, cards, etc)</a></li>-->
+            <!--<li><a href="#footer">Persistent Footer</a></li>-->
+          </paper-menu>
+
+
+        </div>
+      </paper-header-panel>
+      <paper-scroll-header-panel fixed main>
+        <paper-toolbar>
+          <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+          <h1>Library Style Guide</h1>
+        </paper-toolbar>
+
+        <div id="content">
+
+          <iron-pages selected="{{selected}}">
+
+            <paper-card id="about" heading="About">
+              <div class="card-content">This is the Library style guide for applications and websites based on Google's Material Design look
+              implemented with Polymer web components
+              </div>
+            </paper-card>
+
+            <div id="preloading">
+              <paper-card heading="Preloading/Browser detection">
+                <div class="card-content">
+                  This is a sample of loading card and unsupported browser message to be displayed before Polymer/Webcomponents is loaded. <br><br>
+                  - Copy everything inside <strong>&lt;div id="preloader"&gt; ... &lt;/div&gt; </strong> to your project. <br>
+                  - Update path to loader image <br>
+                  - Browser detection is done by <strong>uqlibrary/uqlibrary-browser-supported</strong>.
+                </div>
+              </paper-card>
+
+              <style-preload></style-preload>
+
+            </div>
+
+            <paper-card id="colors" heading="Colors">
+              <div class="card-content">
+                <style-guide-colors></style-guide-colors>
+              </div>
+            </paper-card>
+
+            <paper-card id="typo" heading="Typography">
+              <div class="card-content">
+                <style-guide-typo></style-guide-typo>
+              </div>
+            </paper-card>
+
+            <paper-card id="buttons" heading="Buttons">
+              <div class="card-content">
+                <style-guide-buttons></style-guide-buttons>
+              </div>
+            </paper-card>
+
+            <paper-card id="forms" heading="Forms">
+              <div class="card-content">
+                <style-guide-forms></style-guide-forms>
+              </div>
+            </paper-card>
+
+            <paper-card id="components" heading="Components">
+              <div class="card-content">
+                <a href="http://uqlibrary.github.io/uqlibrary-reusable-components/elements/">Reusable components documentation and demo page</a>
+              </div>
+            </paper-card>
+
+
+            <paper-card id="custom-icons" heading="Custom icons">
+            <div class="card-content">
+              <p style="margin-top: 0px;">A set of custom assigned SVG icons (uqlibrary-styles/uqlibrary-icons.html) have been designed for use in Library pages.</p>
+              <style-guide-custom-icons></style-guide-custom-icons>
+            </div>
+            </paper-card>
+
+          </iron-pages>
+
+        </div>
+      </paper-scroll-header-panel>
+    </paper-drawer-panel>
+
+  </template>
+
+  <script src="style-guide.js"></script>
+
+</dom-module>

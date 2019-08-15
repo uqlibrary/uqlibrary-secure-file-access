@@ -1,0 +1,20 @@
+{
+  "{SEMESTER1}": {
+    "code": "{SEMESTER1}",
+    "begin": "{YEAR}-02-27",
+    "end": "{YEAR}-06-24",
+    "cut_off": "{YEAR}-03-31"
+  },
+  "{SEMESTER2}": {
+    "code": "{SEMESTER2}",
+    "begin": "{YEAR}-07-24",
+    "end": "{YEAR}-11-18",
+    "cut_off": "{YEAR}-08-31"
+  },
+  "{SEMESTER3}": {
+    "code": "{SEMESTER3}",
+    "begin": "{SUMMER_YEAR_START}-11-27",
+    "end": "{SUMMER_YEAR_END}-02-10",
+    "cut_off": "{SUMMER_YEAR_START}-12-18"
+  }
+}

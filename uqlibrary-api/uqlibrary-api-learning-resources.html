@@ -1,0 +1,60 @@
+<link rel="import" href="elements.html">
+
+<!--
+Element providing learning resources.
+
+##### Example
+
+    <uqlibrary-api-learning-resources></uqlibrary-api-learning-resources>
+
+@element uqlibrary-api-learning-resources
+@blurb Element providing learning resources.
+@status alpha
+@homepage https://github.com/uqlibrary/uqlibrary-api
+-->
+<dom-module id="uqlibrary-api-learning-resources">
+  <template>
+    <uqlibrary-api id="list" on-uqlibrary-api="fireResponse"></uqlibrary-api>
+  </template>
+  <script>
+    (function () {
+      Polymer({
+        is: 'uqlibrary-api-learning-resources',
+        properties: {
+          baseUri: {
+            type: String,
+            value: '/learning_resources'
+          },
+          courseCode: {
+            type: String,
+            value: ''
+          }
+        },
+        /**
+         * Fired when the object has loaded.
+         *
+         * @event uqlibrary-api-learning-resources
+         */
+        created: function () {
+        },
+        fireResponse: function (e) {
+          this.list = e.detail;
+          this.fire('uqlibrary-api-learning-resources', this.list);
+        },
+        /**
+         * Gets learning resources.
+         *
+         * @method get
+         */
+        get: function (args) {
+          if (args && args.code) {
+            this.courseCode = args.code;
+            this.set('$.list.uri', this.baseUri + '/' + args.code);
+            this.$.list.get();
+          }
+        }
+      });
+    }());
+  </script>
+</dom-module>
+

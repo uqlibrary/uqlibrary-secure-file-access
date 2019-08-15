@@ -1,0 +1,50 @@
+<link rel="import" href="elements.html">
+
+<!--
+Element providing access to a list of contact links
+
+##### Example
+
+    <uqlibrary-api-contacts></uqlibrary-api-contacts>
+
+@element uqlibrary-api-contacts
+@blurb Element providing access to a list of contact us links
+@homepage https://github.com/uqlibrary/uqlibrary-api
+-->
+
+<dom-module id="uqlibrary-api-contacts">
+  <template></template>
+  <script>
+    (function() {
+      Polymer({
+        is: 'uqlibrary-api-contacts',
+        properties: {
+          url: {
+            type: String,
+            value: 'data/contacts.json'
+          }
+        },
+        /**
+         * Gets the contacts list based on the user account
+         */
+        get: function() {
+          var self = this;
+          var xobj = new XMLHttpRequest();
+
+          xobj.open('GET', this.resolveUrl(this.url), true);
+
+          xobj.onreadystatechange = function () {
+            if (xobj.readyState == 4 && xobj.status == "200") {
+              var response = xobj.responseText;
+              var contacts = JSON.parse(response);
+
+              self.fire('uqlibrary-api-contacts-loaded', contacts);
+            }
+          };
+          xobj.send(null);
+        }
+      });
+    })();
+  </script>
+
+</dom-module>

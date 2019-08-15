@@ -1,0 +1,337 @@
+<link rel="import" href="elements.html">
+
+<!--
+Element providing access to UQ Library's API.
+
+##### Example
+
+    <uqlibrary-api></uqlibrary-api>
+
+@element uqlibrary-api
+@blurb Element providing access to UQ Library's API.
+@status alpha
+@homepage https://github.com/uqlibrary/uqlibrary-api
+-->
+
+<dom-module id="uqlibrary-api">
+
+  <template>
+    <iron-ajax
+        id="ajax"
+        url="{{url}}"
+        headers="{{headers}}"
+        method="{{method}}"
+        handleAs="json"
+        on-response="handleResponse"
+        on-error="handleError"></iron-ajax>
+
+  </template>
+
+  <script>
+    (function() {
+      Polymer({
+
+        is: 'uqlibrary-api',
+
+        properties: {
+
+          uri: {
+            type: String,
+            value: ''
+          },
+
+          method: {
+            type: String,
+            value: 'GET'
+          },
+
+          baseApiUrl: {
+            type: String,
+            value: 'https://api.library.uq.edu.au/v1'
+          },
+
+          masqueradeCookie: {
+            type: String,
+            value: 'UQLMasquerade'
+          }
+        },
+        useMockData: false,
+        isMasquerade: false,
+        headers: {},
+
+        ready: function() {
+          var cookie = this.getCookie('UQLMockData');
+
+          if (typeof cookie !== "undefined") {
+            this.useMockData = (cookie === 'enabled');
+          }
+
+          this.isMasquerading();
+
+        },
+
+        isMasquerading: function (uid) {
+          var UQLMasquerade = this.getCookie(this.masqueradeCookie);
+
+          if (typeof UQLMasquerade !== "undefined") {
+            this.isMasquerade = true;
+            if (uid && UQLMasquerade !== uid) {
+              this.isMasquerade = false;
+              this.deleteMasqueradeCookie();
+            }
+          }
+        },
+
+        handleResponse: function (event) {
+          this.fire('uqlibrary-api', event.detail.response);
+        },
+
+        handleError: function (event, object, sender) {
+          this.fire('uqlibrary-api', {
+            response: true,
+            responseText: "An unknown error occurred"
+          });
+        },
+
+        loadMockData: function() {
+          var that = this;
+
+          var xobj = new XMLHttpRequest();
+          var substringTo = this.uri.indexOf('?') > 0 ? this.uri.indexOf('?') : this.uri.length,
+              substringFrom = 1;
+          if(this.uri.indexOf('/v2/library_hours/') >= 0) {
+            substringFrom = 4;
+          }
+
+          var fileName = this.resolveUrl('mock/' + this.uri.substring(substringFrom, substringTo).replace(/([^a-z0-9]\/)/gi, '_') + '_' + this.method.toLowerCase() +'.json');
+
+          if (this.uri.indexOf('/authors/search/') >= 0) {
+            fileName = this.resolveUrl('mock/authors/search/' + this.method.toLowerCase() +'.json');
+          }
+
+          xobj.open('GET', fileName, true);
+          xobj.onreadystatechange = function () {
+            if (xobj.readyState == 4 && xobj.status == "200") {
+              var response = xobj.responseText;
+
+
+              if (fileName.match(/facilities_availability/)) {
+                var now = new Date();
+
+                var startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+                var availableFrom = startOfDay / 1000 + 7 * 60 * 60;
+                var availableTo = startOfDay / 1000 + 20 * 60 * 60;
+
+                var bookingFrom = startOfDay / 1000 + 10 * 60 * 60;
+                var bookingTo = startOfDay / 1000 + 11 * 60 * 60;
+
+
+                response = response.replace(/"{AVAILABLE_FROM}"/g, availableFrom);
+                response = response.replace(/"{AVAILABLE_TO}"/g, availableTo);
+
+                response = response.replace(/"{BOOKING_START_TIME}"/g, bookingFrom);
+                response = response.replace(/"{BOOKING_END_TIME}"/g, bookingTo);
+              }
+              else if (fileName.match(/loans_get/)) {
+                // dates need to be supplied with format eg 2016-07-12T18:00:00+10:00
+                // solution from http://stackoverflow.com/questions/17415579/how-to-iso-8601-format-a-date-with-timezone-offset-in-javascript
+                var now = new Date(),
+                        tzo = -now.getTimezoneOffset(),
+                        dif = tzo >= 0 ? '+' : '-',
+                        pad = function(num) {
+                          var norm = Math.abs(Math.floor(num));
+                          return (norm < 10 ? '0' : '') + norm;
+                        };
+                var timein10minutes = new Date();
+                timein10minutes.setMinutes(timein10minutes.getMinutes() + 10);
+                timePlus10minutes = timein10minutes.getFullYear()
+                        + '-' + pad(timein10minutes.getMonth()+1)
+                        + '-' + pad(timein10minutes.getDate())
+                        + 'T' + pad(timein10minutes.getHours())
+                        + ':' + pad(timein10minutes.getMinutes())
+                        + ':' + pad(timein10minutes.getSeconds())
+                        + dif + pad(tzo / 60)
+                        + ':' + pad(tzo % 60);
+
+                var timePlusOneDay = new Date();
+                timePlusOneDay.setDate(timePlusOneDay.getDate() + 1);
+                timePlusOneDay = timePlusOneDay.getFullYear()
+                        + '-' + pad(timePlusOneDay.getMonth()+1)
+                        + '-' + pad(timePlusOneDay.getDate())
+                        + 'T' + pad(timePlusOneDay.getHours())
+                        + ':' + pad(timePlusOneDay.getMinutes())
+                        + ':' + pad(timePlusOneDay.getSeconds())
+                        + dif + pad(tzo / 60)
+                        + ':' + pad(tzo % 60);
+
+                var timePlusOneWeek = new Date();
+                timePlusOneWeek.setDate(timePlusOneWeek.getDate() + 7);
+                timePlusOneWeek = timePlusOneWeek.getFullYear()
+                        + '-' + pad(timePlusOneWeek.getMonth()+1)
+                        + '-' + pad(timePlusOneWeek.getDate())
+                        + 'T' + pad(timePlusOneWeek.getHours())
+                        + ':' + pad(timePlusOneWeek.getMinutes())
+                        + ':' + pad(timePlusOneWeek.getSeconds())
+                        + dif + pad(tzo / 60)
+                        + ':' + pad(tzo % 60);
+
+                var timePlusOneMonth = new Date();
+                timePlusOneMonth.setMonth(timePlusOneMonth.getMonth() + 1);
+                timePlusOneMonth = timePlusOneMonth.getFullYear()
+                        + '-' + pad(timePlusOneMonth.getMonth()+1)
+                        + '-' + pad(timePlusOneMonth.getDate())
+                        + 'T' + pad(timePlusOneMonth.getHours())
+                        + ':' + pad(timePlusOneMonth.getMinutes())
+                        + ':' + pad(timePlusOneMonth.getSeconds())
+                        + dif + pad(tzo / 60)
+                        + ':' + pad(tzo % 60);
+
+
+                response = response.replace(/{LESSTHANONEHOUR}/g, timePlus10minutes);
+                response = response.replace(/{AFTERONEDAY}/g, timePlusOneDay);
+                response = response.replace(/{AFTERONEWEEK}/g, timePlusOneWeek);
+                response = response.replace(/{AFTERONEMONTH}/g, timePlusOneMonth);
+              }
+              else if (fileName.match(/account_get/)) {
+                //get user role from a cookie
+                var ptype = that.getCookie('UQLMockData-PType');
+
+                //set default user role to undegraduate
+                if (!ptype){
+                  ptype = 1;
+                }
+
+                response = response.replace(/{PTYPE}/g, ptype);
+
+                //x7xx - corresponds to year of start, eg 2017
+                //x6xx - corresponds to year of start, eg 2016
+                //xx80 - sem 3 - 6680 - Summer semester of 2016/2017
+                //xx20 - sem 1 - 6720 - Sem 1, 2017
+                //xx60 - sem 2 - 6760 - Sem 2, 2017
+
+                var today = new Date();
+                var currentSemester = 6000 + parseInt(today.getFullYear().toString().substring(3, 4)) * 100;
+
+                response = response.replace(/\{SEMESTER1\}/g, (currentSemester + 20));
+                response = response.replace(/\{SEMESTER2\}/g, (currentSemester + 60));
+
+                if (today.getMonth() >= 10) {
+                  currentSemester += 80;
+                } else {
+                  currentSemester += 80;
+                  currentSemester -= 100;
+                }
+                response = response.replace(/\{SEMESTER3\}/g, currentSemester);
+
+              }
+              else if (fileName.match(/facilities_bookings_get/g)) {
+                var now = new Date();
+                var startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                var bookingFrom = startOfDay / 1000 + 10 * 60 * 60;
+                var bookingTo = startOfDay / 1000 + 11 * 60 * 60;
+
+                response = response.replace(/"{BOOKING_START_TIME}"/g, bookingFrom);
+                response = response.replace(/"{BOOKING_END_TIME}"/g, bookingTo);
+              }
+              else if (fileName.match(/term_dates_get/g)) {
+                var today = new Date();
+                var currentSemester = 6000 + parseInt(today.getFullYear().toString().substring(3, 4)) * 100;
+
+                response = response.replace(/\{SEMESTER1\}/g, (currentSemester + 20));
+                response = response.replace(/\{SEMESTER2\}/g, (currentSemester + 60));
+
+                if (today.getMonth() >= 10) {
+                  currentSemester += 80;
+                  response = response.replace(/\{SUMMER_YEAR_START\}/g, today.getFullYear());
+                  response = response.replace(/\{SUMMER_YEAR_END\}/g, today.getFullYear() + 1);
+                } else {
+                  currentSemester += 80;
+                  currentSemester -= 100;
+
+                  response = response.replace(/\{SUMMER_YEAR_START\}/g, today.getFullYear() - 1);
+                  response = response.replace(/\{SUMMER_YEAR_END\}/g, today.getFullYear());
+                }
+
+                response = response.replace(/\{SEMESTER3\}/g, currentSemester);
+                response = response.replace(/\{YEAR\}/g, today.getFullYear());
+             }
+
+              that.fire('uqlibrary-api', JSON.parse(response));
+            }
+          };
+          xobj.send(null);
+        },
+
+        /**
+         * Submits request
+         * args - optional parameters
+         * args = {
+         *  addTimestamp : true //to avoid browser cache
+         *  body: {} //data to be passed in the body as json (not form data)
+         * }
+         * @method get
+         */
+        get: function (args) {
+          if (this.useMockData) {
+            this.loadMockData();
+          } else {
+            this.setHeaders();
+            url = this.baseApiUrl + this.uri;
+
+            if ((args && args.addTimestamp) || this.isMasquerade) {
+              url += (url.indexOf('?') >= 0 ? '&' : '?');
+              url += "timestamp=" + (new Date()).getTime();
+            }
+
+            if (args && args.body) {
+              this.$.ajax.contentType = "application/json";
+              this.$.ajax.body = JSON.stringify(args.body);
+            }
+
+            this.url = url;
+            this.$.ajax.generateRequest();
+          }
+        },
+
+        /**
+         * Sets the headers for the API request.
+         */
+        setHeaders: function () {
+          var cookie = this.getCookie('UQLID');
+          if (cookie) {
+            this.headers = {
+              "X-Uql-Token": cookie
+            };
+          }
+        },
+
+        /**
+         * Gets a cookie by name
+         * @param name the name of the cookie to return
+         * @returns {String}
+         */
+        getCookie: function (name) {
+          var parts = document.cookie.split(";");
+          for (var i = 0, l = parts.length; i < l; i++) {
+            var cookieParts = parts[i].trim().split('=');
+            if (cookieParts[0] === name) {
+              return cookieParts[1];
+            }
+          }
+        },
+        /**
+         * Delete a cookie by name
+         * @param name the name of the cookie to delete
+         */
+        deleteCookie: function (name) {
+          document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        },
+        deleteMasqueradeCookie: function () {
+          this.deleteCookie(this.masqueradeCookie);
+        }
+      });
+    })();
+  </script>
+
+</dom-module>

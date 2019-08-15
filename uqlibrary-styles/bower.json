@@ -1,0 +1,27 @@
+{
+  "name": "uqlibrary-styles",
+  "version": "1.1.10",
+  "description": "Style guide for UQ Library web sites and web applications",
+  "main": "common-styles.html",
+  "authors": [
+    "UQ Library development team"
+  ],
+  "keywords": [
+    "style-guide",
+    "web-components",
+    "polymer"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/uqlibrary/uqlibrary-styles.git"
+  },
+  "private": true,
+  "dependencies": {
+    "iron-elements": "PolymerElements/iron-elements#^1.0.3",
+    "paper-elements": "PolymerElements/paper-elements#^1.0.1",
+    "platinum-elements": "PolymerElements/platinum-elements#^2.0.0",
+    "polymer": "Polymer/polymer#^1.9.3",
+    "webcomponentsjs": "^0.7.12",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#~1.0.2"
+  }
+}

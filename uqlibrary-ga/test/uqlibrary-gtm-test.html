@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=no">
+  <title>uqlibrary-gtm</title>
+
+  <script src="../../webcomponentsjs/webcomponents.min.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../test-fixture/test-fixture-mocha.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+
+  <!-- Import the element to test -->
+  <link rel="import" href="../uqlibrary-gtm.html">
+</head>
+<body>
+
+  <!-- You use the document as a place to set up your fixtures. -->
+  <test-fixture id="gtm-fixture">
+    <template>
+      <uqlibrary-gtm container-id="GTM-12345-6" app-name='TEST'></uqlibrary-gtm>
+    </template>
+  </test-fixture>
+
+  <script>
+
+      suite('<uqlibrary-gtm> unit tests', function () {
+        var element;
+
+        setup(function () {
+          element = fixture('gtm-fixture');
+        });
+
+        //properties unit tests
+        test('defines container Id property', function (done) {
+          assert.equal(element.containerId, 'GTM-12345-6');
+          done();
+        });
+
+        test('defines application name property', function (done) {
+          assert.equal(element.appName, 'TEST');
+          done();
+        });
+
+      });
+  </script>
+
+</body>
+</html>

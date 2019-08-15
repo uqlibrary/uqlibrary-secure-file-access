@@ -1,0 +1,71 @@
+<link rel="import" href="elements.html">
+
+<!--
+Element providing library alerts
+
+##### Example
+
+    <uqlibrary-api-alerts></uqlibrary-api-alerts>
+
+@element uqlibrary-api-alerts
+@blurb Element providing alerts
+@status alpha
+@homepage https://github.com/uqlibrary/uqlibrary-api
+-->
+<dom-module id="uqlibrary-api-alerts">
+    <template>
+        <uqlibrary-api id="list"></uqlibrary-api>
+    </template>
+    <script>
+        (function () {
+            Polymer({
+                is: 'uqlibrary-api-alerts',
+                properties: {
+                    baseUri: {
+                        type: String,
+                        value: '/alerts'
+                    }
+                },
+                /**
+                 * Fired when the object has loaded.
+                 *
+                 * @event uqlibrary-api-alerts
+                 */
+                created: function () {
+                },
+                ready: function () {
+                    var that = this;
+                    this.$.list.addEventListener('uqlibrary-api', function (e) {
+                        that.list = [];
+
+                        if (Object.prototype.toString.call(e.detail) === '[object Array]') {
+                            that.list = e.detail;
+
+                            that.list.forEach(function(item){
+                                var link = item.body.match(/\[([^\]]+)\]\(([^)]+)\)/);
+                                if (link) {
+                                    item.url = link[2];
+                                    item.urlTitle = link[1];
+                                    item.body = item.body.replace(link[0], '');
+                                }
+                            });
+                        }
+                        that.fire('uqlibrary-api-alerts', that.list);
+                    });
+                },
+                /**
+                 * Gets alerts
+                 *
+                 * @method get
+                 */
+                get: function (args) {
+                    if (args && args.mode) {
+                        this.mode = args.code;
+                    }
+                    this.set('$.list.uri', this.baseUri + '/current');
+                    this.$.list.get();
+                }
+            });
+        }());
+    </script>
+</dom-module>

@@ -1,0 +1,222 @@
+<link rel="import" href="elements.html">
+
+<!--
+
+Custom web element for Google Analytics
+
+Example:
+
+    <uqlibrary-ga traking-id='UA-1234-5' website-url='http://www.test.com/app' app-name='TestApp' cookie-domain='test.com'></uqlibrary-ga>
+
+-->
+
+<dom-module id="uqlibrary-ga">
+
+  <template>
+    <uqlibrary-gtm id="gtm" app-name="{{appName}}"></uqlibrary-gtm>
+  </template>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    Polymer({
+
+      is: 'uqlibrary-ga',
+
+      properties: {
+
+        /** The `appName` application name to prefix page views
+         *
+         */
+        appName: {
+          type: String,
+          value: 'UQLAPP'
+        },
+
+        /**
+         * The `trackingId` Google Analytics tracking ID
+         *
+         */
+        trackingId: {
+          type: String,
+          value: '<GA-TRACKING-ID>'
+        },
+
+        /** The `websiteUrl` url of website for Google Analytics
+         *
+         */
+        websiteUrl: {
+          type: String,
+          value: '<GA-WEBSITE-URL>'
+        },
+
+        /** The `cookieDomain` set domain for cookies
+         *
+         */
+        cookieDomain: {
+          type: String,
+          value: '<GA-COOKIE-DOMAIN>'
+        },
+
+        /** Google Analytics setting 'siteSpeedSampleRate'
+        *
+        */
+        sampleRate: {
+          type: Number,
+          value: 100
+        },
+
+        /** Tracking ID for testing purposes. It isn't passed to GA
+         *
+         */
+        disableTracking: {
+          type: String,
+          value: 'ga-disable-UA-XXX-Y'
+        },
+
+        /** Defines whether the element works in test mode and uses mock data
+         *
+         */
+        useMockData: {
+          type: Boolean,
+          value: false
+        }
+
+      },
+
+      ready: function() {
+        var cookie = this.getCookie('UQLMockData');
+        this.useMockData = false;
+        if (cookie !== "undefined") {
+          this.useMockData = (cookie === 'enabled');
+        }
+        //Don't use GA if we are running a mock data test
+        if (!this.useMockData) {
+          try {
+            ga('create', this.trackingId,
+                    {
+                      'cookieName': 'ga_' + this.appName,
+                      'cookieDomain': document.location.hostname.indexOf(this.cookieDomain) >= 0 ? this.cookieDomain : 'none',
+                      'sampleRate': this.sampleRate
+                    });
+            ga('set', 'dimension1', this.getCookie('UQLID_USER_GROUP'));
+
+            // Get user statistical categories from cookie set in auth repo
+            var statClasses = this.getCookie('UQLID_USER_STAT_CLASS');
+            if (statClasses !== "undefined") {
+                // auth encodes the cookie before loading it - decode for easier handling by Analytics users
+                // semi-colon chosen as it does NOT seem to be found in the stat class text
+                // semi-colon encodes to %3b
+                var temp = statClasses.replace('%3B', '%3b');
+                var decoded = temp.replace('%3b', ';');
+                ga('set', 'dimension3', decoded);
+            }
+          } catch(err){}
+        }
+
+        //check if user opted out from GA tracking or if we are currently using mock testing
+        this.disableTracking = 'ga-disable-' + this.trackingId;
+        if (document.cookie.indexOf(this.disableTracking + '=true') > -1) {
+          window[this.disableTracking] = true;
+        }
+      },
+
+      /**
+       *  The `optOut` method disables google analytics tracking and sets cookie to remember this setting
+       *
+       * @method optOut
+       */
+      optOut : function() {
+          document.cookie = this.disableTracking + '=true; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/';
+          window[this.disableTracking] = true;
+      },
+
+      /**
+       *  The `addPageView` method sets current page and records a page view.
+       *  Page view is recorded as '/AppName/page'
+       *
+       * @method addPageView
+       * @param page
+       */
+      addPageView: function(page) {
+        if (!this.useMockData) {
+          var pageHit = "/" + this.appName + "/" + page;
+
+          try {
+            ga('set', {page: pageHit, title: pageHit});
+            ga('send', 'pageview');
+            this.$.gtm.addPageView(page);
+          } catch (err) {
+          }
+        }
+      },
+
+      /**
+       *  The `addEvent` method records an action of the event
+       *  Event is recorded with category set to 'AppName' and action set to '/AppName/action'
+       *
+       * @method addEvent
+       * @param action
+       * @param label
+       */
+      addEvent: function(action, label) {
+        //Don't use GA if we are running a mock data test
+        if (!this.useMockData) {
+          if (this.isOutboundLink(label)) {
+            this.fireEvent('Outbound links', 'Click', label);
+          } else {
+            this.fireEvent(this.appName, "/" + this.appName + "/" + action, label);
+          }
+          this.$.gtm.addEvent(action, label);
+        }
+      },
+
+      /**
+       *  The `fireEvent` method records an action of the event
+       *
+       * @method fireEvent
+       * @param category
+       * @param action
+       * @param label
+       */
+      fireEvent: function(category, action, label){
+        try {
+          if (label) {
+            ga('send', 'event', category, action, label);
+          } else {
+            ga('send', 'event', category, action);
+          }
+        } catch (err) {
+        }
+      },
+
+      /**
+       * Gets a cookie by name
+       * @param name the name of the cookie to return
+       * @returns {String}
+       */
+      getCookie: function (name) {
+        var value = "; " + document.cookie,
+            parts = value.split("; " + name + "=");
+        if (parts.length === 2) return parts.pop().split(";").shift();
+      },
+
+      /**
+       * Simple check on the click event label, any link not match http(s)://*.library.uq.edu.au is an outbound link
+       *
+       * @param link
+       * @return boolean
+       */
+      isOutboundLink: function(link) {
+        var regex = /^http(s)?:\/\/((?!library\.uq\.edu\.au).)*$/i;
+        return regex.test(link);
+      }
+
+    });
+
+  </script>
+
+</dom-module>

@@ -1,0 +1,75 @@
+<link rel="import" href="elements.html">
+
+<!--
+Element providing library training links
+
+##### Example
+
+    <uqlibrary-api-training></uqlibrary-api-training>
+
+@element uqlibrary-api-training
+@blurb Element providing training links
+@status alpha
+@homepage https://github.com/uqlibrary/uqlibrary-api
+-->
+<dom-module id="uqlibrary-api-training">
+    <template>
+        <uqlibrary-api id="list"></uqlibrary-api>
+    </template>
+    <script>
+        (function () {
+            Polymer({
+                is: 'uqlibrary-api-training',
+                properties: {
+                    baseUri: {
+                        type: String,
+                        value: '/training_events'
+                    }
+                },
+                /**
+                 * Fired when the object has loaded.
+                 * @event uqlibrary-api-training
+                 */
+                created: function () {
+                },
+                ready: function () {
+                    var that = this;
+                    this.$.list.addEventListener('uqlibrary-api', function (e) {
+                        that.list = e.detail;
+                        that.fire('uqlibrary-api-training', that.list);
+                    });
+                },
+                /**
+                 * Gets training events
+                 *
+                 * @method get
+                 */
+                get: function (args) {
+                    var uri = this.baseUri;
+                    if (args) {
+                        var qs = this._serialize(args);
+                        if (qs != '') {
+                            uri += '?' + qs;
+                        }
+                    }
+
+                    this.set('$.list.uri', uri);
+                    this.$.list.get();
+                },
+                _serialize: function (obj) {
+                    var parts = [];
+                    for (var i in obj) {
+                        if (obj[i] instanceof Array) {
+                            for (var j = 0; j < obj[i].length; j++) {
+                                parts.push(encodeURIComponent(i) + "[]=" + encodeURIComponent(obj[i][j]));
+                            }
+                        } else {
+                            parts.push(encodeURIComponent(i) + "=" + encodeURIComponent(obj[i]));
+                        }
+                    }
+                    return parts.join("&");
+                }
+            });
+        }());
+    </script>
+</dom-module>

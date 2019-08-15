@@ -1,0 +1,80 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>api applications testing</title>
+
+    <script src="../../webcomponentsjs/webcomponents.min.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <script src="../../test-fixture/test-fixture-mocha.js"></script>
+    <link rel="import" href="../../test-fixture/test-fixture.html">
+
+    <!-- Import the element to test -->
+    <link rel="import" href="../uqlibrary-api-library-hours.html">
+
+</head>
+<body>
+
+<test-fixture id="basic">
+    <template>
+        <uqlibrary-api-library-hours id="app"></uqlibrary-api-library-hours>
+    </template>
+</test-fixture>
+
+<script>
+
+    suite('uqlibrary-api-hours tests', function () {
+        var app;
+
+        setup(function () {
+            app = fixture('basic');
+        });
+
+        test('load library hours data', function (done) {
+
+            var apiLoaded = function(result) {
+                assert.equal('Arch Music', result.detail['locations'][0].abbr);
+                assert.equal('08:00:00', result.detail['locations'][0]['departments'][0].open);
+                done();
+            };
+
+            setTimeout(function(){
+
+                app.addEventListener('uqlibrary-api-library-hours', apiLoaded);
+                app.get();
+
+            }, 100);
+        });
+
+        test('load library hours week data', function (done) {
+
+            var apiLoaded = function(result) {
+                assert.equal('Arch Music', result.detail['locations'][0].abbr);
+                assert.equal('08:00:00', result.detail['locations'][0]['departments'][0]['weeks'][0]['Monday'].open);
+                assert.equal('closed', result.detail['locations'][0]['departments'][0]['weeks'][0]['Sunday']['times']['status']);
+                done();
+            };
+
+            setTimeout(function(){
+
+                app.addEventListener('uqlibrary-api-library-hours', apiLoaded);
+                app.get({mode:'week'});
+
+            }, 100);
+        });
+    });
+</script>
+
+</body>
+</html>
+
